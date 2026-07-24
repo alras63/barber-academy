@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manspire Academy — Академия стрижек. Курс с нуля до профессионала</title>
+<meta name="description" content="Manspire Academy — академия мужских стрижек. Курс с нуля: приходите без опыта и становитесь профессионалом. Более 500 выпускников, помощь с трудоустройством." />
+<meta name="theme-color" content="#0b130d" />
+<meta property="og:title" content="Manspire Academy — академия стрижек" />
+<meta property="og:description" content="Войдите в академию. Курс с нуля до профессионала. Более 500 выпускников и помощь с трудоустройством." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/img/wall.jpeg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 28'%3E%3Cpath d='M16 2 30 14 16 26 2 14Z' fill='none' stroke='%23a8ff5b' stroke-width='2'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<div class="route-progress" id="routeProgress" aria-hidden="true"></div>
+
+<!-- ============================ TOPBAR ============================ -->
+<header class="topbar" id="topbar">
+  <a class="brand" href="#top" aria-label="Manspire Academy — на главную">
+    <svg class="brand__mark" viewBox="0 0 32 28" aria-hidden="true">
+      <path d="M16 2 30 12 16 26 2 12Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M9 12h14M16 12l-4 8m4-8 4 8M9 12l7-6 7 6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".8"/>
+    </svg>
+    <span class="brand__name">Manspire<small>Academy</small></span>
+  </a>
+  <nav class="nav" aria-label="Основная навигация">
+    <a href="#philosophy">Философия</a>
+    <a href="#course">Курс</a>
+    <a href="#about">Об академии</a>
+    <a href="#teachers">Преподаватели</a>
+    <a href="#students">Ученики</a>
+    <a href="#employment">После обучения</a>
+  </nav>
+  <a class="btn btn--glow" href="#enroll">Записаться <span class="arr">→</span></a>
+  <button class="burger" id="burger" aria-label="Открыть меню"><i></i><i></i><i></i></button>
+</header>
+
+<!-- Мобильное меню -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <button class="mobile-menu__close" id="menuClose" aria-label="Закрыть меню">×</button>
+  <a href="#philosophy">Философия</a>
+  <a href="#course">Курс</a>
+  <a href="#about">Об академии</a>
+  <a href="#teachers">Преподаватели</a>
+  <a href="#students">Ученики</a>
+  <a href="#employment">После обучения</a>
+  <a class="btn btn--glow" href="#enroll">Записаться на курс →</a>
+</div>
+
+<main id="top">
+
+<!-- ============================ HERO / ПОРТАЛ ============================ -->
+<section class="hero on-dark" id="hero">
+  <div class="hero__wall" id="heroWall" aria-hidden="true"></div>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="wrap">
+      <span class="hero__kicker"><span class="dot"></span>Академия мужских стрижек</span>
+      <h1 class="hero__title reveal in">Вы не открываете сайт.<br>Вы <em>входите</em> в академию.</h1>
+      <p class="hero__sub reveal in" data-d="1">
+        Наша фирменная стена встречает каждого, кто приходит впервые.
+        Пусть она встретит и вас — прямо сейчас.
+      </p>
+      <div class="hero__cta reveal in" data-d="2">
+        <a class="btn btn--glow" href="#course">Курс с нуля <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="#philosophy">Пройти по академии</a>
+      </div>
+      <div class="hero__meta reveal in" data-d="3">
+        <div><b>500+</b><span>выпускников</span></div>
+        <div><b>С нуля</b><span>без опыта в профессию</span></div>
+        <div><b>10+ лет</b><span>практики преподавателей</span></div>
+        <div><b>Помощь</b><span>с трудоустройством</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="scrollcue" aria-hidden="true">Войти <i></i></div>
+</section>
+
+<!-- ============================ ФИЛОСОФИЯ / ВХОД ============================ -->
+<section class="section dark on-dark manifesto" id="philosophy">
+  <!-- проросшая листва -->
+  <div class="foliage" data-grow style="top:-60px; left:-40px; width:280px; height:280px; --r:-12deg; --o:.35;">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-monstera"/></svg>
+  </div>
+  <div class="foliage" data-grow style="bottom:-70px; right:-30px; width:240px; height:240px; --r:200deg; --o:.28;">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-monstera"/></svg>
+  </div>
+
+  <div class="wrap">
+    <div class="head--center" style="text-align:center; margin-bottom:44px;">
+      <span class="eyebrow reveal">Философия</span>
+    </div>
+    <p class="huge reveal" data-d="1">
+      Эта стена — не декор. <em>Это лицо академии</em> и первая точка контакта.
+      <span>Мы перенесли её ощущение в цифровое пространство, чтобы сайт и академия стали одним местом.</span>
+    </p>
+    <p class="sign reveal" data-d="2">Порог новой профессии · нового окружения · новой жизни</p>
+  </div>
+</section>
+
+<!-- ============================ КУРС С НУЛЯ ============================ -->
+<section class="section paper" id="course">
+  <div class="foliage" data-grow style="top:40px; right:-50px; width:200px; height:200px; --r:150deg; --o:.16; color:var(--moss);">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-fern"/></svg>
+  </div>
+  <div class="wrap">
+    <div class="course-grid">
+      <div>
+        <div class="head reveal">
+          <span class="eyebrow">Главный продукт</span>
+          <h2 class="display">Курс с&nbsp;нуля<br>до&nbsp;<span class="leaf-accent italic">профессионала</span></h2>
+          <p class="lead">Это академия стрижек. Можно прийти без опыта — и выйти мастером,
+          который уверенно стоит за креслом. Мы ведём за руку от первой машинки до первого клиента.</p>
+        </div>
+
+        <div class="zero-badge reveal" data-d="1">
+          <b>0</b>
+          <span>Столько опыта нужно, чтобы начать. Всё остальное — наша работа.</span>
+        </div>
+
+        <div class="course-features reveal" data-d="2">
+          <div class="feat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 8l7-5 7 5"/></svg>
+            <h5>Практика с первого дня</h5>
+            <p>Работа руками, а не только теория и конспекты.</p>
+          </div>
+          <div class="feat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>
+            <h5>Работа на моделях</h5>
+            <p>Живые клиенты и реальные ситуации ещё во время учёбы.</p>
+          </div>
+          <div class="feat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            <h5>Малые группы</h5>
+            <p>Внимание каждому — руку ставят индивидуально.</p>
+          </div>
+          <div class="feat">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7 9 18l-5-5"/></svg>
+            <h5>Диплом и портфолио</h5>
+            <p>Выходите с работами, которые не стыдно показать.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" data-d="1">
+        <ol class="path">
+          <li>
+            <h4>Знакомство и инструмент</h4>
+            <p>Машинка, ножницы, гигиена, посадка клиента. С полного нуля.</p>
+          </li>
+          <li>
+            <h4>База и форма</h4>
+            <p>Классические стрижки, окантовка, понимание головы и роста волос.</p>
+          </li>
+          <li>
+            <h4>Фейд и текстура</h4>
+            <p>Плавные переходы, работа с плотностью и современные формы.</p>
+          </li>
+          <li>
+            <h4>Борода и образ</h4>
+            <p>Оформление бороды, стайлинг и целостный финальный образ.</p>
+          </li>
+          <li>
+            <h4>Скорость и клиент</h4>
+            <p>Чистота, тайминг, коммуникация — как принимать реальный поток.</p>
+          </li>
+          <li>
+            <h4>Старт в профессии</h4>
+            <p>Портфолио, аттестация и выход на первое кресло.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ОБ АКАДЕМИИ / ЦИФРЫ + ПРОГНОЗ ============================ -->
+<section class="section cream" id="about">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Об академии</span>
+      <h2 class="display">Опыт, который можно<br>измерить</h2>
+      <p class="lead">За годы практики через академию прошли сотни людей — с разным прошлым и одной целью.
+      Мы знаем этот путь наизусть, потому что прошли его вместе с каждым.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal"><b><span class="pfx">500+</span></b><span>выпускников прошли обучение</span></div>
+      <div class="stat reveal" data-d="1"><b>10<span class="pfx">+</span></b><span>лет практического опыта преподавателей</span></div>
+      <div class="stat reveal" data-d="2"><b>90<span class="pfx">%</span></b><span>учеников приходят без опыта в профессии</span></div>
+      <div class="stat reveal" data-d="3"><b>1<span class="pfx">→</span></b><span>помогаем сделать первый шаг к первому креслу</span></div>
+    </div>
+
+    <!-- Прогноз профессионального развития -->
+    <div class="forecast reveal" data-d="1">
+      <div class="forecast__body">
+        <span class="eyebrow">Прогноз развития</span>
+        <h3 class="display" style="margin-top:16px;">Мы видим ваш<br>путь наперёд</h3>
+        <p class="lead" style="margin-top:18px;">
+          Сотни пройденных историй дают нам то, чего нет у новичка, — насмотренность.
+          На основе вашего старта, темпа и целей мы составляем реалистичный прогноз
+          профессионального развития на ближайшее будущее. Не обещания — ориентиры.
+        </p>
+      </div>
+      <div class="forecast__viz">
+        <svg class="curve" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="fg" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#4e7a2e" stop-opacity=".1"/>
+              <stop offset="1" stop-color="#a8ff5b" stop-opacity=".9"/>
+            </linearGradient>
+            <linearGradient id="fgFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#a8ff5b" stop-opacity=".22"/>
+              <stop offset="1" stop-color="#a8ff5b" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,270 C120,265 190,210 250,150 C300,100 350,55 400,30 L400,300 L0,300 Z" fill="url(#fgFill)"/>
+          <path d="M0,270 C120,265 190,210 250,150 C300,100 350,55 400,30" fill="none" stroke="url(#fg)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="0"  cy="270" r="4" fill="#8ed24e"/>
+          <circle cx="250" cy="150" r="4" fill="#a8ff5b"/>
+          <circle cx="400" cy="30"  r="5" fill="#a8ff5b"/>
+        </svg>
+        <span class="lbl">Траектория ученика</span>
+        <div class="forecast__points">
+          <div class="fp"><span class="yr">Старт</span><span class="tx">Первая машинка, первая уверенная стрижка</span></div>
+          <div class="fp"><span class="yr">3 мес</span><span class="tx">Первые клиенты, наработка руки и скорости</span></div>
+          <div class="fp"><span class="yr">1 год</span><span class="tx">Своё кресло, стабильная запись, свой стиль</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ПЕРЕЗАГРУЗКА ============================ -->
+<section class="section dark on-dark reboot" id="reboot">
+  <div class="foliage" data-grow style="top:0; left:-30px; width:320px; height:320px; --r:20deg; --o:.3;">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-monstera"/></svg>
+  </div>
+  <div class="foliage" data-grow style="bottom:-40px; right:-40px; width:260px; height:260px; --r:190deg; --o:.24;">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-fern"/></svg>
+  </div>
+  <div class="wrap">
+    <div class="head--center" style="text-align:center; margin-bottom:8px;">
+      <span class="eyebrow reveal">Идея</span>
+    </div>
+    <h2 class="huge reveal" data-d="1" style="text-align:center;">Пере<em>загрузка</em></h2>
+    <p class="lead reveal" data-d="2" style="margin:26px auto 0; text-align:center;">
+      Освежить себя. Сменить профессию. Начать новую главу.
+      Для многих академия — это не про волосы. Это про решение изменить жизнь.
+    </p>
+    <div class="reboot__cards">
+      <div class="reboot__card reveal" data-d="1">
+        <span class="n">01</span>
+        <h4>Освежить себя</h4>
+        <p>Вернуть интерес к делу и к себе. Заняться тем, что даёт энергию, а не забирает её.</p>
+      </div>
+      <div class="reboot__card reveal" data-d="2">
+        <span class="n">02</span>
+        <h4>Сменить профессию</h4>
+        <p>Ремесло, которое всегда с вами и всегда востребовано. Без потолка и без офиса.</p>
+      </div>
+      <div class="reboot__card reveal" data-d="3">
+        <span class="n">03</span>
+        <h4>Новая глава</h4>
+        <p>Новое окружение, новые люди, новый ритм. Точка, с которой начинается другая жизнь.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ПРЕПОДАВАТЕЛИ ============================ -->
+<section class="section paper" id="teachers">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Преподаватели</span>
+      <h2 class="display">Те, кто ставит<br>вам руку</h2>
+      <p class="lead">Практикующие мастера с большим опытом за креслом. Здесь — только профессиональное:
+      что преподают и за что отвечают.</p>
+    </div>
+    <div class="teachers-grid" id="teachersGrid"><!-- рендерится из data.js --></div>
+  </div>
+</section>
+
+<!-- ============================ УЧЕНИКИ ============================ -->
+<section class="section cream" id="students">
+  <div class="foliage" data-grow style="top:-40px; right:-40px; width:220px; height:220px; --r:160deg; --o:.14; color:var(--moss);">
+    <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-monstera"/></svg>
+  </div>
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Ученики</span>
+      <h2 class="display">Пришли с нуля —<br>остались в <span class="leaf-accent italic">профессии</span></h2>
+      <p class="lead">Наши выпускники разных лет. У каждого была своя точка старта — и свой результат после обучения.
+      Это живая база, которая растёт с каждым новым набором.</p>
+    </div>
+    <div class="students-grid" id="studentsGrid"><!-- рендерится из data.js --></div>
+    <p class="students-note reveal">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--glow-deep)"><path d="M12 5v14M5 12h14"/></svg>
+      База пополняется: каждый новый выпуск добавляется в общую историю академии.
+    </p>
+  </div>
+</section>
+
+<!-- ============================ ВИДЕО-ИСТОРИИ ============================ -->
+<section class="section dark on-dark" id="stories">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Видео-истории</span>
+      <h2 class="display">Ученики — о своём пути</h2>
+      <p class="lead">Живые истории: кто они, как пришли в академию, через что прошли
+      и к какому результату пришли после обучения. Без сценария.</p>
+    </div>
+    <div class="videos" id="videosGrid"><!-- рендерится из data.js --></div>
+  </div>
+</section>
+
+<!-- ============================ ПОСЛЕ ОБУЧЕНИЯ / ТРУДОУСТРОЙСТВО ============================ -->
+<section class="section paper" id="employment">
+  <div class="wrap">
+    <div class="employ-grid">
+      <div>
+        <div class="head reveal" style="margin-bottom:0;">
+          <span class="eyebrow">После обучения</span>
+          <h2 class="display">Мы не прощаемся<br>на выпускном</h2>
+          <p class="lead">Диплом — это старт, а не финиш. После обучения мы помогаем сделать
+          главное: выйти на реальную работу и начать зарабатывать в профессии.</p>
+        </div>
+        <ul class="employ__list reveal" data-d="1">
+          <li>
+            <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7 9 18l-5-5"/></svg>
+            <div><h5>Помощь с трудоустройством</h5><p>Рекомендации в барбершопы и связи в индустрии.</p></div>
+          </li>
+          <li>
+            <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7 9 18l-5-5"/></svg>
+            <div><h5>Портфолио и подготовка</h5><p>Собираем работы и готовим к собеседованию и стажировке.</p></div>
+          </li>
+          <li>
+            <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7 9 18l-5-5"/></svg>
+            <div><h5>Поддержка после старта</h5><p>Остаёмся на связи, когда возникают первые рабочие вопросы.</p></div>
+          </li>
+        </ul>
+      </div>
+      <aside class="employ__aside reveal" data-d="1">
+        <div class="foliage grow" style="position:absolute; top:-30px; right:-30px; width:180px; height:180px; --r:170deg; --o:.28; opacity:.28; color:var(--moss)">
+          <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#leaf-fern"/></svg>
+        </div>
+        <p class="big" style="position:relative; z-index:2;">Вы выходите не с&nbsp;<em>дипломом</em>, а с&nbsp;<em>профессией</em>.</p>
+        <p style="position:relative; z-index:2;">Задача академии — чтобы после обучения вы встали за кресло, а не остались с сертификатом в столе.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CTA / ВХОД ============================ -->
+<section class="section cta" id="enroll">
+  <div class="cta__wall" aria-hidden="true"></div>
+  <div class="cta__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="eyebrow reveal" style="color:var(--glow); justify-content:center; display:flex;">Последний шаг</span>
+    <h2 class="display reveal" data-d="1" style="margin-top:18px;">Станьте частью<br>этого <em>пространства</em></h2>
+    <p class="lead reveal" data-d="2" style="margin:22px auto 0; color:var(--on-dark-mut); text-align:center; max-width:52ch;">
+      Оставьте контакты — расскажем о ближайшем наборе, программе и стоимости.
+      Дальше вы просто входите в дверь.
+    </p>
+    <form class="cta__form reveal" data-d="2" id="enrollForm" novalidate>
+      <div class="cta__row">
+        <label class="field"><input type="text" name="name" placeholder="Ваше имя" required autocomplete="name" /></label>
+        <label class="field"><input type="tel" name="phone" placeholder="Телефон" required autocomplete="tel" /></label>
+      </div>
+      <label class="field"><input type="text" name="about" placeholder="Есть ли опыт? (можно «нет» — это нормально)" /></label>
+      <button class="btn btn--glow" type="submit">Записаться на курс <span class="arr">→</span></button>
+      <p class="cta__ok" id="formOk" role="status" aria-live="polite"></p>
+      <p class="cta__fine">Нажимая кнопку, вы соглашаетесь на обработку данных. Мы свяжемся с вами лично.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="brand__mark" viewBox="0 0 32 28" aria-hidden="true">
+            <path d="M16 2 30 12 16 26 2 12Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+          <span class="brand__name">Manspire<small>Academy</small></span>
+        </a>
+        <p>Академия мужских стрижек. Курс с нуля до профессионала, живая практика и помощь с трудоустройством. Ваша новая глава начинается у нашей стены.</p>
+      </div>
+      <div>
+        <h5>Разделы</h5>
+        <ul>
+          <li><a href="#philosophy">Философия</a></li>
+          <li><a href="#course">Курс с нуля</a></li>
+          <li><a href="#about">Об академии</a></li>
+          <li><a href="#teachers">Преподаватели</a></li>
+          <li><a href="#students">Ученики</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Контакты</h5>
+        <ul>
+          <li><a href="#enroll">Записаться на курс</a></li>
+          <li><a href="#stories">Видео-истории</a></li>
+          <li><a href="#employment">После обучения</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> Manspire Academy. Академия стрижек.</span>
+      <span>Войдите в академию — ещё до того, как переступите её двери.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================ SVG-БИБЛИОТЕКА ЛИСТВЫ ============================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- стилизованный лист монстеры с прорезями -->
+    <g id="leaf-monstera">
+      <path fill="currentColor" d="M100 8c-26 22-58 34-58 84 0 44 30 82 58 100 28-18 58-56 58-100 0-50-32-62-58-84Z"/>
+      <path fill="var(--forest-950,#0b130d)" opacity=".55" d="M100 26v152M100 60l-34 8M100 60l34 8M100 96l-40 12M100 96l40 12M100 134l-30 12M100 134l30 12"/>
+      <path fill="none" stroke="var(--forest-950,#0b130d)" stroke-width="4" opacity=".45" d="M100 26v150M100 62l-32 10M100 62l32 10M100 100l-38 12M100 100l38 12M100 138l-28 12M100 138l28 12"/>
+    </g>
+    <!-- перистый лист папоротника -->
+    <g id="leaf-fern">
+      <path fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" d="M100 6C96 60 96 130 100 194"/>
+      <g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" opacity=".92">
+        <path d="M100 26C80 24 64 30 52 44M100 26C120 24 136 30 148 44"/>
+        <path d="M100 54C78 52 60 60 46 78M100 54C122 52 140 60 154 78"/>
+        <path d="M100 86C80 84 62 92 50 110M100 86C120 84 138 92 150 110"/>
+        <path d="M100 118C82 116 66 124 56 140M100 118C118 116 134 124 144 140"/>
+        <path d="M100 150C86 148 72 154 64 168M100 150C114 148 128 154 136 168"/>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
