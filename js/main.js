@@ -174,6 +174,59 @@
     update();
   })();
 
+  /* ===================== ПРОГРАММА (pinned narrative) =====================
+     Скролл ведёт по шагам курса. Приём тот же, что в портале, и по той же
+     причине: программа сама по себе — последовательность, поэтому движение
+     здесь несёт смысл, а не украшает.
+
+     Закрепление включается только на широком экране и только если человек
+     не просил уменьшить движение. Во всех остальных случаях (телефон,
+     reduced-motion, отключённый JS) остаётся обычный список — содержание
+     доступно всегда.
+  ========================================================================= */
+  (function program() {
+    var sec = document.getElementById("program");
+    if (!sec) return;
+    var steps = sec.querySelectorAll(".program__step");
+    var ticks = sec.querySelectorAll(".program__ticks li");
+    var big   = sec.querySelector(".program__big");
+    if (!steps.length) return;
+
+    var canPin = window.matchMedia("(min-width: 900px)").matches && !reduce;
+    if (!canPin) return;
+
+    sec.classList.add("is-pinned");
+    var current = -1;
+
+    function setStep(i) {
+      if (i === current) return;
+      current = i;
+      for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("is-on", k === i);
+      for (var t = 0; t < ticks.length; t++) ticks[t].classList.toggle("done", t <= i);
+      if (big) big.textContent = "0" + (i + 1);
+    }
+    setStep(0);
+
+    var ticking = false;
+    function update() {
+      var r = sec.getBoundingClientRect();
+      var total = sec.offsetHeight - window.innerHeight;
+      var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+      // последний шаг держим до конца дорожки, иначе он мелькает
+      var i = Math.min(steps.length - 1, Math.floor(p * steps.length * 1.001));
+      setStep(i);
+      ticking = false;
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  })();
+
   /* ===================== РЕНДЕР ДАННЫХ ===================== */
   function initials(name) {
     return name.split(/\s+/).map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();

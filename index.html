@@ -26,6 +26,7 @@
   <a href="#hero"       data-ch="hero"><span class="nm">Портал</span><span class="dt"></span></a>
   <a href="#philosophy" data-ch="philosophy"><span class="nm">Ремесло</span><span class="dt"></span></a>
   <a href="#course"     data-ch="course"><span class="nm">Курс</span><span class="dt"></span></a>
+  <a href="#program"    data-ch="program"><span class="nm">Программа</span><span class="dt"></span></a>
   <a href="#about"      data-ch="about"><span class="nm">Академия</span><span class="dt"></span></a>
   <a href="#reboot"     data-ch="reboot"><span class="nm">Перезагрузка</span><span class="dt"></span></a>
   <a href="#teachers"   data-ch="teachers"><span class="nm">Мастера</span><span class="dt"></span></a>
@@ -58,6 +59,7 @@
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <button class="mobile-menu__close" id="menuClose" aria-label="Закрыть меню">×</button>
   <a href="#course">Курс с нуля</a>
+  <a href="#program">Программа</a>
   <a href="#doubts">Сомнения</a>
   <a href="#about">Академия</a>
   <a href="#reboot">Перезагрузка</a>
@@ -90,7 +92,7 @@
       </p>
       <div class="hero__cta reveal in" data-d="3">
         <a class="btn btn--glow" href="#enroll">Записаться <span class="arr">→</span></a>
-        <a class="btn btn--ghost" href="#course">Программа курса</a>
+        <a class="btn btn--ghost" href="#program">Программа курса</a>
       </div>
       <div class="index-line reveal in" data-d="4">
         <span><b>500+</b>выпускников</span>
@@ -133,7 +135,7 @@
 <section class="section paper" id="course" data-chapter="course" data-invert>
   <div class="wrap">
     <div class="course-grid">
-      <div>
+      <div class="course-grid__lede">
         <div class="head reveal" style="margin-bottom:0;">
           <span class="eyebrow">Основной курс</span>
           <h2 class="display">От первой машинки<br>до первого <em>клиента</em></h2>
@@ -154,16 +156,53 @@
         </ul>
       </div>
 
-      <div class="reveal" data-d="1">
-        <ol class="path">
-          <li><h4>Инструмент и посадка</h4><p>Как держать машинку и ножницы, как посадить клиента и как не сажать спину за креслом. С абсолютного нуля.</p></li>
-          <li><h4>База и форма</h4><p>Классические стрижки, окантовка, форма головы и направление роста волос. Фундамент, на котором держится вся дальнейшая работа.</p></li>
-          <li><h4>Фейд и переходы</h4><p>Самая востребованная техника в мужском зале: плавные переходы, работа с плотностью, современные формы.</p></li>
-          <li><h4>Борода и образ</h4><p>Оформление бороды и стайлинг — чтобы вы собирали законченный образ, а не просто «подстригали».</p></li>
-          <li><h4>Скорость и клиент</h4><p>Тайминг, чистота работы и разговор в кресле. Как принимать поток, а не одного человека за час.</p></li>
-          <li><h4>Выход в профессию</h4><p>Портфолио, аттестация и помощь с поиском первого рабочего места.</p></li>
-        </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ПРОГРАММА — маршрут на скролле ==================== -->
+<section class="program" id="program" data-chapter="program" aria-label="Программа курса">
+  <div class="program__stage">
+    <div class="program__wall" aria-hidden="true"></div>
+    <span class="program__big" aria-hidden="true">01</span>
+    <div class="wrap">
+      <span class="eyebrow">Программа</span>
+      <div class="program__steps">
+        <article class="program__step" data-step="0">
+          <span class="program__n">01</span>
+          <h3>Инструмент и посадка</h3>
+          <p>Как держать машинку и ножницы, как посадить клиента и как не сажать спину за креслом. С абсолютного нуля.</p>
+        </article>
+        <article class="program__step" data-step="1">
+          <span class="program__n">02</span>
+          <h3>База и форма</h3>
+          <p>Классические стрижки, окантовка, форма головы и направление роста волос. Фундамент, на котором держится вся дальнейшая работа.</p>
+        </article>
+        <article class="program__step" data-step="2">
+          <span class="program__n">03</span>
+          <h3>Фейд и переходы</h3>
+          <p>Самая востребованная техника в мужском зале: плавные переходы, работа с плотностью, современные формы.</p>
+        </article>
+        <article class="program__step" data-step="3">
+          <span class="program__n">04</span>
+          <h3>Борода и образ</h3>
+          <p>Оформление бороды и стайлинг — чтобы вы собирали законченный образ, а не просто «подстригали».</p>
+        </article>
+        <article class="program__step" data-step="4">
+          <span class="program__n">05</span>
+          <h3>Скорость и клиент</h3>
+          <p>Тайминг, чистота работы и разговор в кресле. Как принимать поток, а не одного человека за час.</p>
+        </article>
+        <article class="program__step" data-step="5">
+          <span class="program__n">06</span>
+          <h3>Выход в профессию</h3>
+          <p>Портфолио, аттестация и помощь с поиском первого рабочего места.</p>
+        </article>
       </div>
+      <ol class="program__ticks" aria-hidden="true">
+        <li></li><li></li><li></li><li></li><li></li><li></li>
+      </ol>
+      <p class="program__foot" aria-hidden="true">От первой машинки до первого клиента</p>
     </div>
   </div>
 </section>
@@ -242,11 +281,11 @@
               <stop offset="1" stop-color="#a9d95c" stop-opacity="0"/>
             </linearGradient>
           </defs>
-          <path d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28 L400,300 L0,300 Z" fill="url(#fgFill)"/>
-          <path d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28" fill="none" stroke="url(#fg)" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="2"   cy="271" r="3.5" fill="#8fbb4c"/>
-          <circle cx="250" cy="150" r="3.5" fill="#a9d95c"/>
-          <circle cx="396" cy="30"  r="5"   fill="#a9d95c"/>
+          <path class="curve__fill" d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28 L400,300 L0,300 Z" fill="url(#fgFill)"/>
+          <path class="curve__line" pathLength="1" d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28" fill="none" stroke="url(#fg)" stroke-width="2" stroke-linecap="round"/>
+          <circle class="curve__dot" style="--i:0" cx="2" cy="271" r="3.5" fill="#8fbb4c"/>
+          <circle class="curve__dot" style="--i:1" cx="250" cy="150" r="3.5" fill="#a9d95c"/>
+          <circle class="curve__dot" style="--i:2" cx="396" cy="30" r="5"   fill="#a9d95c"/>
         </svg>
         <span class="lbl">Траектория ученика</span>
         <div class="forecast__points">
@@ -418,6 +457,7 @@
         <h5>Об обучении</h5>
         <ul>
           <li><a href="#course">Курс с нуля</a></li>
+          <li><a href="#program">Программа</a></li>
           <li><a href="#doubts">Частые сомнения</a></li>
           <li><a href="#about">Об академии</a></li>
           <li><a href="#teachers">Преподаватели</a></li>

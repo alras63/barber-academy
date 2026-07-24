@@ -338,7 +338,8 @@ p { margin: 0; }
 .manifesto .sign { margin-top: 44px; color: var(--on-dark-mut); letter-spacing: .3em; font-size: 10.5px; text-transform: uppercase; }
 
 /* ---------------- Курс ---------------- */
-.course-grid { display: grid; grid-template-columns: 1.02fr 1fr; gap: clamp(34px,5vw,86px); align-items: start; }
+.course-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(34px,5vw,86px); align-items: start; }
+.course-grid__lede { max-width: 44ch; }
 .zero {
   display: flex; align-items: baseline; gap: 20px; margin: 30px 0 34px;
   padding-bottom: 26px; border-bottom: 1px solid var(--line);
@@ -597,17 +598,146 @@ p { margin: 0; }
   .qa__row, .creed__row, .figures__row { grid-template-columns: 1fr; gap: 10px; }
 }
 
+
+/* =====================================================================
+   ПРОГРАММА — маршрут на скролле (pinned narrative)
+   ---------------------------------------------------------------------
+   Тот же приём, что и в портале, и по той же причине: содержание здесь
+   САМО является последовательностью — от «как держать машинку» до
+   первого клиента. Скролл ведёт по шагам, а не просто листает список.
+   Приём применён только там, где он несёт смысл: сыпать анимации по
+   всем блокам — верный способ получить «шаблон с эффектами».
+
+   База (телефон, отключённая анимация, без JS) — обычный список.
+   Закрепление включается только на широком экране.
+   ===================================================================== */
+.program { position: relative; background: var(--forest-950); color: var(--on-dark); }
+/* Листва проступает и здесь — кадр остаётся частью того же пространства */
+.program__wall {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: url("../assets/img/wall.jpeg") center 40% / cover no-repeat;
+  opacity: .16; filter: grayscale(.3) brightness(.7);
+  -webkit-mask-image: linear-gradient(100deg, transparent 34%, #000 78%);
+  mask-image: linear-gradient(100deg, transparent 34%, #000 78%);
+}
+.program__stage { position: relative; overflow: hidden; }
+.program__stage .wrap { position: relative; z-index: 2; }
+/* Крупная цифра держит кадр и показывает, где мы в маршруте */
+.program__big { display: none; }
+.program__stage { padding-block: clamp(80px,12vh,140px); }
+.program__steps { margin-top: clamp(30px,4vw,48px); display: grid; gap: clamp(26px,3vw,38px); }
+.program__step { display: grid; gap: 10px; max-width: 30ch; }
+.program__n {
+  font-family: var(--display); font-size: .95rem; color: var(--sage);
+  font-variant-numeric: tabular-nums; letter-spacing: .04em;
+}
+.program__step h3 {
+  font-family: var(--display); font-weight: 400; letter-spacing: -.025em;
+  font-size: clamp(1.5rem,3.4vw,2.6rem); line-height: 1.1; color: var(--on-dark);
+}
+.program__step p { color: var(--on-dark-mut); font-size: clamp(.95rem,1.3vw,1.08rem); line-height: 1.6; }
+.program__ticks { display: none; list-style: none; margin: 0; padding: 0; }
+.program__foot {
+  margin-top: clamp(26px,3vw,40px); font-size: 11px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--on-dark-mut);
+}
+
+/* --- закреплённый режим --- */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .program.is-pinned { height: 480vh; }
+  .program.is-pinned .program__stage {
+    position: sticky; top: 0; height: 100svh; display: flex; align-items: center;
+    padding-block: 0;
+  }
+  /* шаги ложатся в одну ячейку и сменяют друг друга */
+  .program.is-pinned .program__steps { display: grid; margin-top: clamp(34px,4vw,54px); }
+  .program.is-pinned .program__step {
+    grid-area: 1 / 1; max-width: 34ch;
+    opacity: 0; transform: translateY(18px);
+    transition: opacity .55s var(--ease-out), transform .55s var(--ease-out);
+  }
+  .program.is-pinned .program__step.is-on { opacity: 1; transform: none; }
+  .program.is-pinned .program__steps { min-height: 12em; align-content: center; }
+
+  .program.is-pinned .program__big {
+    display: block; position: absolute; right: clamp(60px,8vw,150px); top: 50%;
+    transform: translateY(-50%); z-index: 1;
+    font-family: var(--display); font-weight: 400; font-variant-numeric: tabular-nums;
+    font-size: clamp(11rem, 26vw, 26rem); line-height: .8; letter-spacing: -.04em;
+    color: rgba(236,233,221,.05); user-select: none;
+  }
+  .program.is-pinned .program__step h3 { font-size: clamp(1.9rem,4vw,3.4rem); }
+  .program.is-pinned .program__step { max-width: 26ch; }
+  .program.is-pinned .program__step p { max-width: 34ch; }
+
+  .program.is-pinned .program__ticks {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    gap: 8px; max-width: 420px; margin-top: clamp(30px,4vw,46px);
+  }
+  .program.is-pinned .program__ticks li {
+    height: 2px; background: rgba(236,233,221,.16); position: relative; overflow: hidden;
+  }
+  .program.is-pinned .program__ticks li::after {
+    content: ""; position: absolute; inset: 0; background: var(--sage);
+    transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease-out);
+  }
+  .program.is-pinned .program__ticks li.done::after { transform: scaleX(1); }
+}
+
+/* =====================================================================
+   КРИВАЯ ПРОГНОЗА — рисуется по мере прокрутки
+   Нативная scroll-driven анимация: считается вне основного потока,
+   без слушателей скролла. Где не поддерживается — кривая просто
+   нарисована целиком, поэтому смысл не теряется.
+   ===================================================================== */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Таймлайн объявляем на самом блоке: у SVG-пути нет собственной
+       геометрии для view(), поэтому анимация срабатывала сразу. */
+    .forecast__viz { view-timeline-name: --curve; view-timeline-axis: block; }
+
+    .curve__line {
+      stroke-dasharray: 1; stroke-dashoffset: 1;
+      animation: curve-draw linear both;
+      animation-timeline: --curve; animation-range: entry 25% entry 95%;
+    }
+    .curve__fill {
+      opacity: 0; animation: curve-fade linear both;
+      animation-timeline: --curve; animation-range: entry 45% entry 100%;
+    }
+    .curve__dot {
+      opacity: 0; animation: curve-dot linear both;
+      animation-timeline: --curve;
+      animation-range: entry calc(35% + var(--i) * 18%) entry calc(50% + var(--i) * 16%);
+    }
+  }
+}
+@keyframes curve-draw { to { stroke-dashoffset: 0; } }
+@keyframes curve-fade { to { opacity: 1; } }
+@keyframes curve-dot  { to { opacity: 1; } }
+
 /* ===================== Reveal ===================== */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1.1s var(--ease-out), transform 1.1s var(--ease-out); }
 .reveal.in { opacity: 1; transform: none; }
 .reveal[data-d="1"]{ transition-delay:.09s } .reveal[data-d="2"]{ transition-delay:.18s }
 .reveal[data-d="3"]{ transition-delay:.27s } .reveal[data-d="4"]{ transition-delay:.36s }
-/* киношная штора для медиа-блоков */
-.wipe { clip-path: inset(0 0 100% 0); transition: clip-path 1.4s var(--ease-out); }
-.wipe.in { clip-path: inset(0 0 0 0); }
+/* Киношная штора.
+   ВАЖНО: реализована накладкой, а не clip-path. Обрезка inset(0 0 100%)
+   схлопывает элемент в нулевую площадь, и IntersectionObserver перестаёт
+   его видеть — блок никогда не открывается. Накладка оставляет геометрию
+   нетронутой, поэтому наблюдатель работает как обычно. */
+.wipe { position: relative; }
+.wipe::after {
+  content: ""; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: var(--paper); transform-origin: bottom;
+  transition: transform 1.2s var(--ease-out);
+}
+.cream .wipe::after { background: var(--cream); }
+.wipe.in::after { transform: scaleY(0); }
 
 @media (prefers-reduced-motion: reduce){
-  .reveal,.wipe{ opacity:1; transform:none; clip-path:none; transition:none }
+  .reveal,.wipe{ opacity:1; transform:none; transition:none }
+  .wipe::after{ display:none }
   .hero__media .still,.cta__media .still{ animation:none; transform:scale(1.06) }
   .hero__light,.hero__kicker .dot{ animation:none }
   .line > span{ transform:none }
