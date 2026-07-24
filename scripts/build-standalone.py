@@ -42,9 +42,14 @@ for block in re.findall(r"@font-face \{.*?\}", fonts_css, re.S):
     kept.append(block.replace("../" + src.group(1), data_uri(src.group(1), "font/woff2")))
 fonts_css = "\n".join(kept)
 
-# --- стили: фотография стены внутрь -----------------------------------------
+# --- стили: фотография стены внутрь ------------------------------------------
+# Картинка встречается в разметке несколько раз (герой, портал, программа,
+# финал). Вшивать её копиями — это лишний мегабайт, поэтому объявляем один
+# раз переменной и везде ссылаемся на неё.
 styles = read("css", "styles.css")
-styles = styles.replace('url("../assets/img/wall.jpeg")', 'url("%s")' % data_uri("assets/img/wall.jpeg", "image/jpeg"))
+wall = data_uri("assets/img/wall.jpeg", "image/jpeg")
+styles = styles.replace('url("../assets/img/wall.jpeg")', "var(--wall)")
+styles = styles.replace(":root {", ':root {\n  --wall: url("%s");' % wall, 1)
 
 scripts = "\n".join(read("js", n) for n in ("media.js", "data.js", "main.js"))
 
