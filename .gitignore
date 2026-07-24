@@ -3,3 +3,4 @@ shots/
 shot.mjs
 package-lock.json
 .DS_Store
+dist/
