@@ -105,7 +105,11 @@
     };
     var dark = stage.querySelector("[data-dark]");
     var glow = stage.querySelector("[data-glow]");
-    var cap  = stage.querySelector("[data-cap]");
+    // Две реплики по ходу прохода: [появление, полная видимость, уход]
+    var caps = [
+      { el: stage.querySelector('[data-cap="0"]'), from: 0.04, to: 0.40 },
+      { el: stage.querySelector('[data-cap="1"]'), from: 0.50, to: 0.86 }
+    ].filter(function (c) { return c.el; });
 
     // Видео-режим (если ролик подключён)
     var vid = null;
@@ -121,7 +125,7 @@
       });
     }
 
-    if (reduce) { if (cap) cap.style.opacity = "1"; return; }
+    if (reduce) { caps.forEach(function (c) { c.el.style.opacity = "1"; }); return; }
 
     var ticking = false;
     function update() {
@@ -147,12 +151,17 @@
       if (glow) glow.style.opacity = String(Math.sin(Math.min(1, p * 1.15) * Math.PI) * 0.95);
       // затемнение к финалу — «мы внутри»
       if (dark) dark.style.opacity = String(Math.max(0, (p - 0.72) / 0.28));
-      // подпись живёт в середине прохода
-      if (cap) {
-        var o = p < 0.12 ? p / 0.12 : p > 0.66 ? Math.max(0, 1 - (p - 0.66) / 0.2) : 1;
-        cap.style.opacity = String(o);
-        cap.style.transform = "translateY(" + (1 - o) * 16 + "px)";
-      }
+      // реплики появляются и уходят по своим отрезкам прохода
+      caps.forEach(function (c) {
+        var fade = 0.09, o;
+        if (p < c.from || p > c.to) o = 0;
+        else if (p < c.from + fade) o = (p - c.from) / fade;
+        else if (p > c.to - fade)   o = (c.to - p) / fade;
+        else o = 1;
+        o = Math.max(0, Math.min(1, o));
+        c.el.style.opacity = String(o);
+        c.el.style.transform = "translateY(" + (1 - o) * 18 + "px)";
+      });
       ticking = false;
     }
     function onScroll() {
@@ -365,11 +374,11 @@
       e.preventDefault();
       var name = form.name.value.trim(), phone = form.phone.value.trim();
       if (!name || !phone) {
-        if (ok) { ok.style.color = "#ff9a9a"; ok.textContent = "Заполните имя и телефон — и мы вам перезвоним."; }
+        if (ok) { ok.style.color = "#ff9a9a"; ok.textContent = "Оставьте имя и телефон — иначе мы не сможем перезвонить."; }
         return;
       }
       // Демо: в проде здесь отправка на бэкенд/CRM.
-      if (ok) { ok.style.color = ""; ok.textContent = "Спасибо, " + name + "! Заявка принята — свяжемся с вами в ближайшее время."; }
+      if (ok) { ok.style.color = ""; ok.textContent = "Спасибо, " + name + ". Заявку получили — перезвоним в ближайшее рабочее время."; }
       form.reset();
     });
   }

@@ -3,16 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Manspire Academy — Академия стрижек. Курс с нуля до профессионала</title>
-<meta name="description" content="Manspire Academy — академия мужских стрижек. Курс с нуля: приходите без опыта и становитесь профессионалом. Более 500 выпускников, помощь с трудоустройством." />
+<title>Manspire Academy — научим стричь с нуля. Академия мужских стрижек</title>
+<meta name="description" content="Академия мужских стрижек Manspire. Курс с нуля: приходите без опыта и выходите с профессией. Больше 500 выпускников, живая практика на моделях, помощь с трудоустройством." />
 <meta name="theme-color" content="#060a07" />
-<meta property="og:title" content="Manspire Academy — академия стрижек" />
-<meta property="og:description" content="Войдите в академию. Курс с нуля до профессионала. Более 500 выпускников и помощь с трудоустройством." />
+<meta property="og:title" content="Manspire Academy — придёте без опыта, уйдёте с профессией" />
+<meta property="og:description" content="Академия мужских стрижек. Учим ремеслу с самого начала — от первой машинки до вашего первого клиента в кресле." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="assets/img/wall.jpeg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="preload" href="assets/fonts/Onest-300-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="css/fonts.css" />
 <link rel="stylesheet" href="css/styles.css" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 28'%3E%3Cpath d='M16 2 30 14 16 26 2 14Z' fill='none' stroke='%23a8ff5b' stroke-width='2'/%3E%3C/svg%3E" />
 </head>
@@ -22,18 +21,17 @@
 <div class="vignette" aria-hidden="true"></div>
 <div class="route-progress" id="routeProgress" aria-hidden="true"></div>
 
-<!-- Рельса глав — маршрут по академии -->
 <nav class="chapters" id="chapters" aria-label="Маршрут по академии">
   <a href="#hero"       data-ch="hero"><span class="nm">Портал</span><span class="dt"></span></a>
-  <a href="#philosophy" data-ch="philosophy"><span class="nm">Философия</span><span class="dt"></span></a>
+  <a href="#philosophy" data-ch="philosophy"><span class="nm">Ремесло</span><span class="dt"></span></a>
   <a href="#course"     data-ch="course"><span class="nm">Курс</span><span class="dt"></span></a>
   <a href="#about"      data-ch="about"><span class="nm">Академия</span><span class="dt"></span></a>
   <a href="#reboot"     data-ch="reboot"><span class="nm">Перезагрузка</span><span class="dt"></span></a>
-  <a href="#teachers"   data-ch="teachers"><span class="nm">Преподаватели</span><span class="dt"></span></a>
+  <a href="#teachers"   data-ch="teachers"><span class="nm">Мастера</span><span class="dt"></span></a>
   <a href="#students"   data-ch="students"><span class="nm">Ученики</span><span class="dt"></span></a>
   <a href="#stories"    data-ch="stories"><span class="nm">Истории</span><span class="dt"></span></a>
-  <a href="#employment" data-ch="employment"><span class="nm">После</span><span class="dt"></span></a>
-  <a href="#enroll"     data-ch="enroll"><span class="nm">Вход</span><span class="dt"></span></a>
+  <a href="#employment" data-ch="employment"><span class="nm">Работа</span><span class="dt"></span></a>
+  <a href="#enroll"     data-ch="enroll"><span class="nm">Запись</span><span class="dt"></span></a>
 </nav>
 
 <!-- ============================ TOPBAR ============================ -->
@@ -48,9 +46,9 @@
   <nav class="nav" aria-label="Основная навигация">
     <a href="#course">Курс</a>
     <a href="#about">Академия</a>
-    <a href="#teachers">Преподаватели</a>
+    <a href="#teachers">Мастера</a>
     <a href="#students">Ученики</a>
-    <a href="#employment">После обучения</a>
+    <a href="#employment">Работа</a>
   </nav>
   <a class="btn btn--glow" href="#enroll">Записаться <span class="arr">→</span></a>
   <button class="burger" id="burger" aria-label="Открыть меню"><i></i><i></i><i></i></button>
@@ -59,18 +57,18 @@
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <button class="mobile-menu__close" id="menuClose" aria-label="Закрыть меню">×</button>
   <a href="#course">Курс с нуля</a>
+  <a href="#doubts">Сомнения</a>
   <a href="#about">Академия</a>
   <a href="#reboot">Перезагрузка</a>
-  <a href="#teachers">Преподаватели</a>
+  <a href="#teachers">Мастера</a>
   <a href="#students">Ученики</a>
-  <a href="#stories">Истории</a>
-  <a href="#employment">После обучения</a>
+  <a href="#employment">Работа после</a>
   <a class="btn btn--glow" href="#enroll">Записаться на курс →</a>
 </div>
 
 <main id="top">
 
-<!-- ==================== HERO — стена дышит ==================== -->
+<!-- ==================== HERO ==================== -->
 <section class="hero on-dark" id="hero" data-chapter="hero">
   <div class="hero__media" id="heroMedia" aria-hidden="true">
     <div class="still"></div>
@@ -82,30 +80,29 @@
     <div class="wrap">
       <span class="hero__kicker"><span class="dot"></span>Академия мужских стрижек</span>
       <h1 class="hero__title">
-        <span class="line"><span>Вы не открываете</span></span>
-        <span class="line"><span>сайт. Вы <em>входите</em></span></span>
-        <span class="line"><span>в академию.</span></span>
+        <span class="line"><span>Придёте без опыта.</span></span>
+        <span class="line"><span>Уйдёте с <em>профессией</em>.</span></span>
       </h1>
       <p class="hero__sub reveal in" data-d="2">
-        Наша фирменная стена встречает каждого, кто приходит впервые.
-        Пусть она встретит и вас — прямо сейчас.
+        Учим ремеслу с самого начала — от того, как правильно держать машинку,
+        до вашего первого клиента в кресле.
       </p>
       <div class="hero__cta reveal in" data-d="3">
-        <a class="btn btn--glow" href="#course">Курс с нуля <span class="arr">→</span></a>
-        <a class="btn btn--ghost" href="#philosophy">Пройти по академии</a>
+        <a class="btn btn--glow" href="#course">Записаться на курс <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="#course">Как проходит обучение</a>
       </div>
       <div class="hero__meta reveal in" data-d="4">
         <div><b>500+</b><span>выпускников</span></div>
-        <div><b>С нуля</b><span>без опыта в профессию</span></div>
-        <div><b>10+ лет</b><span>практики</span></div>
-        <div><b>Помощь</b><span>с трудоустройством</span></div>
+        <div><b>0</b><span>опыта нужно на старте</span></div>
+        <div><b>6</b><span>блоков программы</span></div>
+        <div><b>Работа</b><span>помогаем найти</span></div>
       </div>
     </div>
   </div>
   <div class="hero__cue" aria-hidden="true">Войти <i></i></div>
 </section>
 
-<!-- ============ ПОРТАЛ — скролл ведёт сквозь стену ============ -->
+<!-- ============ ПОРТАЛ ============ -->
 <section class="portal" id="portal" aria-label="Проход сквозь стену в академию">
   <div class="portal__stage" id="portalStage">
     <div class="portal__layer portal__layer--far"  data-layer="far"  aria-hidden="true"></div>
@@ -114,36 +111,38 @@
     <div class="portal__dark" data-dark aria-hidden="true"></div>
     <div class="portal__glow" data-glow aria-hidden="true"></div>
     <div class="portal__cap">
-      <p data-cap="0">За этой стеной начинается <em>другая</em> профессия.</p>
+      <p data-cap="0">Эту стену видит каждый, кто приходит к нам впервые.</p>
+      <p data-cap="1">Для одних это просто зелень. Для других — <em>начало новой профессии</em>.</p>
     </div>
     <span class="portal__hint" aria-hidden="true">Прокрутите, чтобы войти</span>
   </div>
 </section>
 
-<!-- ==================== ФИЛОСОФИЯ ==================== -->
+<!-- ==================== РЕМЕСЛО ==================== -->
 <section class="section dark on-dark manifesto" id="philosophy" data-chapter="philosophy">
   <div class="wrap">
     <div style="text-align:center; margin-bottom:46px;">
-      <span class="eyebrow reveal">Философия</span>
+      <span class="eyebrow reveal">Зачем это вам</span>
     </div>
     <p class="huge reveal" data-d="1">
-      Эта стена — не декор. <em>Это лицо академии</em> и первая точка контакта.
-      <span>Мы перенесли её ощущение в цифровое пространство, чтобы сайт и академия стали одним местом.</span>
+      Стрижка — это ремесло. <em>Ремесло не сокращают</em> вместе с отделом
+      и не закрывают вместе с компанией. <span>Один раз поставленные руки остаются с вами навсегда.</span>
     </p>
-    <p class="sign reveal" data-d="2">Порог новой профессии · нового окружения · новой жизни</p>
+    <p class="sign reveal" data-d="2">Ремесло · Практика · Работа</p>
   </div>
 </section>
 
-<!-- ==================== КУРС С НУЛЯ ==================== -->
+<!-- ==================== КУРС ==================== -->
 <section class="section paper" id="course" data-chapter="course" data-invert>
   <div class="wrap">
     <div class="course-grid">
       <div>
         <div class="head reveal" style="margin-bottom:0;">
-          <span class="eyebrow">Главный продукт</span>
-          <h2 class="display">Курс с&nbsp;нуля<br>до&nbsp;<em>профессионала</em></h2>
-          <p class="lead">Это академия стрижек. Можно прийти без опыта — и выйти мастером,
-          который уверенно стоит за креслом. Мы ведём за руку от первой машинки до первого клиента.</p>
+          <span class="eyebrow">Основной курс</span>
+          <h2 class="display">С нуля<br>до первого <em>клиента</em></h2>
+          <p class="lead">Главный продукт академии — курс для тех, у кого нет опыта.
+          Это не мастер-класс на выходные и не «повышение квалификации».
+          Это полное обучение профессии с самого начала.</p>
         </div>
 
         <div class="zero reveal" data-d="1">
@@ -154,66 +153,101 @@
         <div class="course-features reveal" data-d="2">
           <div class="feat">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v18M5 8l7-5 7 5"/></svg>
-            <h5>Практика с первого дня</h5>
-            <p>Работа руками, а не только теория и конспекты.</p>
+            <h5>Инструмент в руках сразу</h5>
+            <p>Практика с первого занятия. Теории ровно столько, чтобы понимать, что делают ваши руки.</p>
           </div>
           <div class="feat">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>
-            <h5>Работа на моделях</h5>
-            <p>Живые клиенты и реальные ситуации ещё во время учёбы.</p>
+            <h5>Живые модели, а не манекены</h5>
+            <p>Учитесь на реальных людях с реальными запросами — ровно так же будет и на работе.</p>
           </div>
           <div class="feat">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
             <h5>Малые группы</h5>
-            <p>Внимание каждому — руку ставят индивидуально.</p>
+            <p>Преподаватель успевает поправить руку до того, как ошибка закрепится в привычку.</p>
           </div>
           <div class="feat">
             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 7 9 18l-5-5"/></svg>
-            <h5>Диплом и портфолио</h5>
-            <p>Выходите с работами, которые не стыдно показать.</p>
+            <h5>Портфолио к выпуску</h5>
+            <p>Уходите с работами, которые можно показать работодателю, а не с сертификатом в папке.</p>
           </div>
         </div>
       </div>
 
       <div class="reveal" data-d="1">
         <ol class="path">
-          <li><h4>Знакомство и инструмент</h4><p>Машинка, ножницы, гигиена, посадка клиента. С полного нуля.</p></li>
-          <li><h4>База и форма</h4><p>Классические стрижки, окантовка, понимание головы и роста волос.</p></li>
-          <li><h4>Фейд и текстура</h4><p>Плавные переходы, работа с плотностью и современные формы.</p></li>
-          <li><h4>Борода и образ</h4><p>Оформление бороды, стайлинг и целостный финальный образ.</p></li>
-          <li><h4>Скорость и клиент</h4><p>Чистота, тайминг, коммуникация — как принимать реальный поток.</p></li>
-          <li><h4>Старт в профессии</h4><p>Портфолио, аттестация и выход на первое кресло.</p></li>
+          <li><h4>Инструмент и посадка</h4><p>Как держать машинку и ножницы, как посадить клиента и как не сажать спину за креслом. С абсолютного нуля.</p></li>
+          <li><h4>База и форма</h4><p>Классические стрижки, окантовка, форма головы и направление роста волос. Фундамент, на котором держится вся дальнейшая работа.</p></li>
+          <li><h4>Фейд и переходы</h4><p>Самая востребованная техника в мужском зале: плавные переходы, работа с плотностью, современные формы.</p></li>
+          <li><h4>Борода и образ</h4><p>Оформление бороды и стайлинг — чтобы вы собирали законченный образ, а не просто «подстригали».</p></li>
+          <li><h4>Скорость и клиент</h4><p>Тайминг, чистота работы и разговор в кресле. Как принимать поток, а не одного человека за час.</p></li>
+          <li><h4>Выход в профессию</h4><p>Портфолио, аттестация и помощь с поиском первого рабочего места.</p></li>
         </ol>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== АКАДЕМИЯ / ЦИФРЫ + ПРОГНОЗ ==================== -->
-<section class="section cream" id="about" data-chapter="about" data-invert>
+<!-- ==================== СОМНЕНИЯ / ОТРАБОТКА ВОЗРАЖЕНИЙ ==================== -->
+<section class="section cream" id="doubts" data-invert>
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">Честно</span>
+      <h2 class="display">Сомнения, с которыми<br>приходят почти все</h2>
+    </div>
+    <div class="doubts">
+      <div class="doubt reveal">
+        <h4>«У меня совсем нет опыта»</h4>
+        <p>Так приходит большинство. Курс построен ровно под это: мы не предполагаем,
+        что вы что-то умеете заранее, и начинаем с того, как взять инструмент.</p>
+      </div>
+      <div class="doubt reveal" data-d="1">
+        <h4>«А вдруг у меня не получится»</h4>
+        <p>Стрижка — это моторика, а не талант. Руку ставят повторением под присмотром
+        мастера. Мы не отпускаем ученика, пока техника не станет стабильной.</p>
+      </div>
+      <div class="doubt reveal" data-d="2">
+        <h4>«Мне поздно начинать»</h4>
+        <p>За креслом смотрят на руки и голову, а не на дату в паспорте.
+        К нам приходят и сразу после школы, и после сорока — и те и другие доходят до работы.</p>
+      </div>
+      <div class="doubt reveal" data-d="3">
+        <h4>«А куда потом идти работать»</h4>
+        <p>Это наша забота тоже: рекомендации в барбершопы, подготовка к тестовой стрижке
+        и связи в индустрии. Подробнее — в разделе о трудоустройстве.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== АКАДЕМИЯ ==================== -->
+<section class="section paper" id="about" data-chapter="about" data-invert>
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Об академии</span>
-      <h2 class="display">Опыт, который<br>можно измерить</h2>
-      <p class="lead">За годы практики через академию прошли сотни людей — с разным прошлым и одной целью.
-      Мы знаем этот путь наизусть, потому что прошли его вместе с каждым.</p>
+      <h2 class="display">Больше 500 человек<br>уже прошли этот путь</h2>
+      <p class="lead">Мы видели, с чего начинают люди с самым разным прошлым: без опыта,
+      из найма, после армии, со своим делом в другой сфере. Дорога до первого клиента
+      у всех примерно одна — и мы знаем её наизусть.</p>
     </div>
 
     <div class="stats">
-      <div class="stat reveal"><b><span class="pfx">500+</span></b><span>выпускников прошли обучение</span></div>
-      <div class="stat reveal" data-d="1"><b>10<span class="pfx">+</span></b><span>лет практического опыта преподавателей</span></div>
-      <div class="stat reveal" data-d="2"><b>90<span class="pfx">%</span></b><span>учеников приходят без опыта в профессии</span></div>
-      <div class="stat reveal" data-d="3"><b>1<span class="pfx">→</span></b><span>помогаем сделать первый шаг к первому креслу</span></div>
+      <div class="stat reveal"><b>500<span class="pfx">+</span></b><span>выпускников за время работы академии</span></div>
+      <div class="stat reveal" data-d="1"><b>10<span class="pfx">+</span></b><span>лет практики преподавателей за креслом</span></div>
+      <div class="stat reveal" data-d="2"><b>6</b><span>блоков программы — от инструмента до первого клиента</span></div>
+      <div class="stat reveal" data-d="3"><b>0</b><span>опыта нужно, чтобы прийти на курс</span></div>
     </div>
 
     <div class="forecast wipe" data-d="1">
       <div class="forecast__body">
         <span class="eyebrow">Прогноз развития</span>
-        <h3 class="display" style="margin-top:18px;">Мы видим ваш<br>путь наперёд</h3>
+        <h3 class="display" style="margin-top:18px;">Мы примерно знаем,<br>что будет с вами<br>через год</h3>
         <p class="lead" style="margin-top:20px;">
-          Сотни пройденных историй дают нам то, чего нет у новичка, — насмотренность.
-          На основе вашего старта, темпа и целей мы составляем реалистичный прогноз
-          профессионального развития на ближайшее будущее. Не обещания — ориентиры.
+          Сотни пройденных историй дают то, чего нет у новичка, — насмотренность.
+          Мы видим, как быстро ставится рука, когда появляются первые постоянные клиенты
+          и что отличает тех, кто через год работает на себя. Поэтому ещё на старте
+          честно скажем, чего ждать и что для этого придётся делать.
+          Это не обещание дохода. Это ориентир, собранный из чужого опыта.
         </p>
       </div>
       <div class="forecast__viz">
@@ -236,9 +270,9 @@
         </svg>
         <span class="lbl">Траектория ученика</span>
         <div class="forecast__points">
-          <div class="fp"><span class="yr">Старт</span><span class="tx">Первая машинка, первая уверенная стрижка</span></div>
-          <div class="fp"><span class="yr">3 мес</span><span class="tx">Первые клиенты, наработка руки и скорости</span></div>
-          <div class="fp"><span class="yr">1 год</span><span class="tx">Своё кресло, стабильная запись, свой стиль</span></div>
+          <div class="fp"><span class="yr">Старт</span><span class="tx">Руки перестают дрожать: первая стрижка, которую не стыдно показать</span></div>
+          <div class="fp"><span class="yr">3 мес</span><span class="tx">Свои первые клиенты, растёт скорость и чистота работы</span></div>
+          <div class="fp"><span class="yr">1 год</span><span class="tx">Стабильная запись, свой почерк и выбор: кресло в шопе или своя практика</span></div>
         </div>
       </div>
     </div>
@@ -254,48 +288,48 @@
     </div>
     <h2 class="huge reveal" data-d="1">Пере<em>загрузка</em></h2>
     <p class="lead reveal" data-d="2" style="margin:30px auto 0; text-align:center;">
-      Освежить себя. Сменить профессию. Начать новую главу.
-      Для многих академия — это не про волосы. Это про решение изменить жизнь.
+      Многие приходят к нам не за стрижками. Они приходят, потому что устали
+      от работы, которая забирает время и ничего не оставляет взамен.
     </p>
     <div class="reboot__cards">
       <div class="reboot__card reveal" data-d="1">
-        <span class="n">01</span><h4>Освежить себя</h4>
-        <p>Вернуть интерес к делу и к себе. Заняться тем, что даёт энергию, а не забирает её.</p>
+        <span class="n">01</span><h4>Сменить профессию</h4>
+        <p>Ремесло не зависит от рынка вакансий и не сокращается вместе с отделом. Оно всегда при вас.</p>
       </div>
       <div class="reboot__card reveal" data-d="2">
-        <span class="n">02</span><h4>Сменить профессию</h4>
-        <p>Ремесло, которое всегда с вами и всегда востребовано. Без потолка и без офиса.</p>
+        <span class="n">02</span><h4>Зарабатывать руками</h4>
+        <p>Доход, который виден каждый день и зависит от вас, а не от премии в конце квартала.</p>
       </div>
       <div class="reboot__card reveal" data-d="3">
-        <span class="n">03</span><h4>Новая глава</h4>
-        <p>Новое окружение, новые люди, новый ритм. Точка, с которой начинается другая жизнь.</p>
+        <span class="n">03</span><h4>Сменить окружение</h4>
+        <p>Другие люди, другой ритм, другая обстановка. Часто именно за этим к нам и приходят.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ==================== ПРЕПОДАВАТЕЛИ ==================== -->
+<!-- ==================== МАСТЕРА ==================== -->
 <section class="section dark on-dark" id="teachers" data-chapter="teachers">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Преподаватели</span>
       <h2 class="display">Те, кто ставит<br>вам руку</h2>
-      <p class="lead">Практикующие мастера с большим опытом за креслом. Здесь — только профессиональное:
-      что преподают и за что отвечают.</p>
+      <p class="lead">Практикующие мастера, которые каждый день стоят за креслом.
+      Здесь только о работе: что ведут и за что отвечают.</p>
     </div>
     <div class="teachers-grid" id="teachersGrid"></div>
   </div>
 </section>
 
-<!-- ==================== УЧЕНИКИ — лента ==================== -->
+<!-- ==================== УЧЕНИКИ ==================== -->
 <section class="section dark on-dark" id="students" data-chapter="students">
   <div class="wrap">
     <div class="rail-head">
       <div class="head reveal" style="margin-bottom:0;">
         <span class="eyebrow">Ученики</span>
         <h2 class="display">Пришли с нуля —<br>остались в <em>профессии</em></h2>
-        <p class="lead">Выпускники разных лет. У каждого была своя точка старта — и свой результат.
-        Это живая база, которая растёт с каждым набором.</p>
+        <p class="lead">Выпускники разных лет. У каждого была своя точка старта: склад,
+        найм, армия, своё дело. Общее одно — до академии никто из них не умел стричь.</p>
       </div>
       <div class="rail-nav reveal" data-d="1">
         <button type="button" id="railPrev" aria-label="Предыдущие ученики">
@@ -309,78 +343,78 @@
     <div class="rail" id="studentsRail"></div>
     <p class="rail-note reveal">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:var(--glow)"><path d="M12 5v14M5 12h14"/></svg>
-      База пополняется: каждый новый выпуск добавляется в общую историю академии.
+      База пополняется с каждым выпуском: здесь появляются новые имена и новые результаты.
     </p>
   </div>
 </section>
 
-<!-- ==================== ВИДЕО-ИСТОРИИ ==================== -->
+<!-- ==================== ИСТОРИИ ==================== -->
 <section class="section dark on-dark" id="stories" data-chapter="stories">
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Видео-истории</span>
-      <h2 class="display">Ученики — о своём пути</h2>
-      <p class="lead">Живые истории: кто они, как пришли в академию, через что прошли
-      и к какому результату пришли после обучения. Без сценария.</p>
+      <h2 class="display">Лучше послушать их,<br>чем нас</h2>
+      <p class="lead">Выпускники рассказывают сами: кем работали раньше, что оказалось
+      самым сложным в обучении и что изменилось после. Без сценария и заученных фраз.</p>
     </div>
     <div class="videos" id="videosGrid"></div>
   </div>
 </section>
 
-<!-- ==================== ПОСЛЕ ОБУЧЕНИЯ ==================== -->
+<!-- ==================== РАБОТА ПОСЛЕ ==================== -->
 <section class="section paper" id="employment" data-chapter="employment" data-invert>
   <div class="wrap">
     <div class="employ-grid">
       <div>
         <div class="head reveal" style="margin-bottom:0;">
           <span class="eyebrow">После обучения</span>
-          <h2 class="display">Мы не прощаемся<br>на выпускном</h2>
-          <p class="lead">Диплом — это старт, а не финиш. После обучения мы помогаем сделать
-          главное: выйти на реальную работу и начать зарабатывать в профессии.</p>
+          <h2 class="display">После выпуска<br>мы не исчезаем</h2>
+          <p class="lead">Диплом сам по себе не ставит вас за кресло. Поэтому мы доводим
+          дело до главного — до вашей первой реальной работы.</p>
         </div>
         <ul class="employ__list reveal" data-d="1">
           <li>
             <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 7 9 18l-5-5"/></svg>
-            <div><h5>Помощь с трудоустройством</h5><p>Рекомендации в барбершопы и связи в индустрии.</p></div>
+            <div><h5>Рекомендации в барбершопы</h5><p>У нас есть связи в индустрии — направляем выпускников туда, где ждут новых мастеров.</p></div>
           </li>
           <li>
             <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 7 9 18l-5-5"/></svg>
-            <div><h5>Портфолио и подготовка</h5><p>Собираем работы и готовим к собеседованию и стажировке.</p></div>
+            <div><h5>Подготовка к собеседованию</h5><p>Помогаем собрать портфолио и пройти тестовую стрижку так, чтобы вас взяли.</p></div>
           </li>
           <li>
             <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 7 9 18l-5-5"/></svg>
-            <div><h5>Поддержка после старта</h5><p>Остаёмся на связи, когда возникают первые рабочие вопросы.</p></div>
+            <div><h5>Поддержка после старта</h5><p>Первые месяцы за креслом самые сложные. Остаёмся на связи и разбираем рабочие ситуации.</p></div>
           </li>
         </ul>
       </div>
       <aside class="employ__aside wipe" data-d="1">
-        <p class="big">Вы выходите не с&nbsp;<em>дипломом</em>, а с&nbsp;<em>профессией</em>.</p>
-        <p>Задача академии — чтобы после обучения вы встали за кресло, а не остались с сертификатом в столе.</p>
+        <p class="big">Вы выходите не с&nbsp;<em>дипломом</em>, а&nbsp;с&nbsp;<em>профессией</em>.</p>
+        <p>Задача академии — чтобы после обучения вы встали за кресло, а не убрали сертификат в стол.</p>
       </aside>
     </div>
   </div>
 </section>
 
-<!-- ==================== CTA / ВХОД ==================== -->
+<!-- ==================== ЗАПИСЬ ==================== -->
 <section class="section cta on-dark" id="enroll" data-chapter="enroll">
   <div class="cta__media" id="ctaMedia" aria-hidden="true"><div class="still"></div></div>
   <div class="cta__scrim" aria-hidden="true"></div>
   <div class="wrap">
-    <span class="eyebrow reveal" style="justify-content:center; display:flex;">Последний шаг</span>
-    <h2 class="display reveal" data-d="1" style="margin-top:20px;">Станьте частью<br>этого <em>пространства</em></h2>
-    <p class="lead reveal" data-d="2" style="margin:24px auto 0; text-align:center; max-width:50ch;">
-      Оставьте контакты — расскажем о ближайшем наборе, программе и стоимости.
-      Дальше вы просто входите в дверь.
+    <span class="eyebrow reveal" style="justify-content:center; display:flex;">Запись на курс</span>
+    <h2 class="display reveal" data-d="1" style="margin-top:20px;">Начните с одного<br><em>разговора</em></h2>
+    <p class="lead reveal" data-d="2" style="margin:24px auto 0; text-align:center; max-width:48ch;">
+      Оставьте номер — перезвоним, расспросим о ваших целях и честно скажем,
+      подходит вам курс или нет. Без давления и без «последних мест».
     </p>
     <form class="cta__form reveal" data-d="2" id="enrollForm" novalidate>
       <div class="cta__row">
-        <label class="field"><input type="text" name="name" placeholder="Ваше имя" required autocomplete="name" /></label>
-        <label class="field"><input type="tel" name="phone" placeholder="Телефон" required autocomplete="tel" /></label>
+        <label class="field"><input type="text" name="name" placeholder="Как вас зовут" required autocomplete="name" /></label>
+        <label class="field"><input type="tel" name="phone" placeholder="Телефон для связи" required autocomplete="tel" /></label>
       </div>
-      <label class="field"><input type="text" name="about" placeholder="Есть ли опыт? (можно «нет» — это нормально)" /></label>
-      <button class="btn btn--glow" type="submit">Записаться на курс <span class="arr">→</span></button>
+      <label class="field"><input type="text" name="about" placeholder="Есть опыт в стрижках? Можно ответить «нет»" /></label>
+      <button class="btn btn--glow" type="submit">Оставить заявку <span class="arr">→</span></button>
       <p class="cta__ok" id="formOk" role="status" aria-live="polite"></p>
-      <p class="cta__fine">Нажимая кнопку, вы соглашаетесь на обработку данных. Мы свяжемся с вами лично.</p>
+      <p class="cta__fine">Перезваниваем в рабочее время. Телефон нужен только для разговора об обучении — рассылок не будет.</p>
     </form>
   </div>
 </section>
@@ -397,31 +431,32 @@
           </svg>
           <span class="brand__name">Manspire<small>Academy</small></span>
         </a>
-        <p>Академия мужских стрижек. Курс с нуля до профессионала, живая практика и помощь с трудоустройством. Ваша новая глава начинается у нашей стены.</p>
+        <p>Академия мужских стрижек. Учим ремеслу с нуля и помогаем выйти
+        на первую работу в профессии.</p>
       </div>
       <div>
-        <h5>Маршрут</h5>
+        <h5>Об обучении</h5>
         <ul>
-          <li><a href="#philosophy">Философия</a></li>
           <li><a href="#course">Курс с нуля</a></li>
+          <li><a href="#doubts">Частые сомнения</a></li>
           <li><a href="#about">Об академии</a></li>
-          <li><a href="#reboot">Перезагрузка</a></li>
           <li><a href="#teachers">Преподаватели</a></li>
+          <li><a href="#employment">Работа после выпуска</a></li>
         </ul>
       </div>
       <div>
-        <h5>Контакты</h5>
+        <h5>Выпускники</h5>
         <ul>
-          <li><a href="#enroll">Записаться на курс</a></li>
-          <li><a href="#students">Ученики</a></li>
+          <li><a href="#students">Наши ученики</a></li>
           <li><a href="#stories">Видео-истории</a></li>
-          <li><a href="#employment">После обучения</a></li>
+          <li><a href="#reboot">Смена профессии</a></li>
+          <li><a href="#enroll">Записаться на курс</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© <span id="year"></span> Manspire Academy. Академия стрижек.</span>
-      <span>Войдите в академию — ещё до того, как переступите её двери.</span>
+      <span>© <span id="year"></span> Manspire Academy · Академия мужских стрижек</span>
+      <span>Ваша новая глава начинается у нашей стены</span>
     </div>
   </div>
 </footer>
