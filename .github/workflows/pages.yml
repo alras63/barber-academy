@@ -1,0 +1,45 @@
+name: Публикация сайта
+
+# Сайт статический (index.html + css + js + assets), поэтому сборка не нужна:
+# содержимое репозитория отдаётся как есть.
+#
+# configure-pages с enablement: true включает GitHub Pages сам, если он ещё
+# не включён, — поэтому руками в настройках ничего трогать не надо.
+
+on:
+  push:
+    branches: [claude/manspire-academy-website-5ogl0m]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Забрать код
+        uses: actions/checkout@v4
+
+      - name: Включить и настроить Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Упаковать сайт
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Опубликовать
+        id: deployment
+        uses: actions/deploy-pages@v4
