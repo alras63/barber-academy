@@ -12,7 +12,7 @@ CSS и JS вставляются внутрь разметки.
 import base64, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "dist", "manspire-standalone.html")
+OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "dist", "menscut-standalone.html")
 
 # Для предпросмотра берём только кириллицу и латиницу: расширенные наборы
 # добавляют ~90 КБ, а на этом сайте не используются.

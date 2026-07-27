@@ -22,7 +22,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "dist", "manspire-tilda.html")
+OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "dist", "menscut-tilda.html")
 TMP = os.path.join(ROOT, "dist", "_base.html")
 
 # базовую самодостаточную сборку не дублируем — переиспользуем

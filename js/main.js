@@ -363,13 +363,11 @@
     Array.prototype.forEach.call(animated, function (el) { io.observe(el); });
   }
 
-  /* ============ Topbar, прогресс, активная глава ============ */
-  var topbar   = document.getElementById("topbar");
-  var progress = document.getElementById("routeProgress");
-  var rail2    = document.getElementById("chapters");
-  var chapLinks = rail2 ? rail2.querySelectorAll("a") : [];
-  var sections = document.querySelectorAll("[data-chapter]");
-  var invertZones = document.querySelectorAll("[data-invert]");
+  /* ===================== Шапка =====================
+     Рельса глав, полоса прогресса и плёночные оверлеи убраны намеренно:
+     это был визуальный шум, который съедал воздух. Осталась только шапка.
+  ================================================================= */
+  var topbar = document.getElementById("topbar");
 
   var tick = false;
   function onScroll() {
@@ -378,26 +376,6 @@
     requestAnimationFrame(function () {
       var y = window.pageYOffset || document.documentElement.scrollTop;
       if (topbar) topbar.classList.toggle("is-scrolled", y > 60);
-      if (progress) {
-        var h = document.documentElement.scrollHeight - window.innerHeight;
-        progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
-      }
-      // активная глава
-      var mid = y + window.innerHeight * 0.4, current = null;
-      Array.prototype.forEach.call(sections, function (s) {
-        if (s.offsetTop <= mid) current = s.dataset.chapter;
-      });
-      Array.prototype.forEach.call(chapLinks, function (a) {
-        a.classList.toggle("on", a.dataset.ch === current);
-      });
-      // рельса темнеет на светлых секциях
-      if (rail2) {
-        var inv = false, probe = y + window.innerHeight / 2;
-        Array.prototype.forEach.call(invertZones, function (z) {
-          if (probe >= z.offsetTop && probe <= z.offsetTop + z.offsetHeight) inv = true;
-        });
-        rail2.classList.toggle("inv", inv);
-      }
       tick = false;
     });
   }
