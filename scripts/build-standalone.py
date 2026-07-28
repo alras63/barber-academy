@@ -52,6 +52,9 @@ styles = styles.replace('url("../assets/img/wall.jpeg")', "var(--wall)")
 styles = styles.replace(":root {", ':root {\n  --wall: url("%s");' % wall, 1)
 
 scripts = "\n".join(read("js", n) for n in ("media.js", "data.js", "main.js"))
+# В одном файле внешних ресурсов нет: путь к постеру вёл бы в никуда.
+# Постер нужен только вместе с роликом, поэтому здесь он обнуляется.
+scripts = scripts.replace('poster: "assets/img/wall.jpeg"', "poster: null")
 
 # --- разметка: вынимаем содержимое <body> ------------------------------------
 html = read("index.html")

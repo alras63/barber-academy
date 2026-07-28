@@ -369,6 +369,20 @@
   ================================================================= */
   var topbar = document.getElementById("topbar");
 
+  /* Страховка от «навсегда невидимого» блока.
+     IntersectionObserver может не успеть сработать, если экран
+     перепрыгнул содержимое разом — например, при переходе по якорю.
+     Тогда блок остаётся скрытым до перезагрузки. Поэтому после каждой
+     прокрутки добираем всё, что уже поднялось выше нижней кромки экрана. */
+  function sweepRevealed() {
+    var pending = document.querySelectorAll(".reveal:not(.in), .wipe:not(.in)");
+    for (var i = 0; i < pending.length; i++) {
+      if (pending[i].getBoundingClientRect().top < window.innerHeight) {
+        pending[i].classList.add("in");
+      }
+    }
+  }
+
   var tick = false;
   function onScroll() {
     if (tick) return;
@@ -376,6 +390,7 @@
     requestAnimationFrame(function () {
       var y = window.pageYOffset || document.documentElement.scrollTop;
       if (topbar) topbar.classList.toggle("is-scrolled", y > 60);
+      if (!reduce) sweepRevealed();
       tick = false;
     });
   }

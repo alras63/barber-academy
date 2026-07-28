@@ -350,15 +350,30 @@ p { margin: 0; }
 .pcard__img { position: absolute; inset: 0; z-index: 0; }
 .pcard__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .pcard:hover .pcard__img img { transform: scale(1.05); }
-/* Монограмма-плейсхолдер живёт в верхней трети — не спорит с подписью */
+/* =====================================================================
+   СЛОТ ПОД СЪЁМКУ
+   Пока настоящих портретов нет, карточка показывает не пустоту, а
+   осознанный слот: тональная масса на месте будущего снимка, инициалы
+   и подпись «фото». Макет можно оценивать до фотосессии, и сразу видно,
+   что здесь появится. Как только в js/data.js заполнено поле photo,
+   слот молча заменяется снимком.
+   ===================================================================== */
 .pcard__mono {
   position: absolute; inset: 0; z-index: 0;
-  display: flex; align-items: flex-start; justify-content: center; padding-top: 20%;
-  font-family: var(--display); font-size: clamp(3.4rem,6vw,5rem); letter-spacing: .06em;
-  color: rgba(255,255,255,.34);
+  /* Позиция отсчитывается от ВЕРХА кадра, а не по центру: высота подписи
+     у карточек разная, и центрирование неизбежно наезжало на имя. */
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 15%;
+  font-family: var(--display); font-size: clamp(2.4rem,4.2vw,3.4rem);
+  font-weight: 200; letter-spacing: .16em; text-indent: .16em;
+  color: rgba(255,255,255,.36);
   background:
-    radial-gradient(70% 50% at 50% 26%, rgba(255,255,255,.12), transparent 70%),
-    var(--ink);
+    radial-gradient(56% 42% at 50% 36%, rgba(255,255,255,.13), transparent 72%),
+    linear-gradient(168deg, #262626 0%, #141414 54%, #0b0b0b 100%);
+}
+/* мелкое зерно снимает ощущение плоской заливки */
+.pcard__mono::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
 }
 .pcard::after {
   content:""; position:absolute; inset:0; z-index:1;
@@ -414,10 +429,18 @@ p { margin: 0; }
 .videos { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(14px,1.8vw,22px); }
 .vcard {
   position: relative; aspect-ratio: 9/14; overflow: hidden;
-  background: var(--ink);
+  /* до появления настоящих обложек — фактура собственной стены в ч/б,
+     а не абстрактная заглушка */
+  background:
+    linear-gradient(180deg, rgba(10,10,10,.5), rgba(10,10,10,.92)),
+    url("../assets/img/wall.jpeg") center 40% / cover no-repeat;
+  filter: grayscale(1);
   color: var(--on-dark); display: flex; flex-direction: column; justify-content: flex-end;
   transition: transform .8s var(--ease);
 }
+/* разное кадрирование, чтобы обложки не выглядели копией друг друга */
+.vcard:nth-child(2) { background-position: center, 22% 62%; }
+.vcard:nth-child(3) { background-position: center, 78% 30%; }
 .vcard:hover { transform: translateY(-6px); }
 .vcard img, .vcard video { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index:0; }
 .vcard::after { content:""; position:absolute; inset:0; z-index:1; background: linear-gradient(to top, rgba(0,0,0,.94), transparent 62%); pointer-events: none; }
