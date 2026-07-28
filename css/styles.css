@@ -117,8 +117,6 @@ p { margin: 0; }
 .btn .arr { transition: transform .5s var(--ease); }
 .btn:hover .arr { transform: translateX(5px); }
 .btn--glow { --bg: var(--ink-strong); --fg: var(--paper); }
-.btn--ghost { --bg: var(--paper); --fg: var(--ink-strong); }
-.on-dark .btn--ghost, .dark .btn--ghost { --bg: var(--ink-strong); --fg: var(--on-dark); }
 
 
 
@@ -130,56 +128,134 @@ p { margin: 0; }
   transition: background .6s var(--ease), padding .6s var(--ease), border-color .6s;
   border-bottom: 1px solid transparent; mix-blend-mode: normal;
 }
-/* Прокрученная шапка раньше ложилась чёрной полосой поперёк белой полосы
-   и резала страницу пополам. Теперь она того же цвета, что и лист:
-   от контента её отделяет только волосяная линейка. */
+/* Первый экран стал белым, поэтому шапка тёмная с самого верха.
+   Прокрутка добавляет только фон и волосяную линейку — цвета не скачут. */
+.topbar.is-away { opacity: 0; pointer-events: none; transform: translateY(-100%); }
+.topbar { transition: background .6s var(--ease), padding .6s var(--ease),
+          border-color .6s, opacity .5s var(--ease), transform .5s var(--ease); }
 .topbar.is-scrolled {
   background: rgba(255,255,255,.92);
   -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   border-bottom-color: var(--line); padding-block: 14px;
-  color: var(--ink-strong);
 }
-.topbar.is-scrolled .brand,
-.topbar.is-scrolled .brand__mark,
-.topbar.is-scrolled .burger i { color: var(--ink-strong); }
-.topbar.is-scrolled .burger i { background: var(--ink-strong); }
-.topbar.is-scrolled .brand__name small { color: var(--ink-muted); }
-.topbar.is-scrolled .nav a { color: var(--ink-muted); }
-.topbar.is-scrolled .nav a:hover { color: var(--ink-strong); }
-.topbar.is-scrolled .nav a::after { background: var(--ink-strong); }
-.topbar.is-scrolled .btn { color: var(--ink-strong); }
-.topbar.is-scrolled .btn:hover { background: var(--ink-strong); color: var(--paper); }
 
-.brand { display: flex; align-items: center; gap: 13px; color: var(--on-dark); }
+.brand { display: flex; align-items: center; gap: 13px; color: var(--ink-strong); }
 .brand__mark { width: 28px; height: 24px; color: currentColor; }
 .brand__name { font-family: var(--display); font-weight: 300; font-size: 1.2rem; letter-spacing: .26em; text-transform: uppercase; line-height: 1; }
 .brand__name small {
   display: block; font-family: var(--display); font-size: 8px; letter-spacing: .42em;
-  text-transform: uppercase; color: var(--on-dark-mut); margin-top: 4px; font-weight: 700;
+  text-transform: uppercase; color: var(--ink-muted); margin-top: 4px; font-weight: 700;
 }
+/* В подвале тот же логотип стоит на тёмном — подпись берёт светлый серый */
+.footer .brand, .footer .brand__mark { color: var(--on-dark); }
+.footer .brand__name small { color: var(--on-dark-mut); }
 .nav { display: flex; align-items: center; gap: clamp(24px,3vw,44px); }
 .nav a {
-  font-family: var(--display); color: rgba(255,255,255,.7); font-size: 11.5px; font-weight: 300; letter-spacing: .2em;
+  font-family: var(--display); color: var(--ink-muted); font-size: 11.5px; font-weight: 300; letter-spacing: .2em;
   text-transform: uppercase; position: relative; transition: color .35s;
 }
-.nav a::after { content:""; position:absolute; left:0; bottom:-7px; height:1px; width:0; background: var(--on-dark-mut); transition: width .45s var(--ease); }
-.nav a:hover { color: var(--on-dark); } .nav a:hover::after { width: 100%; }
-.topbar .btn { padding: 13px 26px; font-size: 10.5px; letter-spacing: .2em; }
+.nav a::after { content:""; position:absolute; left:0; bottom:-7px; height:1px; width:0; background: var(--ink-strong); transition: width .45s var(--ease); }
+.nav a:hover { color: var(--ink-strong); } .nav a:hover::after { width: 100%; }
+.topbar .btn { padding: 13px 26px; font-size: 10.5px; letter-spacing: .2em; color: var(--ink-strong); }
+.topbar .btn:hover { background: var(--ink-strong); color: var(--paper); }
 .burger { display: none; background: none; border: 0; flex-direction: column; gap: 5px; padding: 10px; }
-.burger i { width: 24px; height: 1.5px; background: var(--on-dark); display: block; }
+.burger i { width: 24px; height: 1.5px; background: var(--ink-strong); display: block; }
 
-/* ====================== HERO — стена дышит ========================== */
+/* =====================================================================
+   ПЕРВЫЙ ЭКРАН
+   ---------------------------------------------------------------------
+   Раньше фотография стены была расстелена обоями на весь экран, а текст
+   лежал поверх неё: самый шумный кадр на сайте, который весь построен на
+   воздухе, плюс единственное зелёное пятно в чёрно-белой палитре.
+   И главное — портал сразу после терял силу, потому что открывать было
+   нечего: тёмное шло по тёмному.
+
+   Теперь титул — белый лист на той же сетке, что и все секции, а стена
+   лежит полосой у нижнего края: приоткрытая дверь. Следующий экран
+   разворачивает её на всю высоту — вход читается как движение.
+   ===================================================================== */
 .hero {
-  position: relative; min-height: 100svh; display: flex; align-items: flex-end;
-  color: var(--on-dark); overflow: hidden; background: var(--ink);
+  position: relative; min-height: 100svh;
+  display: flex; flex-direction: column;
+  background: var(--paper); color: var(--ink-strong); overflow: hidden;
 }
-.hero__media { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+/* Титул занимает ровно экран: полоса стены обязана попасть в первый кадр,
+   иначе «приоткрытой двери» читатель просто не увидит. */
+.hero__inner {
+  flex: 1 1 auto; display: grid; align-content: center;
+  padding-top: clamp(104px,12vh,150px); padding-bottom: clamp(26px,4vh,56px);
+}
+.hero__foot, .hero__door { flex: 0 0 auto; }
+.hero .hero__head { margin-bottom: 0; }
+/* Единственный заголовок первого уровня — крупнее всего остального */
+.hero__title {
+  grid-column: 2; margin: 0;
+  font-family: var(--display); font-weight: 200;
+  font-size: clamp(2.2rem, min(6.2vw, 10.5vh), 5.6rem); line-height: 1.03;
+  letter-spacing: .02em; text-transform: uppercase;
+}
+.hero__sub {
+  grid-column: 2; margin-top: clamp(22px,2.6vw,38px); max-width: 40ch;
+  font-size: clamp(1rem,1.4vw,1.16rem); color: var(--ink-muted); line-height: 1.65;
+}
+.hero__cta { grid-column: 2; margin-top: clamp(30px,3.6vw,50px); display: flex; flex-wrap: wrap; gap: 14px 44px; }
+@media (max-width: 860px) {
+  .hero__title, .hero__sub, .hero__cta { grid-column: 1; }
+}
+/* построчный вылет заголовка */
+.line { display: block; overflow: hidden; }
+.line > span { display: block; transform: translateY(105%); transition: transform 1.3s var(--ease-out); }
+.hero.ready .line > span { transform: none; }
+.hero.ready .line:nth-child(2) > span { transition-delay: .1s }
+
+/* Ссылка-подчёркивание вместо двух рамочных кнопок: на титуле в
+   акцентно белом две коробки читались тяжелее самого заголовка. */
+.lnk {
+  font-family: var(--display); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--ink-muted); padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  display: inline-flex; align-items: center; gap: .8em;
+  transition: color .35s var(--ease), border-color .35s var(--ease);
+}
+.lnk:hover { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
+.lnk--lead { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
+.lnk .arr { transition: transform .5s var(--ease); }
+.lnk:hover .arr { transform: translateX(5px); }
+
+/* Низкий экран ноутбука: поджимаем отбивки, чтобы полоса стены всё равно
+   попадала в первый кадр — ради неё этот экран и построен. */
+@media (max-height: 820px) and (min-width: 861px) {
+  .hero__inner { padding-top: 96px; padding-bottom: 18px; }
+  .hero__sub { margin-top: 18px; }
+  .hero__cta { margin-top: 26px; }
+  .hero__door { height: clamp(104px, 15vh, 170px); }
+}
+
+/* Служебная строка над дверью: волосяная линейка и две подписи по краям */
+.hero__foot { position: relative; z-index: 2; }
+.hero__foot-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  padding-bottom: clamp(16px,2vh,26px); border-bottom: 1px solid var(--line);
+}
+.hero__cue, .hero__fact {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+@media (max-width: 560px) { .hero__fact { display: none; } }
+
+/* Дверь — полоса стены у нижнего края. На титуле она почти обесцвечена:
+   палитра сайта чёрно-белая, и зелень тут была бы единственным цветным
+   пятном. Цвет включается в портале — дверь открылась, и он хлынул. */
+.hero__door {
+  position: relative; height: clamp(120px, 20vh, 240px); overflow: hidden; background: var(--ink);
+  filter: grayscale(.88) contrast(1.06) brightness(.88);
+}
+.hero__media { position: absolute; inset: 0; overflow: hidden; }
 .hero__media video, .hero__media .still {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
 }
-/* CSS-фолбэк: фотография стены живёт — очень медленный наезд + дрейф */
+/* Очень медленный наезд — стена «дышит», пока её не открыли */
 .hero__media .still {
-  background: url("../assets/img/wall.jpeg") center 32% / cover no-repeat;
+  background: url("../assets/img/wall.jpeg") center 42% / cover no-repeat;
   animation: breathe 26s var(--ease-cine) infinite alternate;
   will-change: transform;
 }
@@ -188,53 +264,12 @@ p { margin: 0; }
   to   { transform: scale(1.16) translate3d(-1.2%, -1.6%, 0); }
 }
 /* Свет из центра стены — как подсветка логотипа вживую */
-.hero__light {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(44% 38% at 50% 42%, rgba(255,255,255,.16), transparent 64%);
+.hero__door::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(46% 120% at 50% 50%, rgba(255,255,255,.16), transparent 68%);
   animation: pulse 9s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{opacity:.75} 50%{opacity:1} }
-.hero__scrim {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background:
-    linear-gradient(to top, rgba(0,0,0,.96) 2%, rgba(0,0,0,.55) 32%, rgba(0,0,0,.08) 62%, rgba(0,0,0,.55) 100%),
-    radial-gradient(120% 92% at 50% 50%, transparent 32%, rgba(0,0,0,.6) 82%, rgba(0,0,0,.95) 100%);
-}
-.hero__inner {
-  position: relative; z-index: 4; width: 100%;
-  padding-top: clamp(110px,15vh,170px); padding-bottom: clamp(52px,8vh,110px);
-}
-.hero__kicker {
-  display: inline-block; font-family: var(--display);
-  font-size: 10.5px; letter-spacing: .34em; text-transform: uppercase; font-weight: 700;
-  color: rgba(255,255,255,.8);
-}
-.hero__kicker .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--on-dark); box-shadow: 0 0 14px var(--on-dark-mut); animation: pulse 3s ease-in-out infinite; }
-.hero__title {
-  font-family: var(--display); font-weight: 200;
-  font-size: clamp(2rem, 4.4vw, 3.9rem); line-height: 1.2; letter-spacing: .1em; text-transform: uppercase;
-  margin: 28px 0 0; max-width: 16ch;
-}
-.hero__title em { font-style: normal; color: var(--on-dark-mut); }
-/* построчный кинематографичный вылет */
-.line { display: block; overflow: hidden; }
-.line > span { display: block; transform: translateY(105%); transition: transform 1.3s var(--ease-out); }
-.hero.ready .line > span { transform: none; }
-.hero.ready .line:nth-child(2) > span { transition-delay: .1s }
-.hero.ready .line:nth-child(3) > span { transition-delay: .2s }
-.hero__sub {
-  margin-top: 34px; max-width: 44ch; font-size: clamp(1rem,1.5vw,1.22rem);
-  color: rgba(255,255,255,.68); line-height: 1.6;
-}
-.hero__cta { margin-top: 46px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-.hero__cue {
-  position: absolute; z-index: 4; right: clamp(56px,7vw,110px); bottom: 30px;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  color: rgba(255,255,255,.5); font-size: 9.5px; letter-spacing: .34em; text-transform: uppercase;
-}
-.hero__cue { font-family: var(--mono); letter-spacing: .18em; }
-.hero__cue i { width: 1px; height: 46px; background: linear-gradient(var(--on-dark-mut), transparent); animation: cue 2.6s var(--ease) infinite; }
-@keyframes cue { 0%{transform:scaleY(.15);transform-origin:top;opacity:.2} 50%{transform:scaleY(1);opacity:1} 100%{transform:scaleY(.15);transform-origin:bottom;opacity:.2} }
 
 /* ============ ПОРТАЛ — проход сквозь стену (scroll-scrub) =========== */
 .portal { position: relative; height: 320vh; background: var(--ink); }
@@ -803,16 +838,17 @@ p { margin: 0; }
   .reveal,.wipe{ opacity:1; transform:none; transition:none }
   .wipe::after{ display:none }
   .hero__media .still,.cta__media .still{ animation:none; transform:scale(1.06) }
-  .hero__light,.hero__kicker .dot{ animation:none }
+  .hero__door::after{ animation:none }
   .line > span{ transform:none }
 }
 
 
 /* ============================ RESPONSIVE ============================ */
 @media (max-width: 1100px){
-  .course-grid, .employ-grid, .forecast { grid-template-columns: 1fr; }
+  /* Сетки блоков схлопываются на своём брейкпоинте (860px) — том же, что
+     и заголовки секций, чтобы страница перестраивалась одним движением. */
   .teachers-grid, .videos { grid-template-columns: repeat(2,1fr); }
-      .portal { height: 260vh; }
+  .portal { height: 260vh; }
 }
 @media (max-width: 700px){
   .nav { display: none; }
@@ -821,7 +857,6 @@ p { margin: 0; }
   .videos, .teachers-grid { grid-template-columns: 1fr; }
     .cta__row { grid-template-columns: 1fr; }
   .footer__top { grid-template-columns: 1fr; gap: 32px; }
-  .hero__cue { display: none; }
   .rail { grid-auto-columns: 74vw; }
   .portal { height: 220vh; }
   }

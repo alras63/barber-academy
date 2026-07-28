@@ -383,13 +383,27 @@
     }
   }
 
+  /* Пока портал занимает экран целиком, шапка уходит. Она стала светлой
+     (первый экран теперь белый), и белая полоса поверх стены рвала бы
+     единственный кадр, ради которого сайт и построен. Сразу после
+     портала шапка возвращается. */
+  var portalSec = document.getElementById("portal");
+  function inPortal(y) {
+    if (!portalSec) return false;
+    var top = portalSec.offsetTop;
+    return y > top - 40 && y < top + portalSec.offsetHeight - window.innerHeight * 0.6;
+  }
+
   var tick = false;
   function onScroll() {
     if (tick) return;
     tick = true;
     requestAnimationFrame(function () {
       var y = window.pageYOffset || document.documentElement.scrollTop;
-      if (topbar) topbar.classList.toggle("is-scrolled", y > 60);
+      if (topbar) {
+        topbar.classList.toggle("is-scrolled", y > 60);
+        topbar.classList.toggle("is-away", inPortal(y));
+      }
       if (!reduce) sweepRevealed();
       tick = false;
     });

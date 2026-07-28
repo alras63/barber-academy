@@ -55,31 +55,38 @@
 <main id="top">
 
 <!-- ==================== HERO ==================== -->
-<section class="hero on-dark" id="hero" data-chapter="hero">
-  <div class="hero__media" id="heroMedia" aria-hidden="true">
-    <div class="still"></div>
-  </div>
-  <div class="hero__light" aria-hidden="true"></div>
-  <div class="hero__scrim" aria-hidden="true"></div>
-
-  <div class="hero__inner">
-    <div class="wrap">
-      <span class="hero__kicker">Академия мужских стрижек</span>
+<!-- Титульная страница: белый лист и приоткрытая дверь понизу.
+     Стена не расстелена обоями под текстом — она лежит полосой у нижнего
+     края, и следующий экран (портал) разворачивает её на всю высоту. -->
+<section class="hero" id="hero" data-chapter="hero">
+  <div class="wrap hero__inner">
+    <div class="head hero__head">
+      <span class="eyebrow">Академия мужских стрижек</span>
       <h1 class="hero__title">
         <span class="line"><span>Учим стричь.</span></span>
         <span class="line"><span>С нуля.</span></span>
       </h1>
-      <p class="hero__sub reveal in" data-d="2">
+      <p class="hero__sub">
         Без опыта, без художественного образования, без «способностей».
         Нужны руки, время и желание работать.
       </p>
-      <div class="hero__cta reveal in" data-d="3">
-        <a class="btn btn--glow" href="#enroll">Записаться <span class="arr">→</span></a>
-        <a class="btn btn--ghost" href="#program">Программа курса</a>
+      <div class="hero__cta">
+        <a class="lnk lnk--lead" href="#enroll">Записаться <span class="arr">→</span></a>
+        <a class="lnk" href="#program">Программа курса</a>
       </div>
     </div>
   </div>
-  
+
+  <div class="hero__foot">
+    <div class="wrap hero__foot-row">
+      <span class="hero__cue">Прокрутите — стена откроется</span>
+      <span class="hero__fact">500+ выпускников</span>
+    </div>
+  </div>
+
+  <div class="hero__door" aria-hidden="true">
+    <div class="hero__media" id="heroMedia"><div class="still"></div></div>
+  </div>
 </section>
 
 <!-- ============ ПОРТАЛ ============ -->
