@@ -101,11 +101,14 @@
 <!-- ==================== РЕМЕСЛО ==================== -->
 <section class="section paper manifesto" id="philosophy" data-chapter="philosophy">
   <div class="wrap">
-    <p class="huge reveal">
-      Мы учим ремеслу. <em>Ремесло не зависит от рынка вакансий:</em>
-      пока у людей растут волосы, работа есть всегда.
-      <span>Один раз поставленные руки остаются с вами.</span>
-    </p>
+    <div class="head head--manifest reveal">
+      <span class="eyebrow">Ремесло</span>
+      <p class="huge">
+        Мы учим ремеслу. <em>Ремесло не зависит от рынка вакансий:</em>
+        пока у людей растут волосы, работа есть всегда.
+        <span>Один раз поставленные руки остаются с вами.</span>
+      </p>
+    </div>
   </div>
 </section>
 
@@ -243,20 +246,17 @@
       <div class="forecast__viz">
         <svg class="curve" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
           <defs>
+            <!-- Кривая рисуется чёрным: на белом развороте цвет был бы
+                 пятым тоном, а линия и без него читается. -->
             <linearGradient id="fg" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#46702a" stop-opacity=".1"/>
-              <stop offset="1" stop-color="#a9d95c" stop-opacity=".95"/>
-            </linearGradient>
-            <linearGradient id="fgFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#a9d95c" stop-opacity=".2"/>
-              <stop offset="1" stop-color="#a9d95c" stop-opacity="0"/>
+              <stop offset="0" stop-color="#0a0a0a" stop-opacity=".18"/>
+              <stop offset="1" stop-color="#0a0a0a" stop-opacity="1"/>
             </linearGradient>
           </defs>
-          <path class="curve__fill" d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28 L400,300 L0,300 Z" fill="url(#fgFill)"/>
-          <path class="curve__line" pathLength="1" d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28" fill="none" stroke="url(#fg)" stroke-width="2" stroke-linecap="round"/>
-          <circle class="curve__dot" style="--i:0" cx="2" cy="271" r="3.5" fill="#8fbb4c"/>
-          <circle class="curve__dot" style="--i:1" cx="250" cy="150" r="3.5" fill="#a9d95c"/>
-          <circle class="curve__dot" style="--i:2" cx="396" cy="30" r="5"   fill="#a9d95c"/>
+          <path class="curve__line" pathLength="1" d="M0,272 C120,266 190,212 250,150 C300,100 350,54 400,28" fill="none" stroke="url(#fg)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle class="curve__dot" style="--i:0" cx="2" cy="271" r="3" fill="#0a0a0a" fill-opacity=".3"/>
+          <circle class="curve__dot" style="--i:1" cx="250" cy="150" r="3" fill="#0a0a0a" fill-opacity=".6"/>
+          <circle class="curve__dot" style="--i:2" cx="396" cy="30" r="4.5" fill="#0a0a0a"/>
         </svg>
         <span class="lbl">Траектория ученика</span>
         <div class="forecast__points">
@@ -273,14 +273,14 @@
 <section class="section paper reboot" id="reboot" data-chapter="reboot">
   <div class="sec-media" data-media="ambientReboot" aria-hidden="true"></div>
   <div class="wrap">
-    <div style="text-align:center; margin-bottom:10px;">
-      <span class="eyebrow reveal">Идея</span>
+    <div class="head reveal">
+      <span class="eyebrow">Идея</span>
+      <h2 class="huge" data-d="1">Пере<em>загрузка</em></h2>
+      <p class="lead" data-d="2">
+        Многие приходят не за стрижками. Приходят, потому что работа забирает
+        время и ничего не оставляет взамен.
+      </p>
     </div>
-    <h2 class="huge reveal" data-d="1">Пере<em>загрузка</em></h2>
-    <p class="lead reveal" data-d="2" style="margin:clamp(34px,4vw,54px) auto 0; text-align:center;">
-      Многие приходят не за стрижками. Приходят, потому что работа забирает
-      время и ничего не оставляет взамен.
-    </p>
     <div class="creed">
       <div class="creed__row reveal">
         <span class="creed__n">01</span>
@@ -354,14 +354,13 @@
 <!-- ==================== РАБОТА ПОСЛЕ ==================== -->
 <section class="section paper" id="employment" data-chapter="employment">
   <div class="wrap">
+    <div class="head reveal">
+      <span class="eyebrow">После обучения</span>
+      <h2 class="display">После выпуска<br>мы не исчезаем</h2>
+      <p class="lead">Диплом сам по себе не ставит за кресло. Поэтому доводим дело
+      до главного — до вашей первой реальной работы.</p>
+    </div>
     <div class="employ-grid">
-      <div>
-        <div class="head reveal" style="margin-bottom:0;">
-          <span class="eyebrow">После обучения</span>
-          <h2 class="display">После выпуска<br>мы не исчезаем</h2>
-          <p class="lead">Диплом сам по себе не ставит за кресло. Поэтому доводим дело
-          до главного — до вашей первой реальной работы.</p>
-        </div>
         <ul class="employ__list reveal" data-d="1">
           <li>
             <svg class="ci" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 7 9 18l-5-5"/></svg>
@@ -376,7 +375,6 @@
             <div><h5>Поддержка после старта</h5><p>Первые месяцы за креслом самые сложные. Остаёмся на связи и разбираем рабочие ситуации.</p></div>
           </li>
         </ul>
-      </div>
       <aside class="employ__aside wipe" data-d="1">
         <p class="big">Вы выходите не с&nbsp;<em>дипломом</em>, а&nbsp;с&nbsp;<em>профессией</em>.</p>
         <p>Задача академии — чтобы после обучения вы встали за кресло, а не убрали сертификат в стол.</p>
