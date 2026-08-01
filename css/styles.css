@@ -589,12 +589,24 @@ p { margin: 0; }
 .rail::-webkit-scrollbar { display: none; }
 .rail.drag { cursor: grabbing; scroll-behavior: auto; scroll-snap-type: none; }
 .rail > * { scroll-snap-align: start; }
+.rail-note .ic { width: 14px; height: 14px; }
 .rail-note { margin-top: 32px; font-size: .86rem; color: var(--ink-muted); display:flex; gap:10px; align-items:center; }
+
+/* Видео-истории живут внутри блока учеников: отдельной главой они
+   занимали 2.5 экрана телефона ради трёх обложек. Здесь это подраздел —
+   строка-подпись и ряд обложек, на той же вертикали, что и всё остальное. */
+.stories { margin-top: clamp(56px,7vw,96px); }
+.stories__lab {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--ink-muted);
+  padding-bottom: clamp(18px,2.2vw,28px); border-bottom: 1px solid var(--line);
+  margin-bottom: clamp(24px,3vw,40px);
+}
 
 /* ---------------- Видео-истории ---------------- */
 .videos { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(20px,2.6vw,40px); }
 .vcard {
-  position: relative; aspect-ratio: 9/14; overflow: hidden;
+  position: relative; aspect-ratio: 16/9; overflow: hidden;
   /* до появления настоящих обложек — фактура собственной стены в ч/б,
      а не абстрактная заглушка */
   background:
@@ -609,7 +621,11 @@ p { margin: 0; }
 .vcard:nth-child(3) { background-position: center, 78% 30%; }
 .vcard:hover { transform: translateY(-6px); }
 .vcard img, .vcard video { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index:0; }
-.vcard::after { content:""; position:absolute; inset:0; z-index:1; background: linear-gradient(to top, rgba(0,0,0,.94), transparent 62%); pointer-events: none; }
+/* Кадр стал широким 16:9, и подпись оказалась на светлой части кадра —
+   шторку пришлось усилить. Замерено: было 3.3:1, стало выше 4.5:1. */
+.vcard::after { content:""; position:absolute; inset:0; z-index:1;
+  background: linear-gradient(to top, rgba(0,0,0,.96) 0%, rgba(0,0,0,.86) 26%,
+              rgba(0,0,0,.5) 52%, transparent 82%); pointer-events: none; }
 .vcard.playing::after { opacity: 0; transition: opacity .5s; }
 .vcard__play {
   position: absolute; z-index:3; top: 50%; left: 50%; transform: translate(-50%,-50%);
@@ -702,6 +718,7 @@ p { margin: 0; }
 
 /* Вопрос — ответ: разговор, а не четыре одинаковых кирпича */
 .qa { border-top: 1px solid var(--line); }
+.notes + .qa { margin-top: clamp(56px,7vw,90px); }
 .qa__row {
   display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(20px,4vw,60px);
   padding: clamp(24px,3vw,38px) 0; border-bottom: 1px solid var(--line);
@@ -741,10 +758,15 @@ p { margin: 0; }
 /* Короткие заметки о том, как устроено обучение */
 .notes { margin-top: 34px; list-style: none; padding: 0; border-top: 1px solid var(--line); }
 .notes li {
-  padding: 16px 0 16px 26px; border-bottom: 1px solid var(--line);
-  font-size: .96rem; color: var(--ink-body); position: relative;
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 0; border-bottom: 1px solid var(--line);
+  font-size: .96rem; color: var(--ink-body);
 }
-.notes li::before { content: "—"; position: absolute; left: 0; color: var(--ink-muted); }
+/* Вместо тире — фирменная иконка: бритва, кресло, человек, фен.
+   Ровно те инструменты, о которых говорит строка. */
+/* Барберские иконки детальные — на 20 px они превращаются в кашу.
+   26 px и цвет основного текста: читается как знак, а не как пятно. */
+.notes li .ic { width: 26px; height: 26px; margin-top: -2px; color: var(--ink-strong); }
 
 @media (max-width: 800px){
   .qa__row, .creed__row, .figures__row { grid-template-columns: 1fr; gap: 10px; }
@@ -928,7 +950,7 @@ p { margin: 0; }
      три экрана одной прокрутки. Квадратнее кадр — короче разворот,
      а лицо не страдает: object-fit берёт середину. */
   .pcard__img, .pcard__mono { aspect-ratio: 4/5; }
-  .vcard { aspect-ratio: 4/5; }
+  .vcard { aspect-ratio: 16/10; }
   /* Бесконечное «дыхание» кадра — постоянная перерисовка ради эффекта,
      которого на такой диагонали почти не видно, и заметный расход батареи. */
   .hero__media .still, .cta__media .still { animation: none; transform: none; }
