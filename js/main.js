@@ -334,7 +334,7 @@
           (v.poster ? ' data-poster="' + esc(v.poster) + '"' : "") + ">" +
           inner +
           '<button class="vcard__play" type="button" aria-label="Смотреть историю: ' + esc(v.name) + '">' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
+            '<svg class="ic" aria-hidden="true"><use href="#ic-play"/></svg>' +
           "</button>" +
           '<div class="vcard__cap"><h4>' + esc(v.name) + "</h4><span>" + esc(v.role) + "</span></div>" +
         "</article>"

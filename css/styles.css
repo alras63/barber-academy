@@ -79,6 +79,13 @@ p { margin: 0; }
 ::selection { background: var(--ink); color: var(--paper); }
 
 
+/* Фирменные иконки. Спрайт лежит в разметке, элемент ставится через <use>,
+   цвет наследуется от текста — поэтому одна иконка работает и на белом,
+   и на тёмном без второго файла. */
+.ic { width: 1em; height: 1em; flex: none; }
+.employ__list .ic, .rail-nav .ic { width: 18px; height: 18px; }
+.vcard__play .ic { width: 16px; height: 16px; }
+
 /* --------------------------- Utilities ------------------------------ */
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 /* Воздух — главный материал этого макета: одна мысль на экран. */
@@ -629,7 +636,7 @@ p { margin: 0; }
 }
 .employ__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .employ__list li { display: flex; gap: 20px; align-items: flex-start; padding: 24px 0; border-bottom: 1px solid var(--line); }
-.employ__list .ci { flex: none; width: 20px; height: 20px; color: var(--ink-muted); margin-top: 2px; }
+.employ__list .ci { flex: none; width: 18px; height: 18px; color: var(--ink-strong); margin-top: 3px; }
 .employ__list h5 { margin: 0; font-size: .98rem; color: var(--ink-strong); font-weight: 700; }
 .employ__list p { margin-top: 5px; font-size: .89rem; color: var(--ink-muted); }
 /* Вывод раздела: раньше — чёрная плашка, теперь просто крупная реплика
