@@ -125,7 +125,18 @@
       });
     }
 
-    if (reduce) { caps.forEach(function (c) { c.el.style.opacity = "1"; }); return; }
+    /* На телефоне прохода сквозь стену нет.
+       Проматывание трёх слоёв большой фотографии — самая тяжёлая работа на
+       странице, а вместе с высотой блока в единицах vh оно ещё и дёргает
+       вёрстку, когда браузер прячет адресную строку. Поэтому здесь стена
+       показывается одним неподвижным кадром с одной репликой: один экран,
+       одна мысль. Проход остаётся десктопу, где он и читается. */
+    if (reduce || isPhone) {
+      sec.classList.add("portal--still");
+      if (caps[0]) { caps[0].el.style.opacity = "1"; caps[0].el.style.transform = "none"; }
+      for (var i = 1; i < caps.length; i++) caps[i].el.style.display = "none";
+      return;
+    }
 
     var ticking = false;
     function update() {
@@ -373,14 +384,23 @@
      IntersectionObserver может не успеть сработать, если экран
      перепрыгнул содержимое разом — например, при переходе по якорю.
      Тогда блок остаётся скрытым до перезагрузки. Поэтому после каждой
-     прокрутки добираем всё, что уже поднялось выше нижней кромки экрана. */
+     прокрутки добираем всё, что уже поднялось выше нижней кромки экрана.
+
+     Список берём один раз и вычёркиваем из него показанное: раньше здесь
+     был querySelectorAll на каждом кадре прокрутки — лишняя работа ровно
+     там, где её меньше всего можно себе позволить, на телефоне. */
+  var pendingReveal = Array.prototype.slice.call(
+    document.querySelectorAll(".reveal, .wipe"));
   function sweepRevealed() {
-    var pending = document.querySelectorAll(".reveal:not(.in), .wipe:not(.in)");
-    for (var i = 0; i < pending.length; i++) {
-      if (pending[i].getBoundingClientRect().top < window.innerHeight) {
-        pending[i].classList.add("in");
-      }
+    if (!pendingReveal.length) return;
+    var vh = window.innerHeight, rest = [];
+    for (var i = 0; i < pendingReveal.length; i++) {
+      var el = pendingReveal[i];
+      if (el.classList.contains("in")) continue;
+      if (el.getBoundingClientRect().top < vh) el.classList.add("in");
+      else rest.push(el);
     }
+    pendingReveal = rest;
   }
 
   /* Пока портал занимает экран целиком, шапка уходит. Она стала светлой

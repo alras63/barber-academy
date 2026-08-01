@@ -30,6 +30,11 @@
   --line-dark:  rgba(255,255,255,.18);
   --cream:      var(--paper);
 
+  /* ФИРМЕННАЯ СТЕНА — одна точка правды на весь файл.
+     Ширина выбирается по ширине окна, а не по плотности пикселей:
+     image-set() умеет только 1x/2x и отдал бы монитору телефонный кадр. */
+  --wall: url("../assets/img/bg/main-800.webp");
+
   --maxw: 1280px;
   --gutter: clamp(24px, 6vw, 96px);
   /* Единая сетка разворота: узкая колонка под метку, широкая — под текст.
@@ -48,6 +53,10 @@
   --ease-out: cubic-bezier(.16,1,.3,1);
   --ease-cine: cubic-bezier(.65,0,.35,1);
 }
+
+/* Телефон качает 800 px вместо 2400 — главный вклад в скорость на мобильном */
+@media (min-width: 700px)  { :root { --wall: url("../assets/img/bg/main-1400.webp"); } }
+@media (min-width: 1500px) { :root { --wall: url("../assets/img/bg/main-2400.webp"); } }
 
 *,*::before,*::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -255,7 +264,7 @@ p { margin: 0; }
 }
 /* Очень медленный наезд — стена «дышит», пока её не открыли */
 .hero__media .still {
-  background: url("../assets/img/wall.jpeg") center 42% / cover no-repeat;
+  background: var(--wall) center 42% / cover no-repeat;
   animation: breathe 26s var(--ease-cine) infinite alternate;
   will-change: transform;
 }
@@ -263,6 +272,10 @@ p { margin: 0; }
   from { transform: scale(1.06) translate3d(0,0,0); }
   to   { transform: scale(1.16) translate3d(-1.2%, -1.6%, 0); }
 }
+/* Бесконечное «дыхание» — постоянная перерисовка большого кадра.
+   На телефоне это заметный расход батареи ради эффекта, которого
+   на такой диагонали почти не видно. */
+
 /* Свет из центра стены — как подсветка логотипа вживую */
 .hero__door::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -283,7 +296,7 @@ p { margin: 0; }
 /* CSS-фолбэк портала: три слоя стены с разной скоростью = камера входит внутрь */
 .portal__layer {
   position: absolute; inset: -10%; z-index: 0;
-  background: url("../assets/img/wall.jpeg") center center / cover no-repeat;
+  background: var(--wall) center center / cover no-repeat;
   will-change: transform, opacity;
 }
 .portal__layer--far  { filter: brightness(.5) blur(1px); }
@@ -312,6 +325,51 @@ p { margin: 0; }
 .portal__hint {
   position: absolute; z-index: 5; bottom: 34px; left: 50%; transform: translateX(-50%);
   font-size: 9.5px; letter-spacing: .34em; text-transform: uppercase; color: rgba(255,255,255,.62);
+}
+
+/* На телефоне портал — один неподвижный кадр, а не проход на 220vh.
+   Высота в единицах vh вместе с sticky заставляла страницу дёргаться,
+   когда браузер прячет адресную строку, а проматывание трёх слоёв
+   фотографии 6000 px было самой тяжёлой работой на странице. */
+.portal.portal--still { height: auto; }
+.portal--still .portal__stage { position: static; height: 100svh; }
+.portal--still .portal__layer--mid,
+.portal--still .portal__layer--near,
+.portal--still .portal__dark { display: none; }
+.portal--still .portal__layer--far { inset: 0; filter: none; }
+.portal--still .portal__glow { opacity: .5; }
+
+/* =====================================================================
+   ПОЛОСА-РАЗВОРОТ
+   ---------------------------------------------------------------------
+   Между блоками текста идёт кадр во всю ширину и без единого слова.
+   Это и есть «открытая книга»: развернул — слева мысль, справа картинка,
+   и глазу есть где отдохнуть. Полоса заодно работает разделителем, поэтому
+   волосяная линейка между соседними секциями рядом с ней не нужна.
+
+   Картинка — не фон, а <img srcset>: браузер сам берёт 800 px на телефон
+   и 2400 px на большой монитор, грузит лениво и декодирует вне потока.
+   ===================================================================== */
+.plate { position: relative; overflow: hidden; margin: 0; background: var(--ink); }
+.plate img { width: 100%; height: 100%; object-fit: cover; }
+.plate--tall  { height: clamp(340px, 66vh, 760px); }
+.plate--band  { height: clamp(190px, 34vh, 400px); }
+.plate + .section.paper, .section.paper:has(+ .plate) { border-top: 0; }
+/* Под реплику нужна шторка: фирменные кадры светлые (бетон), и белый
+   текст на них без затемнения не читается — замерено, было 1.6:1. */
+.plate--caption::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.74) 26%,
+              rgba(0,0,0,.36) 52%, transparent 76%);
+}
+/* Реплика поверх кадра — не заголовок, а одна строка на весь разворот */
+.plate__line {
+  position: absolute; inset: auto 0 0 0; z-index: 2;
+  padding: clamp(28px,5vh,64px) var(--gutter);
+  color: var(--on-dark); font-family: var(--display); font-weight: 200;
+  font-size: clamp(1.2rem, 2.6vw, 2.3rem); line-height: 1.2; letter-spacing: .02em;
+  max-width: 22ch;
+  text-shadow: 0 1px 30px rgba(0,0,0,.85), 0 1px 6px rgba(0,0,0,.6);
 }
 
 /* ============================ SECTIONS ============================== */
@@ -534,7 +592,7 @@ p { margin: 0; }
      а не абстрактная заглушка */
   background:
     linear-gradient(180deg, rgba(10,10,10,.5), rgba(10,10,10,.92)),
-    url("../assets/img/wall.jpeg") center 40% / cover no-repeat;
+    var(--wall) center 40% / cover no-repeat;
   filter: grayscale(1);
   color: var(--on-dark); display: flex; flex-direction: column; justify-content: flex-end;
   transition: transform .8s var(--ease);
@@ -588,7 +646,7 @@ p { margin: 0; }
 .cta { position: relative; overflow: hidden; color: var(--on-dark); background: var(--ink); }
 .cta__media { position: absolute; inset: 0; z-index: 0; }
 .cta__media video, .cta__media .still { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; }
-.cta__media .still { background: url("../assets/img/wall.jpeg") center 62% / cover no-repeat; animation: breathe 30s var(--ease-cine) infinite alternate; }
+.cta__media .still { background: var(--wall) center 62% / cover no-repeat; animation: breathe 30s var(--ease-cine) infinite alternate; }
 .cta__scrim { position:absolute; inset:0; z-index:1; background: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.72) 42%, rgba(0,0,0,.94)); }
 .cta .wrap { position: relative; z-index: 3; text-align: center; }
 .cta .display { font-size: clamp(2.8rem,7.4vw,6rem); }
@@ -706,7 +764,7 @@ p { margin: 0; }
 /* Листва проступает и здесь, но еле слышно — как водяной знак на бумаге */
 .program__wall {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: url("../assets/img/wall.jpeg") center 40% / cover no-repeat;
+  background: var(--wall) center 40% / cover no-repeat;
   opacity: .07; filter: grayscale(1) contrast(.8);
   -webkit-mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
   mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
@@ -859,6 +917,14 @@ p { margin: 0; }
   .footer__top { grid-template-columns: 1fr; gap: 32px; }
   .rail { grid-auto-columns: 74vw; }
   .portal { height: 220vh; }
+  /* Портрет 5:7 на телефоне растягивает страницу: три карточки — почти
+     три экрана одной прокрутки. Квадратнее кадр — короче разворот,
+     а лицо не страдает: object-fit берёт середину. */
+  .pcard__img, .pcard__mono { aspect-ratio: 4/5; }
+  .vcard { aspect-ratio: 4/5; }
+  /* Бесконечное «дыхание» кадра — постоянная перерисовка ради эффекта,
+     которого на такой диагонали почти не видно, и заметный расход батареи. */
+  .hero__media .still, .cta__media .still { animation: none; transform: none; }
   }
 
 /* Мобильное меню */

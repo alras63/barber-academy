@@ -20,7 +20,7 @@ var MEDIA = {
   heroLoop: {
     webm: null,   // "assets/video/wall-breathe.webm"
     mp4:  null,   // "assets/video/wall-breathe.mp4"
-    poster: "assets/img/wall.jpeg"
+    poster: "assets/img/bg/main-1400.webp"
   },
 
   /* Портал: проход камеры СКВОЗЬ листву внутрь академии.
@@ -29,11 +29,11 @@ var MEDIA = {
   portalScrub: {
     webm: null,   // "assets/video/portal-through.webm"
     mp4:  null,   // "assets/video/portal-through.mp4"
-    poster: "assets/img/wall.jpeg"
+    poster: "assets/img/bg/main-1400.webp"
   },
 
   /* Фоновые ambient-лупы разделов (по желанию, можно оставить null). */
   ambientCourse: { webm: null, mp4: null, poster: null },
   ambientReboot: { webm: null, mp4: null, poster: null },
-  ambientCta:    { webm: null, mp4: null, poster: "assets/img/wall.jpeg" }
+  ambientCta:    { webm: null, mp4: null, poster: "assets/img/bg/main-1400.webp" }
 };

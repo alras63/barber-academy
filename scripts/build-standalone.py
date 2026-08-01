@@ -46,19 +46,22 @@ for block in re.findall(r"@font-face \{.*?\}", fonts_css, re.S):
     kept.append(block.replace("../" + src.group(1), data_uri(src.group(1), "font/woff2")))
 fonts_css = "\n".join(kept)
 
-# --- стили: фотография стены внутрь ------------------------------------------
-# Картинка встречается в разметке несколько раз (герой, портал, программа,
-# финал). Вшивать её копиями — это лишний мегабайт, поэтому объявляем один
-# раз переменной и везде ссылаемся на неё.
+# --- стили: фоны внутрь -------------------------------------------------------
+# В одном файле нет внешних ресурсов, поэтому все фоны вшиваются data-URI.
+# Берём только самую лёгкую ширину: единственный файл и так весит под мегабайт,
+# а 2400 px в base64 добавили бы ещё несколько.
 styles = read("css", "styles.css")
-wall = data_uri("assets/img/wall.jpeg", "image/jpeg")
-styles = styles.replace('url("../assets/img/wall.jpeg")', "var(--wall)")
-styles = styles.replace(":root {", ':root {\n  --wall: url("%s");' % wall, 1)
+for path in sorted(set(re.findall(r"assets/img/bg/[\w-]+\.webp", styles))):
+    if not path.endswith("-800.webp"):
+        # ступени для больших экранов в одном файле не нужны
+        styles = re.sub(r"@media[^{]+\{ :root \{ --wall: url\(\"\.\./%s\"\); \} \}\n" % re.escape(path), "", styles)
+        continue
+    styles = styles.replace('url("../%s")' % path, "url(%s)" % data_uri(path, "image/webp"))
 
 scripts = "\n".join(read("js", n) for n in ("media.js", "data.js", "main.js"))
 # В одном файле внешних ресурсов нет: путь к постеру вёл бы в никуда.
 # Постер нужен только вместе с роликом, поэтому здесь он обнуляется.
-scripts = scripts.replace('poster: "assets/img/wall.jpeg"', "poster: null")
+scripts = re.sub(r'poster: "assets/img/bg/[\w-]+\.webp"', "poster: null", scripts)
 
 # --- портреты внутрь -----------------------------------------------------------
 # Пути вида assets/img/students/artem.jpg живут в data.js. Подменяем каждый
@@ -82,6 +85,16 @@ for path in sorted(set(re.findall(r"assets/img/(?:students|teachers|stories)/[\w
 
 # --- разметка: вынимаем содержимое <body> ------------------------------------
 html = read("index.html")
+
+# Развороты-полосы объявлены как <img srcset> — в одном файле внешних путей
+# быть не должно. Оставляем самую лёгкую ширину и вшиваем её data-URI,
+# а srcset убираем: выбирать браузеру уже не из чего.
+def inline_plate(m):
+    path = "assets/img/bg/%s-800.webp" % m.group(1)
+    return 'src="%s"' % data_uri(path, "image/webp")
+
+html = re.sub(r'\s+srcset="[^"]*"\s+sizes="100vw"', ' ', html)
+html = re.sub(r'src="assets/img/bg/([\w-]+)-1400\.webp"', inline_plate, html)
 title = re.search(r"<title>(.*?)</title>", html, re.S).group(1).strip()
 body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
 # внешние подключения больше не нужны — всё внутри
