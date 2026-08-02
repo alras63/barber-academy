@@ -34,6 +34,7 @@
      Ширина выбирается по ширине окна, а не по плотности пикселей:
      image-set() умеет только 1x/2x и отдал бы монитору телефонный кадр. */
   --wall: url("../assets/img/bg/main-800.webp");
+  --wall-bw: url("../assets/img/bg/main-bw-800.webp");
 
   --maxw: 1280px;
   --gutter: clamp(24px, 6vw, 96px);
@@ -55,8 +56,10 @@
 }
 
 /* Телефон качает 800 px вместо 2400 — главный вклад в скорость на мобильном */
-@media (min-width: 700px)  { :root { --wall: url("../assets/img/bg/main-1400.webp"); } }
-@media (min-width: 1500px) { :root { --wall: url("../assets/img/bg/main-2400.webp"); } }
+@media (min-width: 700px)  { :root { --wall: url("../assets/img/bg/main-1400.webp");
+  --wall-bw: url("../assets/img/bg/main-bw-1400.webp"); } }
+@media (min-width: 1500px) { :root { --wall: url("../assets/img/bg/main-2400.webp");
+  --wall-bw: url("../assets/img/bg/main-bw-2400.webp"); } }
 
 *,*::before,*::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -85,6 +88,30 @@ p { margin: 0; }
 .ic { width: 1em; height: 1em; flex: none; }
 .employ__list .ic, .rail-nav .ic { width: 18px; height: 18px; }
 .vcard__play .ic { width: 16px; height: 16px; }
+
+/* =====================================================================
+   ОБЛЕГЧЁННЫЙ РЕЖИМ ДВИЖЕНИЯ
+   ---------------------------------------------------------------------
+   Один выключатель вместо десятка разрозненных правил. JS ставит на <html>
+   data-motion="lite", если это телефон, слабое устройство или человек
+   попросил меньше движения, — и вся страница перестаёт делать работу
+   во время прокрутки. Это и есть «устойчивость»: не важно, какой эффект
+   добавят завтра, он выключится здесь же.
+   ===================================================================== */
+[data-motion="lite"] *,
+[data-motion="lite"] *::before,
+[data-motion="lite"] *::after {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+[data-motion="lite"] .reveal,
+[data-motion="lite"] .wipe { opacity: 1 !important; transform: none !important; }
+[data-motion="lite"] .wipe::after { display: none !important; }
+[data-motion="lite"] .line > span { transform: none !important; }
+[data-motion="lite"] .topbar.is-scrolled { background: var(--paper); }
 
 /* --------------------------- Utilities ------------------------------ */
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
@@ -150,8 +177,7 @@ p { margin: 0; }
 .topbar { transition: background .6s var(--ease), padding .6s var(--ease),
           border-color .6s, opacity .5s var(--ease), transform .5s var(--ease); }
 .topbar.is-scrolled {
-  background: rgba(255,255,255,.92);
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  background: rgba(255,255,255,.96);
   border-bottom-color: var(--line); padding-block: 14px;
 }
 
@@ -263,7 +289,6 @@ p { margin: 0; }
    пятном. Цвет включается в портале — дверь открылась, и он хлынул. */
 .hero__door {
   position: relative; height: clamp(120px, 20vh, 240px); overflow: hidden; background: var(--ink);
-  filter: grayscale(.88) contrast(1.06) brightness(.88);
 }
 .hero__media { position: absolute; inset: 0; overflow: hidden; }
 .hero__media video, .hero__media .still {
@@ -271,9 +296,8 @@ p { margin: 0; }
 }
 /* Очень медленный наезд — стена «дышит», пока её не открыли */
 .hero__media .still {
-  background: var(--wall) center 42% / cover no-repeat;
+  background: var(--wall-bw) center 42% / cover no-repeat;
   animation: breathe 26s var(--ease-cine) infinite alternate;
-  will-change: transform;
 }
 @keyframes breathe {
   from { transform: scale(1.06) translate3d(0,0,0); }
@@ -297,6 +321,9 @@ p { margin: 0; }
   position: sticky; top: 0; height: 100svh; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
+.portal.is-scrubbing .portal__layer,
+.portal.is-scrubbing .portal__dark,
+.portal.is-scrubbing .portal__glow { will-change: transform, opacity; }
 .portal__stage video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
 }
@@ -304,18 +331,17 @@ p { margin: 0; }
 .portal__layer {
   position: absolute; inset: -10%; z-index: 0;
   background: var(--wall) center center / cover no-repeat;
-  will-change: transform, opacity;
 }
 .portal__layer--far  { filter: brightness(.5) blur(1px); }
 .portal__layer--mid  { filter: brightness(.75); opacity: .85; }
 .portal__layer--near { filter: brightness(.95) blur(3px); opacity: .7; }
 .portal__dark {
-  position: absolute; inset: 0; z-index: 2; background: var(--ink); opacity: 0; will-change: opacity;
+  position: absolute; inset: 0; z-index: 2; background: var(--ink); opacity: 0;
 }
 .portal__glow {
   position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background: radial-gradient(38% 34% at 50% 48%, rgba(255,255,255,.34), transparent 66%);
-  opacity: 0; will-change: opacity;
+  opacity: 0;
 }
 /* Реплики лежат в одной ячейке грида — сменяют друг друга, не сдвигая кадр */
 .portal__cap {
@@ -325,7 +351,7 @@ p { margin: 0; }
 .portal__cap p { grid-area: 1 / 1; }
 .portal__cap p {
   font-family: var(--display); font-size: clamp(1.7rem,4.4vw,3.6rem); line-height: 1.1;
-  letter-spacing: -.04em; font-weight: 300; opacity: 0; will-change: opacity, transform;
+  letter-spacing: -.04em; font-weight: 300; opacity: 0;
   max-width: 15em; margin-inline: auto;  /* em — относительно собственного кегля */
 }
 .portal__cap p em { font-style: normal; color: var(--on-dark-mut); }
@@ -612,7 +638,6 @@ p { margin: 0; }
   background:
     linear-gradient(180deg, rgba(10,10,10,.5), rgba(10,10,10,.92)),
     var(--wall) center 40% / cover no-repeat;
-  filter: grayscale(1);
   color: var(--on-dark); display: flex; flex-direction: column; justify-content: flex-end;
   transition: transform .8s var(--ease);
 }
@@ -632,7 +657,6 @@ p { margin: 0; }
   width: 62px; height: 62px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,.45); background: rgba(0,0,0,.42);
   color: var(--on-dark-mut); display: grid; place-items: center;
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   transition: background .4s, color .4s, transform .4s;
 }
 .vcard:hover .vcard__play { background: var(--on-dark-mut); color: #000000; transform: translate(-50%,-50%) scale(1.06); }
@@ -766,7 +790,7 @@ p { margin: 0; }
    Ровно те инструменты, о которых говорит строка. */
 /* Барберские иконки детальные — на 20 px они превращаются в кашу.
    26 px и цвет основного текста: читается как знак, а не как пятно. */
-.notes li .ic { width: 26px; height: 26px; margin-top: -2px; color: var(--ink-strong); }
+.notes li .ic { width: 28px; height: 28px; margin-top: -3px; color: var(--ink-strong); }
 
 @media (max-width: 800px){
   .qa__row, .creed__row, .figures__row { grid-template-columns: 1fr; gap: 10px; }
@@ -793,8 +817,8 @@ p { margin: 0; }
 /* Листва проступает и здесь, но еле слышно — как водяной знак на бумаге */
 .program__wall {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: var(--wall) center 40% / cover no-repeat;
-  opacity: .07; filter: grayscale(1) contrast(.8);
+  background: var(--wall-bw) center 40% / cover no-repeat;
+  opacity: .07;
   -webkit-mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
   mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
 }

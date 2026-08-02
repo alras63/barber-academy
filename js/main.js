@@ -8,6 +8,18 @@
 
   var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isPhone = window.matchMedia("(max-width: 700px)").matches;
+
+  /* ОБЛЕГЧЁННЫЙ РЕЖИМ ДВИЖЕНИЯ — один выключатель на всю страницу.
+     Телефон, слабое устройство или явная просьба системы «поменьше
+     движения» → на <html> появляется data-motion="lite", и CSS одним
+     блоком гасит анимации, переходы и подготовку слоёв. Дальше не нужно
+     помнить про каждый эффект по отдельности: новый выключится сам.
+     Порог по ядрам намеренно низкий: у обычного ноутбука их четыре, и
+     срезать ему анимации было бы перебором. Телефоны ловятся шириной. */
+  var weak = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) ||
+             (navigator.deviceMemory && navigator.deviceMemory <= 2);
+  var lite = reduce || isPhone || weak;
+  document.documentElement.dataset.motion = lite ? "lite" : "full";
   var M = window.MEDIA || {};
 
   /* ===================== ВИДЕО-СИСТЕМА =====================
@@ -138,6 +150,8 @@
       return;
     }
 
+    sec.classList.add("is-scrubbing");
+
     var ticking = false;
     function update() {
       var r = sec.getBoundingClientRect();
@@ -217,6 +231,8 @@
       if (big) big.textContent = "0" + (i + 1);
     }
     setStep(0);
+
+    sec.classList.add("is-scrubbing");
 
     var ticking = false;
     function update() {

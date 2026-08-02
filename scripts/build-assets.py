@@ -20,7 +20,7 @@ CSS подбирает нужную через image-set(), поэтому те�
 import os
 import sys
 
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageOps
 
 Image.MAX_IMAGE_PIXELS = None
 
@@ -30,6 +30,9 @@ OUT = os.path.join(ROOT, "assets", "img", "bg")
 # (ширина, качество). Мелкие ширины жмём сильнее: на телефоне разницы не видно,
 # а вес решает всё.
 SIZES = ((2400, 78), (1400, 76), (800, 72))
+
+# Для этих кадров дополнительно кладём чёрно-белую копию
+BW_TOO = {"main"}
 
 
 def main(src_dir):
@@ -49,12 +52,23 @@ def main(src_dir):
             if im.width < width:
                 continue
             h = round(im.height * width / im.width)
+            small = im.resize((width, h), Image.LANCZOS)
             out = os.path.join(OUT, "%s-%d.webp" % (stem, width))
-            im.resize((width, h), Image.LANCZOS).save(
-                out, "WEBP", quality=quality, method=6)
+            small.save(out, "WEBP", quality=quality, method=6)
             size = os.path.getsize(out)
             total_out += size
             made.append("%d:%.0fКБ" % (width, size / 1024))
+            if stem in BW_TOO:
+                # Обесцвеченный вариант готовим здесь, а не фильтром в браузере:
+                # filter: grayscale на большом слое, который ещё и анимируется,
+                # заставляет телефон перерисовывать его каждый кадр.
+                bw = os.path.join(OUT, "%s-bw-%d.webp" % (stem, width))
+                # Заодно притемняем: на титуле полоса стены идёт приглушённой,
+                # и делать это фильтром в браузере — работа на каждом кадре.
+                ImageEnhance.Brightness(
+                    ImageOps.grayscale(small)).enhance(0.88).save(
+                        bw, "WEBP", quality=quality, method=6)
+                total_out += os.path.getsize(bw)
         print("%-12s %5dx%-5d → %s" % (name, im.width, im.height, "  ".join(made)))
 
     print("\nбыло %.0f МБ → стало %.1f МБ (в %.0f раз легче)"

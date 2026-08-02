@@ -51,11 +51,13 @@ fonts_css = "\n".join(kept)
 # Берём только самую лёгкую ширину: единственный файл и так весит под мегабайт,
 # а 2400 px в base64 добавили бы ещё несколько.
 styles = read("css", "styles.css")
+
+# Ступени для больших экранов в одном файле не нужны: там всё равно
+# зашита только самая лёгкая ширина. Выкидываем медиазапросы, которые
+# только и делают, что переопределяют --wall на 1400/2400.
+styles = re.sub(r"@media \([^)]*\)\s*\{\s*:root \{[^}]*--wall[^}]*\}\s*\}\n?", "", styles)
+
 for path in sorted(set(re.findall(r"assets/img/bg/[\w-]+\.webp", styles))):
-    if not path.endswith("-800.webp"):
-        # ступени для больших экранов в одном файле не нужны
-        styles = re.sub(r"@media[^{]+\{ :root \{ --wall: url\(\"\.\./%s\"\); \} \}\n" % re.escape(path), "", styles)
-        continue
     styles = styles.replace('url("../%s")' % path, "url(%s)" % data_uri(path, "image/webp"))
 
 scripts = "\n".join(read("js", n) for n in ("media.js", "data.js", "main.js"))
