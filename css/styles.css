@@ -30,12 +30,7 @@
   --line-dark:  rgba(255,255,255,.18);
   --cream:      var(--paper);
 
-  /* ФИРМЕННАЯ СТЕНА — одна точка правды на весь файл.
-     Ширина выбирается по ширине окна, а не по плотности пикселей:
-     image-set() умеет только 1x/2x и отдал бы монитору телефонный кадр. */
-  --wall: url("../assets/img/bg/main-800.webp");
-  --wall-bw: url("../assets/img/bg/main-bw-800.webp");
-
+  
   --maxw: 1280px;
   --gutter: clamp(24px, 6vw, 96px);
   /* Единая сетка разворота: узкая колонка под метку, широкая — под текст.
@@ -55,11 +50,6 @@
   --ease-cine: cubic-bezier(.65,0,.35,1);
 }
 
-/* Телефон качает 800 px вместо 2400 — главный вклад в скорость на мобильном */
-@media (min-width: 700px)  { :root { --wall: url("../assets/img/bg/main-1400.webp");
-  --wall-bw: url("../assets/img/bg/main-bw-1400.webp"); } }
-@media (min-width: 1500px) { :root { --wall: url("../assets/img/bg/main-2400.webp");
-  --wall-bw: url("../assets/img/bg/main-bw-2400.webp"); } }
 
 *,*::before,*::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -265,23 +255,10 @@ p { margin: 0; }
 .hero__door {
   position: relative; height: clamp(120px, 20vh, 240px); overflow: hidden; background: var(--ink);
 }
-.hero__media { position: absolute; inset: 0; overflow: hidden; }
-.hero__media video, .hero__media .still {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-}
-/* Очень медленный наезд — стена «дышит», пока её не открыли */
-.hero__media .still {
-  background: var(--wall-bw) center 42% / cover no-repeat;
-}
-/* Бесконечное «дыхание» — постоянная перерисовка большого кадра.
-   На телефоне это заметный расход батареи ради эффекта, которого
-   на такой диагонали почти не видно. */
+/* Обычная картинка, а не CSS-фон: фон с cover браузер пересчитывает
+   при каждой перерисовке полосы, картинка же просто лежит слоем. */
+.hero__door img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
 
-/* Свет из центра стены — как подсветка логотипа вживую */
-.hero__door::after {
-  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(46% 120% at 50% 50%, rgba(255,255,255,.16), transparent 68%);
-}
 
 /* =====================================================================
    СТЕНА
@@ -340,10 +317,6 @@ p { margin: 0; }
 /* Фоновое ambient-видео секции */
 /* Пока ролик не подключён, контейнер пуст — и не должен затемнять секцию:
    без этого правила пустая накладка красила белое полотно в серый. */
-.sec-media:empty { display: none; }
-.sec-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; opacity: .3; }
-.sec-media video { width: 100%; height: 100%; object-fit: cover; }
-.sec-media::after { content:""; position:absolute; inset:0; background: rgba(0,0,0,.55); }
 
 /* =====================================================================
    ЗАГОЛОВОК РАЗВОРОТА — один и тот же во всех секциях
@@ -550,16 +523,9 @@ p { margin: 0; }
 .videos { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(20px,2.6vw,40px); }
 .vcard {
   position: relative; aspect-ratio: 16/9; overflow: hidden;
-  /* до появления настоящих обложек — фактура собственной стены в ч/б,
-     а не абстрактная заглушка */
-  background:
-    linear-gradient(180deg, rgba(10,10,10,.5), rgba(10,10,10,.92)),
-    var(--wall) center 40% / cover no-repeat;
+  background: var(--ink);
   color: var(--on-dark); display: flex; flex-direction: column; justify-content: flex-end;
 }
-/* разное кадрирование, чтобы обложки не выглядели копией друг друга */
-.vcard:nth-child(2) { background-position: center, 22% 62%; }
-.vcard:nth-child(3) { background-position: center, 78% 30%; }
 .vcard:hover { transform: translateY(-6px); }
 .vcard img, .vcard video { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index:0; }
 /* Кадр стал широким 16:9, и подпись оказалась на светлой части кадра —
@@ -607,8 +573,7 @@ p { margin: 0; }
 /* ---------------- CTA ---------------- */
 .cta { position: relative; overflow: hidden; color: var(--on-dark); background: var(--ink); }
 .cta__media { position: absolute; inset: 0; z-index: 0; }
-.cta__media video, .cta__media .still { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; }
-.cta__media .still { background: var(--wall) center 62% / cover no-repeat; }
+.cta__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; }
 .cta__scrim { position:absolute; inset:0; z-index:1; background: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.72) 42%, rgba(0,0,0,.94)); }
 .cta .wrap { position: relative; z-index: 3; text-align: center; }
 .cta .display { font-size: clamp(2.8rem,7.4vw,6rem); }
@@ -728,14 +693,6 @@ p { margin: 0; }
    идёт по тому же листу: тёмный фон остался только на входе (первый
    экран и портал) и на выходе (запись и подвал). */
 .program { position: relative; background: var(--paper); color: var(--ink-strong); }
-/* Листва проступает и здесь, но еле слышно — как водяной знак на бумаге */
-.program__wall {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: var(--wall-bw) center 40% / cover no-repeat;
-  opacity: .07;
-  -webkit-mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
-  mask-image: linear-gradient(100deg, transparent 40%, #000 88%);
-}
 .program__stage { position: relative; overflow: hidden; }
 /* Маршрут стоит на той же сетке, что и остальные секции: метка слева,
    шаги — с той же вертикали, что заголовки всех разворотов. */
@@ -803,9 +760,6 @@ p { margin: 0; }
   .rail { scroll-snap-type: x proximity; }
   .pcard__img, .pcard__mono { aspect-ratio: 4/5; }
   .vcard { aspect-ratio: 16/10; }
-  /* Бесконечное «дыхание» кадра — постоянная перерисовка ради эффекта,
-     которого на такой диагонали почти не видно, и заметный расход батареи. */
-  .hero__media .still, .cta__media .still { transform: none; }
   }
 
 /* Мобильное меню */

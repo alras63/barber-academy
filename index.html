@@ -458,13 +458,17 @@
 
   <div class="hero__foot">
     <div class="wrap hero__foot-row">
-      <span class="hero__cue">Прокрутите — стена откроется</span>
+      <span class="hero__cue">Курс с нуля до профессии</span>
       <span class="hero__fact">500+ выпускников</span>
     </div>
   </div>
 
   <div class="hero__door" aria-hidden="true">
-    <div class="hero__media" id="heroMedia"><div class="still"></div></div>
+    <img src="assets/img/bg/main-bw-1400.webp"
+         srcset="assets/img/bg/main-bw-800.webp 800w,
+                 assets/img/bg/main-bw-1400.webp 1400w,
+                 assets/img/bg/main-bw-2400.webp 2400w"
+         sizes="100vw" alt="" decoding="async">
   </div>
 </section>
 
@@ -581,7 +585,6 @@
 <!-- ==================== ПРОГРАММА — маршрут на скролле ==================== -->
 <section class="program" id="program" data-chapter="program" aria-label="Программа курса">
   <div class="program__stage">
-    <div class="program__wall" aria-hidden="true"></div>
     <span class="program__big" aria-hidden="true">01</span>
     <div class="wrap">
       <span class="eyebrow">Программа</span>
@@ -772,7 +775,13 @@
 
 <!-- ==================== ЗАПИСЬ ==================== -->
 <section class="section cta on-dark" id="enroll" data-chapter="enroll">
-  <div class="cta__media" id="ctaMedia" aria-hidden="true"><div class="still"></div></div>
+  <div class="cta__media" aria-hidden="true">
+    <img src="assets/img/bg/main-1400.webp"
+         srcset="assets/img/bg/main-800.webp 800w,
+                 assets/img/bg/main-1400.webp 1400w,
+                 assets/img/bg/main-2400.webp 2400w"
+         sizes="100vw" alt="" loading="lazy" decoding="async">
+  </div>
   <div class="cta__scrim" aria-hidden="true"></div>
   <div class="wrap">
     <span class="eyebrow reveal" style="justify-content:center; display:flex;">Запись на курс</span>
@@ -837,7 +846,6 @@
   </div>
 </footer>
 
-<script src="js/media.js"></script>
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 </body>

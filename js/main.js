@@ -9,80 +9,11 @@
   var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isPhone = window.matchMedia("(max-width: 700px)").matches;
 
-  var M = window.MEDIA || {};
 
-  /* ===================== ВИДЕО-СИСТЕМА =====================
-     Ambient-видео подключается только когда:
-     — файл указан в media.js,
-     — пользователь не просил уменьшить движение,
-     — это не телефон (экономим трафик; там остаётся постер).
-     Ленивая загрузка через IntersectionObserver: src подставляется,
-     когда блок подходит к экрану, и пауза, когда уходит.
-  ================================================================= */
-  function canUseVideo(slot) {
-    return !!(slot && (slot.webm || slot.mp4) && !reduce && !isPhone);
-  }
-
-  function buildVideo(slot, opts) {
-    opts = opts || {};
-    var v = document.createElement("video");
-    v.muted = true; v.defaultMuted = true;
-    v.playsInline = true; v.setAttribute("playsinline", "");
-    v.setAttribute("webkit-playsinline", "");
-    if (opts.loop !== false) v.loop = true;
-    v.preload = "none";
-    if (slot.poster) v.poster = slot.poster;
-    // src не ставим сразу — только когда блок близко к экрану
-    v.dataset.webm = slot.webm || "";
-    v.dataset.mp4  = slot.mp4  || "";
-    return v;
-  }
-
-  function attachSources(v) {
-    if (v.dataset.loaded) return;
-    v.dataset.loaded = "1";
-    if (v.dataset.webm) {
-      var s1 = document.createElement("source");
-      s1.src = v.dataset.webm; s1.type = "video/webm"; v.appendChild(s1);
-    }
-    if (v.dataset.mp4) {
-      var s2 = document.createElement("source");
-      s2.src = v.dataset.mp4; s2.type = "video/mp4"; v.appendChild(s2);
-    }
-    v.load();
-  }
-
-  // Один общий наблюдатель на все ambient-видео — не грузим главный поток
-  var ambientIO = "IntersectionObserver" in window
-    ? new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          var v = en.target;
-          if (en.isIntersecting) {
-            attachSources(v);
-            var p = v.play();
-            if (p && p.catch) p.catch(function () {});
-          } else if (!v.paused) {
-            v.pause();
-          }
-        });
-      }, { threshold: 0.05, rootMargin: "200px 0px" })
-    : null;
-
-  function mountAmbient(container, slot) {
-    if (!container || !canUseVideo(slot)) return null;
-    var v = buildVideo(slot);
-    container.insertBefore(v, container.firstChild);
-    if (ambientIO) ambientIO.observe(v); else { attachSources(v); v.play(); }
-    return v;
-  }
-
-  // Герой: видео поверх CSS-фолбэка (фолбэк остаётся, если видео нет)
-  mountAmbient(document.getElementById("heroMedia"), M.heroLoop);
-  mountAmbient(document.getElementById("ctaMedia"),  M.ctaMedia || M.ambientCta);
-  // Фоновые ambient-слоты секций
-  Array.prototype.forEach.call(document.querySelectorAll("[data-media]"), function (el) {
-    mountAmbient(el, M[el.dataset.media]);
-  });
+  /* Фоновых ambient-роликов на сайте нет: движение снято полностью,
+     а зацикленное видео — это движение по определению. Осталась только
+     ручная проигрывалка видео-историй ниже: там человек сам нажимает
+     на кнопку, это не анимация. */
 
   /* ===================== ПРОГРАММА =====================
      Раньше шаги сменяли друг друга в закреплённом кадре по мере прокрутки.

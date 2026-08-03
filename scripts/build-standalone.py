@@ -60,7 +60,7 @@ styles = re.sub(r"@media \([^)]*\)\s*\{\s*:root \{[^}]*--wall[^}]*\}\s*\}\n?", "
 for path in sorted(set(re.findall(r"assets/img/bg/[\w-]+\.webp", styles))):
     styles = styles.replace('url("../%s")' % path, "url(%s)" % data_uri(path, "image/webp"))
 
-scripts = "\n".join(read("js", n) for n in ("media.js", "data.js", "main.js"))
+scripts = "\n".join(read("js", n) for n in ("data.js", "main.js"))
 # В одном файле внешних ресурсов нет: путь к постеру вёл бы в никуда.
 # Постер нужен только вместе с роликом, поэтому здесь он обнуляется.
 scripts = re.sub(r'poster: "assets/img/bg/[\w-]+\.webp"', "poster: null", scripts)
