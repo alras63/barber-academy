@@ -9,17 +9,6 @@
   var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var isPhone = window.matchMedia("(max-width: 700px)").matches;
 
-  /* ОБЛЕГЧЁННЫЙ РЕЖИМ ДВИЖЕНИЯ — один выключатель на всю страницу.
-     Телефон, слабое устройство или явная просьба системы «поменьше
-     движения» → на <html> появляется data-motion="lite", и CSS одним
-     блоком гасит анимации, переходы и подготовку слоёв. Дальше не нужно
-     помнить про каждый эффект по отдельности: новый выключится сам.
-     Порог по ядрам намеренно низкий: у обычного ноутбука их четыре, и
-     срезать ему анимации было бы перебором. Телефоны ловятся шириной. */
-  var weak = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) ||
-             (navigator.deviceMemory && navigator.deviceMemory <= 2);
-  var lite = reduce || isPhone || weak;
-  document.documentElement.dataset.motion = lite ? "lite" : "full";
   var M = window.MEDIA || {};
 
   /* ===================== ВИДЕО-СИСТЕМА =====================
@@ -95,163 +84,36 @@
     mountAmbient(el, M[el.dataset.media]);
   });
 
-  // Появление героя (построчный вылет заголовка)
-  var hero = document.getElementById("hero");
-  if (hero) requestAnimationFrame(function () { hero.classList.add("ready"); });
-
-  /* ===================== ПОРТАЛ (scroll-scrub) =====================
-     Скролл управляет проходом сквозь стену. Если задано видео —
-     проматываем его currentTime по прогрессу (как в кинематографичных
-     лендингах). Если нет — двигаем три слоя стены с разной скоростью:
-     камера входит внутрь, свет разгорается, кадр уходит в темноту.
+  /* ===================== ПОРТАЛ =====================
+     Здесь был проход сквозь стену: прокрутка вела камеру внутрь листвы.
+     Движение с сайта снято совсем, поэтому осталась одна неподвижная
+     стена с одной репликой. Показываем её сразу — ждать нечего.
   ================================================================= */
   (function portal() {
-    var sec = document.getElementById("portal");
     var stage = document.getElementById("portalStage");
-    if (!sec || !stage) return;
-
-    var layers = {
-      far:  stage.querySelector('[data-layer="far"]'),
-      mid:  stage.querySelector('[data-layer="mid"]'),
-      near: stage.querySelector('[data-layer="near"]')
-    };
-    var dark = stage.querySelector("[data-dark]");
-    var glow = stage.querySelector("[data-glow]");
-    // Две реплики по ходу прохода: [появление, полная видимость, уход]
-    var caps = [
-      { el: stage.querySelector('[data-cap="0"]'), from: 0.04, to: 0.40 },
-      { el: stage.querySelector('[data-cap="1"]'), from: 0.50, to: 0.86 }
-    ].filter(function (c) { return c.el; });
-
-    // Видео-режим (если ролик подключён)
-    var vid = null;
-    if (canUseVideo(M.portalScrub)) {
-      vid = buildVideo(M.portalScrub, { loop: false });
-      vid.style.opacity = "0";
-      stage.insertBefore(vid, stage.firstChild);
-      attachSources(vid);
-      vid.addEventListener("loadedmetadata", function () {
-        vid.style.opacity = "1";
-        // слои-фолбэк больше не нужны
-        Object.keys(layers).forEach(function (k) { if (layers[k]) layers[k].style.display = "none"; });
-      });
+    if (!stage) return;
+    var caps = stage.querySelectorAll(".portal__cap p");
+    for (var i = 0; i < caps.length; i++) {
+      // вторая реплика была второй точкой прохода — без прохода она лишняя
+      if (i === 0) caps[i].style.opacity = "1";
+      else caps[i].style.display = "none";
     }
-
-    /* На телефоне прохода сквозь стену нет.
-       Проматывание трёх слоёв большой фотографии — самая тяжёлая работа на
-       странице, а вместе с высотой блока в единицах vh оно ещё и дёргает
-       вёрстку, когда браузер прячет адресную строку. Поэтому здесь стена
-       показывается одним неподвижным кадром с одной репликой: один экран,
-       одна мысль. Проход остаётся десктопу, где он и читается. */
-    if (reduce || isPhone) {
-      sec.classList.add("portal--still");
-      if (caps[0]) { caps[0].el.style.opacity = "1"; caps[0].el.style.transform = "none"; }
-      for (var i = 1; i < caps.length; i++) caps[i].el.style.display = "none";
-      return;
-    }
-
-    sec.classList.add("is-scrubbing");
-
-    var ticking = false;
-    function update() {
-      var r = sec.getBoundingClientRect();
-      var total = sec.offsetHeight - window.innerHeight;
-      var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
-
-      if (vid && vid.duration) {
-        // проматываем ролик строго по прогрессу скролла
-        var t = p * (vid.duration - 0.05);
-        if (Math.abs(vid.currentTime - t) > 0.01) vid.currentTime = t;
-      } else {
-        // CSS-камера: слои разлетаются, создавая проход внутрь
-        if (layers.far)  layers.far.style.transform  = "scale(" + (1 + p * 0.55) + ")";
-        if (layers.mid)  layers.mid.style.transform  = "scale(" + (1 + p * 1.15) + ")";
-        if (layers.near) {
-          layers.near.style.transform = "scale(" + (1 + p * 2.4) + ")";
-          layers.near.style.opacity = String(Math.max(0, 0.7 - p * 0.9));
-        }
-      }
-
-      // свет разгорается к середине и гаснет к концу
-      if (glow) glow.style.opacity = String(Math.sin(Math.min(1, p * 1.15) * Math.PI) * 0.95);
-      // затемнение к финалу — «мы внутри»
-      if (dark) dark.style.opacity = String(Math.max(0, (p - 0.72) / 0.28));
-      // реплики появляются и уходят по своим отрезкам прохода
-      caps.forEach(function (c) {
-        var fade = 0.09, o;
-        if (p < c.from || p > c.to) o = 0;
-        else if (p < c.from + fade) o = (p - c.from) / fade;
-        else if (p > c.to - fade)   o = (c.to - p) / fade;
-        else o = 1;
-        o = Math.max(0, Math.min(1, o));
-        c.el.style.opacity = String(o);
-        c.el.style.transform = "translateY(" + (1 - o) * 18 + "px)";
-      });
-      ticking = false;
-    }
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
+    var hint = stage.querySelector(".portal__hint");
+    if (hint) hint.remove();      // «прокрутите, чтобы войти» — входить больше некуда
   })();
 
-  /* ===================== ПРОГРАММА (pinned narrative) =====================
-     Скролл ведёт по шагам курса. Приём тот же, что в портале, и по той же
-     причине: программа сама по себе — последовательность, поэтому движение
-     здесь несёт смысл, а не украшает.
-
-     Закрепление включается только на широком экране и только если человек
-     не просил уменьшить движение. Во всех остальных случаях (телефон,
-     reduced-motion, отключённый JS) остаётся обычный список — содержание
-     доступно всегда.
-  ========================================================================= */
+  /* ===================== ПРОГРАММА =====================
+     Раньше шаги сменяли друг друга в закреплённом кадре по мере прокрутки.
+     Теперь это просто список из шести пунктов: всё видно сразу. Полоска
+     прогресса и крупная цифра шага вместе с закреплением потеряли смысл.
+  ================================================================= */
   (function program() {
     var sec = document.getElementById("program");
     if (!sec) return;
-    var steps = sec.querySelectorAll(".program__step");
-    var ticks = sec.querySelectorAll(".program__ticks li");
-    var big   = sec.querySelector(".program__big");
-    if (!steps.length) return;
-
-    var canPin = window.matchMedia("(min-width: 900px)").matches && !reduce;
-    if (!canPin) return;
-
-    sec.classList.add("is-pinned");
-    var current = -1;
-
-    function setStep(i) {
-      if (i === current) return;
-      current = i;
-      for (var k = 0; k < steps.length; k++) steps[k].classList.toggle("is-on", k === i);
-      for (var t = 0; t < ticks.length; t++) ticks[t].classList.toggle("done", t <= i);
-      if (big) big.textContent = "0" + (i + 1);
-    }
-    setStep(0);
-
-    sec.classList.add("is-scrubbing");
-
-    var ticking = false;
-    function update() {
-      var r = sec.getBoundingClientRect();
-      var total = sec.offsetHeight - window.innerHeight;
-      var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
-      // последний шаг держим до конца дорожки, иначе он мелькает
-      var i = Math.min(steps.length - 1, Math.floor(p * steps.length * 1.001));
-      setStep(i);
-      ticking = false;
-    }
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
+    var ticks = sec.querySelector(".program__ticks");
+    if (ticks) ticks.remove();
+    var big = sec.querySelector(".program__big");
+    if (big) big.remove();
   })();
 
   /* ===================== РЕНДЕР ДАННЫХ ===================== */
@@ -377,40 +239,17 @@
     });
   }
 
-  /* ===================== Reveal ===================== */
-  var animated = document.querySelectorAll(".reveal:not(.in), .wipe:not(.in)");
-  if (reduce || !("IntersectionObserver" in window)) {
-    Array.prototype.forEach.call(animated, function (el) { el.classList.add("in"); });
-  } else {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
-    Array.prototype.forEach.call(animated, function (el) { io.observe(el); });
-  }
-
   /* ===================== Шапка =====================
-     Рельса глав, полоса прогресса и плёночные оверлеи убраны намеренно:
-     это был визуальный шум, который съедал воздух. Осталась только шапка.
+     Всё, что относилось к появлению блоков — наблюдатель, страховка от
+     «навсегда невидимого» блока, слушатель прокрутки — убрано вместе с
+     анимациями: показывать нечего, содержимое видно сразу.
+
+     Осталось одно состояние: на белой странице у шапки появляется фон
+     и волосяная линейка. Это не анимация, а переключение вида, и делает
+     его IntersectionObserver — метровая полоска у верхнего края страницы.
+     Слушателей прокрутки на странице нет ни одного.
   ================================================================= */
   var topbar = document.getElementById("topbar");
-
-  /* =====================================================================
-     СОСТОЯНИЯ ПРИ ПРОКРУТКЕ — БЕЗ ОБРАБОТЧИКА ПРОКРУТКИ
-     ---------------------------------------------------------------------
-     Здесь был слушатель scroll, и на каждом кадре он вызывал
-     getBoundingClientRect у десятков элементов и offsetTop у портала.
-     Каждое такое чтение заставляет браузер пересчитать вёрстку прямо
-     посреди кадра — на телефоне это и давало фризы при прокрутке.
-
-     Теперь ни одного слушателя scroll. Оба состояния шапки определяет
-     IntersectionObserver: он считает пересечения вне основного потока
-     и будит нас только в момент смены состояния.
-     ===================================================================== */
-
-  // 1. Тень и фон шапки: следим за метровой полоской в самом верху страницы.
-  //    Ушла из виду — значит, страницу прокрутили.
   if (topbar && "IntersectionObserver" in window) {
     var sentinel = document.createElement("div");
     sentinel.setAttribute("aria-hidden", "true");
@@ -422,44 +261,6 @@
   } else if (topbar) {
     topbar.classList.add("is-scrolled");
   }
-
-  /* 2. Пока портал занимает экран целиком, шапка уходит: белая полоса
-        поверх стены рвала бы единственный кадр, ради которого сайт и
-        построен. На телефоне прохода нет, поэтому и наблюдать нечего. */
-  var portalSec = document.getElementById("portal");
-  if (topbar && portalSec && !lite && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (e) {
-      topbar.classList.toggle("is-away", e[0].intersectionRatio > 0.6);
-    }, { threshold: [0, 0.6, 1] }).observe(portalSec.querySelector(".portal__stage") || portalSec);
-  }
-
-  /* 3. Страховка от «навсегда невидимого» блока: IntersectionObserver
-        может не успеть сработать, если экран перепрыгнул содержимое разом
-        — например, при переходе по якорю. Раньше это добиралось на каждом
-        кадре прокрутки; на самом деле достаточно проверить после перехода
-        по якорю и один раз после загрузки. */
-  function sweepRevealed() {
-    var pending = document.querySelectorAll(".reveal:not(.in), .wipe:not(.in)");
-    var vh = window.innerHeight;
-    for (var i = 0; i < pending.length; i++) {
-      if (pending[i].getBoundingClientRect().top < vh) pending[i].classList.add("in");
-    }
-  }
-  /* Проверяем ПОСЛЕ остановки прокрутки, а не во время неё.
-     scrollend приходит один раз, когда движение закончилось. Там, где его
-     ещё нет, вешаем обычный scroll — но он только двигает таймер и не
-     читает геометрию, поэтому на кадр не приходится никакой работы. */
-  if ("onscrollend" in window) {
-    window.addEventListener("scrollend", sweepRevealed, { passive: true });
-  } else {
-    var idle;
-    window.addEventListener("scroll", function () {
-      clearTimeout(idle);
-      idle = setTimeout(sweepRevealed, 140);
-    }, { passive: true });
-  }
-  window.addEventListener("hashchange", function () { setTimeout(sweepRevealed, 400); });
-  window.addEventListener("load", function () { setTimeout(sweepRevealed, 300); });
 
   /* ===================== Меню ===================== */
   var burger = document.getElementById("burger");
