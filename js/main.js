@@ -265,7 +265,7 @@
   }
   function media(photo, name, cls) {
     return photo
-      ? '<div class="pcard__img"><img src="' + esc(photo) + '" alt="' + esc(name) + '" loading="lazy" /></div>'
+      ? '<div class="pcard__img"><img src="' + esc(photo) + '" alt="' + esc(name) + '" loading="lazy" decoding="async" /></div>'
       : '<div class="' + cls + '">' + initials(name) + "</div>";
   }
 
@@ -343,7 +343,7 @@
   if (vGrid && window.VIDEOS) {
     vGrid.innerHTML = VIDEOS.map(function (v, i) {
       var inner = "";
-      if (v.poster) inner = '<img src="' + esc(v.poster) + '" alt="' + esc(v.name) + '" loading="lazy" />';
+      if (v.poster) inner = '<img src="' + esc(v.poster) + '" alt="' + esc(v.name) + '" loading="lazy" decoding="async" />';
       return (
         '<article class="vcard reveal" data-d="' + ((i % 3) + 1) + '"' +
           (v.url ? ' data-src="' + esc(v.url) + '"' : "") +
@@ -396,57 +396,70 @@
   ================================================================= */
   var topbar = document.getElementById("topbar");
 
-  /* Страховка от «навсегда невидимого» блока.
-     IntersectionObserver может не успеть сработать, если экран
-     перепрыгнул содержимое разом — например, при переходе по якорю.
-     Тогда блок остаётся скрытым до перезагрузки. Поэтому после каждой
-     прокрутки добираем всё, что уже поднялось выше нижней кромки экрана.
+  /* =====================================================================
+     СОСТОЯНИЯ ПРИ ПРОКРУТКЕ — БЕЗ ОБРАБОТЧИКА ПРОКРУТКИ
+     ---------------------------------------------------------------------
+     Здесь был слушатель scroll, и на каждом кадре он вызывал
+     getBoundingClientRect у десятков элементов и offsetTop у портала.
+     Каждое такое чтение заставляет браузер пересчитать вёрстку прямо
+     посреди кадра — на телефоне это и давало фризы при прокрутке.
 
-     Список берём один раз и вычёркиваем из него показанное: раньше здесь
-     был querySelectorAll на каждом кадре прокрутки — лишняя работа ровно
-     там, где её меньше всего можно себе позволить, на телефоне. */
-  var pendingReveal = Array.prototype.slice.call(
-    document.querySelectorAll(".reveal, .wipe"));
-  function sweepRevealed() {
-    if (!pendingReveal.length) return;
-    var vh = window.innerHeight, rest = [];
-    for (var i = 0; i < pendingReveal.length; i++) {
-      var el = pendingReveal[i];
-      if (el.classList.contains("in")) continue;
-      if (el.getBoundingClientRect().top < vh) el.classList.add("in");
-      else rest.push(el);
-    }
-    pendingReveal = rest;
+     Теперь ни одного слушателя scroll. Оба состояния шапки определяет
+     IntersectionObserver: он считает пересечения вне основного потока
+     и будит нас только в момент смены состояния.
+     ===================================================================== */
+
+  // 1. Тень и фон шапки: следим за метровой полоской в самом верху страницы.
+  //    Ушла из виду — значит, страницу прокрутили.
+  if (topbar && "IntersectionObserver" in window) {
+    var sentinel = document.createElement("div");
+    sentinel.setAttribute("aria-hidden", "true");
+    sentinel.style.cssText = "position:absolute;top:0;left:0;width:1px;height:60px;pointer-events:none";
+    document.body.appendChild(sentinel);
+    new IntersectionObserver(function (e) {
+      topbar.classList.toggle("is-scrolled", !e[0].isIntersecting);
+    }).observe(sentinel);
+  } else if (topbar) {
+    topbar.classList.add("is-scrolled");
   }
 
-  /* Пока портал занимает экран целиком, шапка уходит. Она стала светлой
-     (первый экран теперь белый), и белая полоса поверх стены рвала бы
-     единственный кадр, ради которого сайт и построен. Сразу после
-     портала шапка возвращается. */
+  /* 2. Пока портал занимает экран целиком, шапка уходит: белая полоса
+        поверх стены рвала бы единственный кадр, ради которого сайт и
+        построен. На телефоне прохода нет, поэтому и наблюдать нечего. */
   var portalSec = document.getElementById("portal");
-  function inPortal(y) {
-    if (!portalSec) return false;
-    var top = portalSec.offsetTop;
-    return y > top - 40 && y < top + portalSec.offsetHeight - window.innerHeight * 0.6;
+  if (topbar && portalSec && !lite && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) {
+      topbar.classList.toggle("is-away", e[0].intersectionRatio > 0.6);
+    }, { threshold: [0, 0.6, 1] }).observe(portalSec.querySelector(".portal__stage") || portalSec);
   }
 
-  var tick = false;
-  function onScroll() {
-    if (tick) return;
-    tick = true;
-    requestAnimationFrame(function () {
-      var y = window.pageYOffset || document.documentElement.scrollTop;
-      if (topbar) {
-        topbar.classList.toggle("is-scrolled", y > 60);
-        topbar.classList.toggle("is-away", inPortal(y));
-      }
-      if (!reduce) sweepRevealed();
-      tick = false;
-    });
+  /* 3. Страховка от «навсегда невидимого» блока: IntersectionObserver
+        может не успеть сработать, если экран перепрыгнул содержимое разом
+        — например, при переходе по якорю. Раньше это добиралось на каждом
+        кадре прокрутки; на самом деле достаточно проверить после перехода
+        по якорю и один раз после загрузки. */
+  function sweepRevealed() {
+    var pending = document.querySelectorAll(".reveal:not(.in), .wipe:not(.in)");
+    var vh = window.innerHeight;
+    for (var i = 0; i < pending.length; i++) {
+      if (pending[i].getBoundingClientRect().top < vh) pending[i].classList.add("in");
+    }
   }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
-  onScroll();
+  /* Проверяем ПОСЛЕ остановки прокрутки, а не во время неё.
+     scrollend приходит один раз, когда движение закончилось. Там, где его
+     ещё нет, вешаем обычный scroll — но он только двигает таймер и не
+     читает геометрию, поэтому на кадр не приходится никакой работы. */
+  if ("onscrollend" in window) {
+    window.addEventListener("scrollend", sweepRevealed, { passive: true });
+  } else {
+    var idle;
+    window.addEventListener("scroll", function () {
+      clearTimeout(idle);
+      idle = setTimeout(sweepRevealed, 140);
+    }, { passive: true });
+  }
+  window.addEventListener("hashchange", function () { setTimeout(sweepRevealed, 400); });
+  window.addEventListener("load", function () { setTimeout(sweepRevealed, 300); });
 
   /* ===================== Меню ===================== */
   var burger = document.getElementById("burger");
