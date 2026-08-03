@@ -469,15 +469,25 @@
 </section>
 
 <!-- ============ ПОРТАЛ ============ -->
-<section class="portal" id="portal" aria-label="Проход сквозь стену в академию">
-  <div class="portal__stage" id="portalStage">
-    <div class="portal__layer portal__layer--far"  data-layer="far"  aria-hidden="true"></div>
-    <div class="portal__glow" data-glow aria-hidden="true"></div>
-    <div class="portal__cap">
-      <p data-cap="0">Эту стену видит каждый, кто приходит сюда впервые.</p>
-      <p data-cap="1">Для одних это просто зелень. Для других — <em>начало новой работы</em>.</p>
+<!-- ==================== СТЕНА ====================
+     Кадр отдельно, слова отдельно. Пока реплика лежала поверх листвы,
+     глазу не за что было зацепиться: фактура спорит с текстом. Теперь
+     текст на белом и на той же вертикали, что во всех секциях. -->
+<section class="portal" id="portal" aria-label="Фирменная стена академии">
+  <figure class="portal__frame">
+    <img src="assets/img/bg/main-1400.webp"
+         srcset="assets/img/bg/main-800.webp 800w,
+                 assets/img/bg/main-1400.webp 1400w,
+                 assets/img/bg/main-2400.webp 2400w"
+         sizes="100vw" alt="Фирменная стена академии: живая зелень и хромированный логотип"
+         decoding="async">
+  </figure>
+  <div class="wrap portal__say">
+    <div class="head">
+      <span class="eyebrow">Стена</span>
+      <p class="portal__line">Эту стену видит каждый, кто приходит сюда впервые.
+        Для одних это просто зелень. Для других — <em>начало новой работы</em>.</p>
     </div>
-    <span class="portal__hint" aria-hidden="true">Прокрутите, чтобы войти</span>
   </div>
 </section>
 
