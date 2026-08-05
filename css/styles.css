@@ -146,7 +146,7 @@ p { margin: 0; }
 .topbar.is-away { opacity: 0; pointer-events: none; transform: translateY(-100%); }
 .topbar { }
 .topbar.is-scrolled {
-  background: rgba(255,255,255,.96);
+  background: var(--paper);
   border-bottom-color: var(--line); padding-block: 14px;
 }
 
@@ -195,8 +195,7 @@ p { margin: 0; }
   flex: 1 1 auto; display: grid; align-content: center;
   padding-top: clamp(104px,12vh,150px); padding-bottom: clamp(26px,4vh,56px);
 }
-.hero__foot, .hero__door { flex: 0 0 auto; }
-.hero .hero__head { margin-bottom: 0; }
+.hero__foot, .hero .hero__head { margin-bottom: 0; }
 /* Единственный заголовок первого уровня — крупнее всего остального */
 .hero__title {
   grid-column: 2; margin: 0;
@@ -234,31 +233,19 @@ p { margin: 0; }
   .hero__inner { padding-top: 96px; padding-bottom: 18px; }
   .hero__sub { margin-top: 18px; }
   .hero__cta { margin-top: 26px; }
-  .hero__door { height: clamp(104px, 15vh, 170px); }
-}
+  }
 
 /* Служебная строка над дверью: волосяная линейка и две подписи по краям */
 .hero__foot { position: relative; z-index: 2; }
 .hero__foot-row {
   display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
-  padding-bottom: clamp(16px,2vh,26px); border-bottom: 1px solid var(--line);
+  padding-bottom: clamp(26px,4vh,44px); border-bottom: 1px solid var(--line);
 }
 .hero__cue, .hero__fact {
   font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
   text-transform: uppercase; color: var(--ink-muted);
 }
 @media (max-width: 560px) { .hero__fact { display: none; } }
-
-/* Дверь — полоса стены у нижнего края. На титуле она почти обесцвечена:
-   палитра сайта чёрно-белая, и зелень тут была бы единственным цветным
-   пятном. Цвет включается в портале — дверь открылась, и он хлынул. */
-.hero__door {
-  position: relative; height: clamp(120px, 20vh, 240px); overflow: hidden; background: var(--ink);
-}
-/* Обычная картинка, а не CSS-фон: фон с cover браузер пересчитывает
-   при каждой перерисовке полосы, картинка же просто лежит слоем. */
-.hero__door img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
-
 
 /* =====================================================================
    СТЕНА
