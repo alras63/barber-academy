@@ -227,14 +227,14 @@ p { margin: 0; }
    иначе «приоткрытой двери» читатель просто не увидит. */
 .hero__inner {
   flex: 1 1 auto; display: grid; align-content: center;
-  padding-top: clamp(104px,12vh,150px); padding-bottom: clamp(26px,4vh,56px);
+  padding-top: clamp(104px,9vw,150px); padding-bottom: clamp(26px,3vw,56px);
 }
 .hero__foot, .hero .hero__head { margin-bottom: 0; }
 /* Единственный заголовок первого уровня — крупнее всего остального */
 .hero__title {
   grid-column: 2; margin: 0;
   font-family: var(--display); font-weight: 200;
-  font-size: clamp(2.2rem, min(6.2vw, 10.5vh), 5.6rem); line-height: 1.03;
+  font-size: clamp(2.2rem, 6.2vw, 5.6rem); line-height: 1.03;
   letter-spacing: .02em; text-transform: uppercase;
 }
 .hero__sub {
@@ -273,7 +273,7 @@ p { margin: 0; }
 .hero__foot { position: relative; z-index: 2; }
 .hero__foot-row {
   display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
-  padding-bottom: clamp(26px,4vh,44px); border-bottom: 1px solid var(--line);
+  padding-bottom: clamp(26px,3vw,44px); border-bottom: 1px solid var(--line);
 }
 .hero__cue, .hero__fact {
   font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
@@ -292,11 +292,19 @@ p { margin: 0; }
    ===================================================================== */
 .portal { position: relative; background: var(--paper); }
 .portal__frame {
-  margin: 0; height: clamp(260px, 46vh, 560px); overflow: hidden; background: var(--ink);
+  /* Высота задана пропорцией, а НЕ единицами vh. На iOS при скрытии
+     адресной строки vh меняется, высота кадра прыгает, и object-fit: cover
+     перекадрирует снимок — со стороны это выглядит как наезд камеры при
+     прокрутке. Пропорция считается от ширины, а ширина не меняется. */
+  margin: 0; aspect-ratio: 21 / 9; overflow: hidden; background: var(--ink);
 }
-/* Кадр шире исходника, поэтому обрезается по высоте. Смещаем вверх:
-   по центру верхние лучи логотипа уходили за край. */
-.portal__frame img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+/* 21:9 из исходника 16:9 оставляет 76 % высоты — логотип занимает 65 %
+   и помещается целиком, поэтому кадрируем ровно по центру. */
+.portal__frame img { width: 100%; height: 100%; object-fit: cover; }
+/* На широком мониторе 21:9 даёт уже больше 800 px — режем полосу площе */
+@media (min-width: 1600px) { .portal__frame { aspect-ratio: 24 / 9; } }
+/* На телефоне 16:9 совпадает с пропорцией исходника: кадр целиком, без обрезки */
+@media (max-width: 700px)  { .portal__frame { aspect-ratio: 16 / 9; } }
 .portal__say { padding-block: clamp(64px, 8vw, 130px); }
 .portal__say .head { margin-bottom: 0; }
 .portal__line {
@@ -321,8 +329,13 @@ p { margin: 0; }
    ===================================================================== */
 .plate { position: relative; overflow: hidden; margin: 0; background: var(--ink); }
 .plate img { width: 100%; height: 100%; object-fit: cover; }
-.plate--tall  { height: clamp(300px, 56vh, 660px); }
-.plate--band  { height: clamp(170px, 30vh, 340px); }
+/* Те же соображения, что и у стены: пропорция вместо vh. */
+.plate--tall  { aspect-ratio: 21 / 9;  max-height: 660px; }
+.plate--band  { aspect-ratio: 32 / 9;  max-height: 340px; }
+@media (max-width: 700px) {
+  .plate--tall { aspect-ratio: 4 / 3; }
+  .plate--band { aspect-ratio: 16 / 9; }
+}
 .plate + .section.paper, .section.paper:has(+ .plate) { border-top: 0; }
 
 /* ============================ SECTIONS ============================== */
@@ -630,7 +643,7 @@ p { margin: 0; }
 
 /* Строка-индекс: цифры под первым экраном без «плиток статистики» */
 .index-line {
-  margin-top: clamp(40px,6vh,72px); padding-top: 24px;
+  margin-top: clamp(40px,5vw,72px); padding-top: 24px;
   border-top: 1px solid rgba(255,255,255,.16);
   display: flex; flex-wrap: wrap; gap: clamp(20px,4vw,56px); align-items: baseline;
 }
@@ -731,7 +744,7 @@ p { margin: 0; }
 }
 /* Крупная цифра держит кадр и показывает, где мы в маршруте */
 .program__big { display: none; }
-.program__stage { padding-block: clamp(80px,12vh,140px); }
+.program__stage { padding-block: clamp(80px,9vw,140px); }
 .program__steps { margin-top: 0; display: grid; gap: clamp(40px,5vw,64px); }
 .program__step { display: grid; gap: 10px; max-width: 46ch; }
 .program__n {
