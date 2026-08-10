@@ -1,10 +1,27 @@
 /* =====================================================================
-   MANSPIRE ACADEMY — Кинематографичная дизайн-система v2
+   MENSCUT ACADEMY — дизайн-система
    ---------------------------------------------------------------------
-   Стена — не фон, а портал. Она дышит (ambient-видео) и пропускает
-   сквозь себя (scroll-scrub). Сайт — маршрут по академии: тёмный вход
-   (первый экран и портал) → белый разворот на всю середину → тёмный
-   выход (запись). Тёмного ровно два раза, в начале и в конце.
+   Академия — не отдельный бренд, а вторая половина барбершопа. Поэтому
+   вся система снята с основного сайта menscut.ru и повторяет его
+   вплоть до значений: серый холст #f4f4f4, белые карточки со скруглением
+   8 px, бирюзовый акцент #00b7ac, тёмные полотна #343434 и крупные
+   повторяющиеся заголовки-строки, обрезанные краями экрана.
+
+   Главная претензия к прежней версии была ровно одна: «весь текст идёт
+   фоном, взгляду не за что зацепиться». Ответ здесь структурный, а не
+   косметический:
+
+     — ХОЛСТ СЕРЫЙ, а не белый. Белый стал материалом карточки, и всё,
+       что должно читаться как факт, физически лежит на отдельном листе.
+       Рассказ идёт по серому, факты — по белому.
+     — АКЦЕНТ БИРЮЗОВЫЙ и очень скупой: метка секции, цифры, ключевое
+       слово в заголовке, кнопка. Больше нигде.
+     — ЗАГОЛОВОК СЕКЦИИ — крупная строка во всю полосу, повторённая
+       несколько раз и обрезанная краями экрана. Приём взят с основного
+       сайта один в один: он и делит страницу на главы.
+
+   Движения по-прежнему нет: ни анимаций, ни эффектов на прокрутке.
+   Строка-заголовок никуда не едет — она просто длиннее экрана.
 
    ВСЁ СТОИТ НА ОДНОЙ СЕТКЕ. Метка секции — в узкой левой колонке,
    заголовок, лид и текст — в широкой правой. Эта вертикаль повторяется
@@ -13,24 +30,32 @@
 
 /* ------------------------------ Tokens ------------------------------ */
 :root {
-  /* ЦВЕТ. Основа — белый. Палитра намеренно короткая: четыре значения
-     вместо россыпи оттенков серого. Тёмный фон остался только на входе
-     (первый экран, портал) и на выходе (запись, подвал) — этим он и
-     работает как акцент. Единственный цвет на сайте даёт сама стена. */
-  --paper:      #ffffff;   /* основа */
-  --ink:        #0a0a0a;   /* текст и тёмные полотна */
-  --ink-muted:  #6b6b6b;   /* второстепенный текст: 5.2:1 на белом */
-  --line:       #e6e6e6;   /* волосяные линейки */
+  /* ЦВЕТ — палитра основного сайта, значение в значение.
+     #f4f4f4 холст · #ffffff карточка · #353535 текст · #525254 второй
+     план · #ebebeb линейки · #343434 тёмные полотна · #00b7ac акцент. */
+  --ground:     #f4f4f4;   /* холст страницы */
+  --paper:      #ffffff;   /* карточка, панель, лист */
+  --ink:        #353535;   /* основной текст */
+  --ink-muted:  #525254;   /* второстепенный текст: 7.0:1 на холсте */
+  --line:       #ebebeb;   /* волосяные линейки */
+  --dark:       #343434;   /* тёмные полотна: запись и подвал */
 
-  /* производные — не новые оттенки, а те же четыре в другой роли */
+  /* Бирюза живёт в двух значениях. #00b7ac — фирменный тон, но на светлом
+     он даёт всего 2.5:1 и текстом на белом нечитаем. Поэтому графика
+     (линейки, метки, заливки) берёт фирменный тон, а текст — тот же цвет
+     на тон глубже: 5.8:1 на белом и на холсте. */
+  --accent:     #00b7ac;
+  --accent-ink: #00726b;
+  --accent-dim: rgba(0,183,172,.14);
+
+  /* производные */
   --ink-strong: var(--ink);
-  --ink-body:   var(--ink);   /* основной текст — тот же чёрный, без третьего серого */
-  --on-dark:    var(--paper);
-  --on-dark-mut:rgba(255,255,255,.62);
-  --line-dark:  rgba(255,255,255,.18);
-  --cream:      var(--paper);
+  --ink-body:   var(--ink);
+  --on-dark:    #ffffff;
+  --on-dark-mut:rgba(255,255,255,.72);
+  --line-dark:  rgba(255,255,255,.14);
+  --cream:      var(--ground);
 
-  
   --maxw: 1280px;
   --gutter: clamp(24px, 6vw, 96px);
   /* Единая сетка разворота: узкая колонка под метку, широкая — под текст.
@@ -38,16 +63,27 @@
   --col-label: minmax(0, 3fr);
   --col-body:  minmax(0, 9fr);
   --col-gap:   clamp(24px, 4vw, 72px);
-  --radius: 0px;
-  --radius-lg: 0px;
+  /* 8 px — самое частое скругление на основном сайте (67 использований). */
+  --radius: 8px;
+  --radius-lg: 8px;
+  /* Внутренние поля белой карточки */
+  --pad: clamp(22px, 3vw, 44px);
 
-  --display: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --display: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --sans:    "Golos Text", "Helvetica Neue", Arial, sans-serif;
-  --mono:    "Jost", "Helvetica Neue", Arial, sans-serif;
+  --mono:    "Manrope", "Helvetica Neue", Arial, sans-serif;
 
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
   --ease-cine: cubic-bezier(.65,0,.35,1);
+}
+
+/* Белый лист — единственный носитель фактов на сером холсте.
+   Один класс на все панели: карточки людей, перечни, врезки. */
+.card {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: var(--pad);
 }
 
 
@@ -57,7 +93,7 @@ body {
   margin: 0;
   font-family: var(--sans);
   color: var(--ink-body);
-  background: var(--paper);
+  background: var(--ground);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -85,52 +121,97 @@ p { margin: 0; }
 /* Воздух — главный материал, но мерить его высотой экрана нельзя:
    на телефоне 26vh давали по четверти экрана пустоты сверху и снизу
    у каждой из десяти секций. Меряем шириной и разводим два случая. */
-.section, .program { position: relative; padding-block: clamp(84px, 13vw, 120px); }
+/* Поля стали скромнее прежних: главу теперь открывает заголовок-строка,
+   и держать её на расстоянии четверти экрана больше не нужно. */
+.section, .program { position: relative; padding-block: clamp(64px, 10vw, 96px); }
 @media (min-width: 861px) {
-  .section, .program { padding-block: clamp(120px, 15vw, 230px); }
+  .section, .program { padding-block: clamp(96px, 10vw, 150px); }
 }
-/* Секции на белом разделяются волосяной линейкой, а не сменой фона:
-   одно полотно на весь сайт вместо чередования оттенков. */
-.section.paper + .section.paper { border-top: 1px solid var(--line); }
-/* Служебная метка — моноширинный, поэтому трекинг нужен умеренный */
-.eyebrow {
-  font-family: var(--sans);
-  font-family: var(--display);
-  font-size: 10.5px; font-weight: 400; letter-spacing: .3em; text-transform: uppercase;
-  color: var(--ink-muted); display: inline-block;
-}
-.on-dark .eyebrow, .dark .eyebrow { color: var(--on-dark-mut); }
+/* Соседние секции больше не разделяются линейкой: главы делит
+   заголовок-строка, а фон и так меняется с холста на карточку. */
 
-/* Крупный кегль держим лёгким начертанием и тугим трекингом —
-   так гротеск читается дорого, а не «жирным баннером». */
-/* Трекинг обратно пропорционален кеглю: .14em, уместные в мелкой метке,
-   на крупном заголовке рассыпают слово на буквы. */
+/* Служебная метка. На основном сайте это единственное место, где мелкий
+   кегль набран бирюзовым, — забираем приём вместе с квадратной меткой
+   перед словом: она и ставит точку, с которой глаз начинает секцию. */
+.eyebrow {
+  font-family: var(--display);
+  font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent-ink); display: inline-flex; align-items: center; gap: .85em;
+}
+.eyebrow::before {
+  content: ""; width: 10px; height: 10px; flex: none;
+  background: var(--accent); border-radius: 2px;
+}
+.on-dark .eyebrow, .dark .eyebrow { color: var(--accent); }
+
+/* Заголовок разворота. Прежняя версия набирала его сверхлёгким
+   начертанием в разрядку капителью — красиво, но ровно от этого «весь
+   текст шёл фоном»: разреженные тонкие прописные весят меньше, чем
+   абзац под ними. Основной сайт держит заголовки плотными и в наборном
+   регистре — здесь то же самое. */
 .display {
-  font-family: var(--display); font-weight: 300;
-  font-size: clamp(2rem, 4.6vw, 4.05rem); line-height: 1.12;
-  letter-spacing: .05em; text-transform: uppercase; color: var(--ink-strong);
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(1.85rem, 3.6vw, 3.1rem); line-height: 1.1;
+  letter-spacing: -.02em; color: var(--ink-strong);
   text-wrap: balance;
 }
 .on-dark .display, .dark .display { color: var(--on-dark); }
-/* Акцент — цветом, без курсива: курсивный «люксовый» серив тут не нужен */
-.display em { font-style: normal; color: var(--ink-muted); }
-.on-dark .display em, .dark .display em { color: var(--on-dark-mut); }
-.lead { font-size: clamp(1.02rem, 1.35vw, 1.18rem); color: var(--ink-muted); max-width: 54ch; line-height: 1.65; }
+/* Ключевое слово в заголовке — бирюзой. Это и есть «акцентная часть»:
+   в каждом заголовке ровно одно слово, за которое цепляется глаз. */
+.display em { font-style: normal; color: var(--accent-ink); }
+.on-dark .display em, .dark .display em { color: var(--accent); }
+.lead { font-size: clamp(1.02rem, 1.35vw, 1.14rem); color: var(--ink-muted); max-width: 54ch; line-height: 1.68; }
 .on-dark .lead, .dark .lead { color: var(--on-dark-mut); }
 
-.btn {
-  --bg: var(--ink-strong); --fg: var(--paper);
-  display: inline-flex; align-items: center; gap: .9em;
-  padding: 19px 42px; border-radius: 0;
-  background: transparent; color: var(--fg);
-  font-family: var(--display);
-  font-size: 12px; font-weight: 400; letter-spacing: .22em; text-transform: uppercase;
-  border: 1px solid currentColor; position: relative;
+/* =====================================================================
+   ЗАГОЛОВОК-СТРОКА
+   ---------------------------------------------------------------------
+   Фирменный приём основного сайта: название главы набрано крупно,
+   повторено несколько раз через косую и обрезано краями экрана. Так
+   разворот открывается не подписью в 10 px, а полосой в 80 px — и
+   страница наконец делится на главы, которые видно издалека.
+
+   Строка НЕ едет: это не бегущая строка, а просто текст длиннее экрана.
+   Движения на сайте нет нигде, и здесь тоже.
+   ===================================================================== */
+.ticker {
+  overflow: hidden; padding-block: clamp(30px, 4vw, 52px);
+  border-block: 1px solid var(--line);
+  background: var(--ground);
 }
-.btn:hover { background: var(--fg); color: var(--bg); }
-.btn .arr { }
-.btn:hover .arr { transform: translateX(5px); }
-.btn--glow { --bg: var(--ink-strong); --fg: var(--paper); }
+.ticker__row {
+  display: block; white-space: nowrap;
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(40px, 7.2vw, 80px); line-height: .95; letter-spacing: -.03em;
+  text-transform: uppercase; color: var(--ink-strong);
+  /* Строка начинается левее полосы: край экрана срезает первое слово —
+     ровно так, как это сделано на основном сайте. */
+  margin-left: calc(var(--gutter) * -1 - 4vw);
+}
+/* Разделитель бирюзовый, но на тон глубже фирменного: #00b7ac на холсте
+   даёт 2.3:1 и на светлом просто теряется. */
+.ticker__row i { font-style: normal; color: var(--accent-ink); padding-inline: .18em; font-weight: 400; }
+.plate + .ticker, .ticker + .plate { border-top: 0; }
+.dark + .ticker, .ticker:first-child { border-top: 0; }
+
+/* Кнопка основного сайта: скругление 8 px, рамка 2 px, полужирный
+   строчной кегль. Заливка на тон глубже фирменной бирюзы — точный
+   #00b7ac под белым текстом даёт 2.5:1 и читается плохо; наведение
+   возвращает ровно фирменный тон. */
+.btn {
+  display: inline-flex; align-items: center; gap: .6em;
+  padding: 15px 30px; border-radius: var(--radius);
+  background: var(--accent-ink); color: #ffffff;
+  font-family: var(--display);
+  font-size: 15px; font-weight: 700; letter-spacing: .01em;
+  border: 2px solid var(--accent-ink); position: relative;
+}
+.btn:hover { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+/* Вторая по важности кнопка — та же форма, но контуром */
+.btn--ghost { background: transparent; color: var(--accent-ink); }
+.btn--ghost:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #ffffff; }
+.on-dark .btn--ghost, .dark .btn--ghost { color: var(--on-dark); border-color: rgba(255,255,255,.4); }
+.on-dark .btn--ghost:hover, .dark .btn--ghost:hover { background: #ffffff; border-color: #ffffff; color: var(--dark); }
 
 
 
@@ -152,22 +233,21 @@ p { margin: 0; }
 
 .brand { display: flex; align-items: center; gap: 13px; color: var(--ink-strong); }
 .brand__mark { width: 28px; height: 24px; color: currentColor; }
-.brand__name { font-family: var(--display); font-weight: 300; font-size: 1.2rem; letter-spacing: .26em; text-transform: uppercase; line-height: 1; }
+.brand__name { font-family: var(--display); font-weight: 800; font-size: 1.15rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
 .brand__name small {
-  display: block; font-family: var(--display); font-size: 8px; letter-spacing: .42em;
-  text-transform: uppercase; color: var(--ink-muted); margin-top: 4px; font-weight: 700;
+  display: block; font-family: var(--display); font-size: 9px; letter-spacing: .34em;
+  text-transform: uppercase; color: var(--accent-ink); margin-top: 5px; font-weight: 700;
 }
 /* В подвале тот же логотип стоит на тёмном — подпись берёт светлый серый */
 .footer .brand, .footer .brand__mark { color: var(--on-dark); }
-.footer .brand__name small { color: var(--on-dark-mut); }
+.footer .brand__name small { color: var(--accent); }
 .nav { display: flex; align-items: center; gap: clamp(24px,3vw,44px); }
 .nav a {
-  font-family: var(--display); color: var(--ink-muted); font-size: 11.5px; font-weight: 300; letter-spacing: .2em;
-  text-transform: uppercase; position: relative;}
-.nav a::after { content:""; position:absolute; left:0; bottom:-7px; height:1px; width:0; background: var(--ink-strong); }
+  font-family: var(--display); color: var(--ink-muted); font-size: 14px; font-weight: 600; letter-spacing: .01em;
+  position: relative;}
+.nav a::after { content:""; position:absolute; left:0; bottom:-7px; height:2px; width:0; background: var(--accent); }
 .nav a:hover { color: var(--ink-strong); } .nav a:hover::after { width: 100%; }
-.topbar .btn { padding: 13px 26px; font-size: 10.5px; letter-spacing: .2em; color: var(--ink-strong); }
-.topbar .btn:hover { background: var(--ink-strong); color: var(--paper); }
+.topbar .btn { padding: 11px 24px; font-size: 14px; }
 .burger { display: none; background: none; border: 0; flex-direction: column; gap: 5px; padding: 10px; }
 .burger i { width: 24px; height: 1.5px; background: var(--ink-strong); display: block; }
 
@@ -184,10 +264,13 @@ p { margin: 0; }
    лежит полосой у нижнего края: приоткрытая дверь. Следующий экран
    разворачивает её на всю высоту — вход читается как движение.
    ===================================================================== */
+/* Экран не занимает всю высоту намеренно: верх фотографии стены должен
+   попасть в первый кадр. Это «приоткрытая дверь» — читатель видит, что
+   ниже есть кадр, и прокручивает, а не гадает. */
 .hero {
-  position: relative; min-height: 100svh;
+  position: relative; min-height: clamp(540px, 82svh, 880px);
   display: flex; flex-direction: column;
-  background: var(--paper); color: var(--ink-strong); overflow: hidden;
+  background: var(--ground); color: var(--ink-strong); overflow: hidden;
 }
 /* Титул занимает ровно экран: полоса стены обязана попасть в первый кадр,
    иначе «приоткрытой двери» читатель просто не увидит. */
@@ -199,10 +282,11 @@ p { margin: 0; }
 /* Единственный заголовок первого уровня — крупнее всего остального */
 .hero__title {
   grid-column: 2; margin: 0;
-  font-family: var(--display); font-weight: 200;
-  font-size: clamp(2.2rem, 6.2vw, 5.6rem); line-height: 1.03;
-  letter-spacing: .02em; text-transform: uppercase;
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(2.4rem, 6.4vw, 5.2rem); line-height: 1.02;
+  letter-spacing: -.035em; text-transform: uppercase;
 }
+.hero__title em { font-style: normal; color: var(--accent-ink); }
 .hero__sub {
   grid-column: 2; margin-top: clamp(22px,2.6vw,38px); max-width: 40ch;
   font-size: clamp(1rem,1.4vw,1.16rem); color: var(--ink-muted); line-height: 1.65;
@@ -218,14 +302,12 @@ p { margin: 0; }
 /* Ссылка-подчёркивание вместо двух рамочных кнопок: на титуле в
    акцентно белом две коробки читались тяжелее самого заголовка. */
 .lnk {
-  font-family: var(--display); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--ink-muted); padding-bottom: 8px; border-bottom: 1px solid var(--line);
-  display: inline-flex; align-items: center; gap: .8em;
+  font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0;
+  color: var(--ink-muted); padding-bottom: 8px; border-bottom: 2px solid var(--line);
+  display: inline-flex; align-items: center; gap: .6em;
 }
-.lnk:hover { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
-.lnk--lead { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
-.lnk .arr { }
-.lnk:hover .arr { transform: translateX(5px); }
+.lnk:hover { color: var(--accent-ink); border-bottom-color: var(--accent); }
+.lnk--lead { color: var(--accent-ink); border-bottom-color: var(--accent); }
 
 /* Низкий экран ноутбука: поджимаем отбивки, чтобы полоса стены всё равно
    попадала в первый кадр — ради неё этот экран и построен. */
@@ -242,9 +324,10 @@ p { margin: 0; }
   padding-bottom: clamp(26px,3vw,44px); border-bottom: 1px solid var(--line);
 }
 .hero__cue, .hero__fact {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .08em;
   text-transform: uppercase; color: var(--ink-muted);
 }
+.hero__fact { color: var(--accent-ink); font-weight: 700; }
 @media (max-width: 560px) { .hero__fact { display: none; } }
 
 /* =====================================================================
@@ -256,13 +339,13 @@ p { margin: 0; }
    фактура спорила с текстом. Теперь текст стоит на той же вертикали,
    что и во всех остальных секциях, и читается первым.
    ===================================================================== */
-.portal { position: relative; background: var(--paper); }
+.portal { position: relative; background: var(--ground); }
 .portal__frame {
   /* Высота задана пропорцией, а НЕ единицами vh. На iOS при скрытии
      адресной строки vh меняется, высота кадра прыгает, и object-fit: cover
      перекадрирует снимок — со стороны это выглядит как наезд камеры при
      прокрутке. Пропорция считается от ширины, а ширина не меняется. */
-  margin: 0; aspect-ratio: 21 / 9; overflow: hidden; background: var(--ink);
+  margin: 0; aspect-ratio: 21 / 9; overflow: hidden; background: var(--dark);
 }
 /* 21:9 из исходника 16:9 оставляет 76 % высоты — логотип занимает 65 %
    и помещается целиком, поэтому кадрируем ровно по центру. */
@@ -271,15 +354,15 @@ p { margin: 0; }
 @media (min-width: 1600px) { .portal__frame { aspect-ratio: 24 / 9; } }
 /* На телефоне 16:9 совпадает с пропорцией исходника: кадр целиком, без обрезки */
 @media (max-width: 700px)  { .portal__frame { aspect-ratio: 16 / 9; } }
-.portal__say { padding-block: clamp(64px, 8vw, 130px); }
+.portal__say { padding-block: clamp(56px, 7vw, 104px); }
 .portal__say .head { margin-bottom: 0; }
 .portal__line {
   grid-column: 2;
-  font-family: var(--display); font-weight: 200;
-  font-size: clamp(1.25rem, 2.3vw, 2rem); line-height: 1.3; letter-spacing: -.01em;
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(1.2rem, 2.2vw, 1.9rem); line-height: 1.32; letter-spacing: -.025em;
   color: var(--ink-strong); max-width: 27ch;
 }
-.portal__line em { font-style: normal; color: var(--ink-muted); }
+.portal__line em { font-style: normal; color: var(--accent-ink); }
 @media (max-width: 860px) { .portal__line { grid-column: 1; } }
 
 /* =====================================================================
@@ -293,7 +376,7 @@ p { margin: 0; }
    Картинка — не фон, а <img srcset>: браузер сам берёт 800 px на телефон
    и 2400 px на большой монитор, грузит лениво и декодирует вне потока.
    ===================================================================== */
-.plate { position: relative; overflow: hidden; margin: 0; background: var(--ink); }
+.plate { position: relative; overflow: hidden; margin: 0; background: var(--dark); }
 .plate img { width: 100%; height: 100%; object-fit: cover; }
 /* Те же соображения, что и у стены: пропорция вместо vh. */
 .plate--tall  { aspect-ratio: 21 / 9;  max-height: 660px; }
@@ -305,13 +388,12 @@ p { margin: 0; }
 .plate + .section.paper, .section.paper:has(+ .plate) { border-top: 0; }
 
 /* ============================ SECTIONS ============================== */
-.dark  { background: var(--ink); color: var(--on-dark); position: relative; }
-.paper { background: var(--paper); }
-.cream { background: var(--cream); }
-.dark::before {
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background: radial-gradient(58% 55% at 80% 8%, rgba(255,255,255,.07), transparent 62%);
-}
+/* Холст один на весь сайт. Класс .paper остался в разметке ради истории
+   правок и теперь означает «обычная секция на холсте»: белым на этом
+   сайте работает не секция, а карточка внутри неё. */
+.dark  { background: var(--dark); color: var(--on-dark); position: relative; }
+.paper { background: var(--ground); }
+.cream { background: var(--ground); }
 .dark > .wrap { position: relative; z-index: 2; }
 
 /* Фоновое ambient-видео секции */
@@ -329,7 +411,7 @@ p { margin: 0; }
   display: grid;
   grid-template-columns: var(--col-label) var(--col-body);
   column-gap: var(--col-gap);
-  margin-bottom: clamp(72px,10vw,150px);
+  margin-bottom: clamp(44px,6vw,84px);
 }
 .head .eyebrow  { grid-column: 1; padding-top: .5em; }
 .head .display  { grid-column: 2; margin-top: 0; }
@@ -343,10 +425,10 @@ p { margin: 0; }
 /* Текстовое содержимое секции продолжает вертикаль заголовка.
    Сетки с фотографиями намеренно остаются во всю полосу — контраст
    отступа и полного разворота и держит ритм страницы. */
-.figures, .notes, .creed, .qa, .path, .employ-grid,
+.figures, .notes, .creed, .qa, .path, .employ-grid, .forecast,
 .course-grid .zero { margin-left: calc((3 / 12) * (100% + var(--col-gap))); }
 @media (max-width: 860px) {
-  .figures, .notes, .creed, .qa, .path, .employ-grid,
+  .figures, .notes, .creed, .qa, .path, .employ-grid, .forecast,
   .course-grid .zero { margin-left: 0; }
 }
 
@@ -370,21 +452,19 @@ p { margin: 0; }
    одна вертикаль сверху донизу вместо блуждающей середины. */
 .course-grid { display: block; }
 .course-grid__lede { max-width: none; }
+/* Нулевой опыт — отдельная бирюзовая врезка. Единственное место на
+   сайте, где акцент занимает целую плашку: цифра «0» и есть главное
+   обещание курса, и она должна ловить взгляд раньше текста. */
 .zero {
-  display: grid; grid-template-columns: auto minmax(0,1fr); align-items: end;
-  column-gap: clamp(24px,3vw,44px);
-  margin: clamp(62px,8vw,104px) 0 clamp(52px,7vw,84px);
+  display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center;
+  column-gap: clamp(22px,3vw,40px);
+  margin: clamp(34px,4.5vw,56px) 0 clamp(28px,3.4vw,44px);
+  background: var(--accent-ink); color: #ffffff;
+  border-radius: var(--radius); padding: clamp(20px,2.6vw,34px) var(--pad);
 }
-.zero b { font-family: var(--display); font-weight: 200; letter-spacing: 0; font-size: clamp(4rem,8vw,7rem); line-height: .82; color: var(--ink-strong); }
-.zero span { font-size: 13px; color: var(--ink-muted); max-width: 30ch; padding-bottom: .6em; }
-.path { list-style: none; margin: 0; padding: 0; counter-reset: step; border-top: 1px solid var(--line); }
-.path li { counter-increment: step; position: relative; padding: 26px 0 26px 66px; border-bottom: 1px solid var(--line); }
-.path li::before {
-  content: "0" counter(step); position: absolute; left: 0; top: 28px;
-  font-family: var(--mono); font-size: 1rem; color: var(--ink-muted); letter-spacing: .06em;
-}
-.path h4 { font-family: var(--sans); font-weight: 600; font-size: 1rem; color: var(--ink-strong); letter-spacing: .01em; }
-.path p { margin-top: 7px; color: var(--ink-muted); font-size: .93rem; }
+.zero b { font-family: var(--display); font-weight: 800; letter-spacing: -.05em; font-size: clamp(3.4rem,7vw,5.6rem); line-height: .84; color: #ffffff; }
+.zero span { font-size: 1rem; color: rgba(255,255,255,.88); max-width: 34ch; line-height: 1.55; }
+@media (max-width: 560px) { .zero { grid-template-columns: 1fr; row-gap: 10px; } }
 
 
 /* ---------------- Цифры + прогноз ---------------- */
@@ -392,41 +472,31 @@ p { margin: 0; }
 /* Прогноз раньше был чёрной плашкой с зелёной кривой — два лишних тона
    посреди белого разворота. Теперь это тот же белый лист: границы
    рисует волосяная линейка, кривая идёт чёрным. */
+/* Врезка стоит на той же вертикали, что и перечень цифр над ней:
+   левый край у всех белых листов один. */
 .forecast {
-  margin-top: clamp(90px,11vw,150px); display: grid;
-  grid-template-columns: var(--col-label) var(--col-body);
-  column-gap: var(--col-gap);
-  border-top: 1px solid var(--line); padding-top: clamp(44px,5vw,72px);
+  margin-top: clamp(16px,2vw,28px);
+  background: var(--paper); border-radius: var(--radius);
+  padding: clamp(30px,4vw,56px) var(--pad);
 }
-.forecast__body { grid-column: 2; }
-.forecast__body .eyebrow { display: block; margin-bottom: 26px; }
-.forecast__body .display { font-size: clamp(1.7rem,2.9vw,2.5rem); }
+.forecast__body { grid-column: 1; }
+.forecast__body .eyebrow { display: inline-flex; margin-bottom: 22px; }
+.forecast__body .display { font-size: clamp(1.5rem,2.5vw,2.1rem); }
 .forecast__viz {
-  grid-column: 2;
-  margin-top: clamp(40px,5vw,64px); padding-top: clamp(26px,3vw,40px);
+  margin-top: clamp(32px,4vw,52px); padding-top: clamp(24px,3vw,36px);
   border-top: 1px solid var(--line);
 }
-.forecast__viz .lbl { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--ink-muted); }
-.forecast__points { position: relative; z-index: 2; display: grid; gap: 20px; margin-top: 20px; }
+.forecast__viz .lbl { display: block; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+.forecast__points { position: relative; z-index: 2; display: grid; gap: 20px; margin-top: 22px; }
 .fp { display: flex; align-items: baseline; gap: 24px; }
-.fp .yr { font-family: var(--mono); font-size: 1.05rem; color: var(--ink-strong); min-width: 76px; letter-spacing: .04em; }
-.fp .tx { font-size: .9rem; color: var(--ink-muted); max-width: 46ch; }
-@media (max-width: 860px) {
-  .forecast { grid-template-columns: 1fr; }
-  .forecast__body, .forecast__viz { grid-column: 1; }
-}
+.fp .yr { font-family: var(--mono); font-weight: 800; font-size: 1.05rem; color: var(--accent-ink); min-width: 82px; letter-spacing: -.02em; }
+.fp .tx { font-size: .93rem; color: var(--ink-muted); max-width: 46ch; }
 
 /* ---------------- Перезагрузка ---------------- */
+/* Заголовок этой секции больше не отдельного размера: главу называет
+   заголовок-строка над ней, а h2 внутри — обычный .display, как везде.
+   Двух крупных надписей подряд об одном и том же быть не должно. */
 .reboot { overflow: hidden; }
-.reboot .huge {
-  grid-column: 2;
-  font-family: var(--display); font-weight: 200; letter-spacing: .06em; text-transform: uppercase;
-  font-size: clamp(2.2rem, 6vw, 5rem); line-height: 1.06; color: var(--ink-strong);
-}
-@media (max-width: 860px) { .reboot .huge { grid-column: 1; } }
-.on-dark .reboot .huge { color: var(--on-dark); }
-.reboot .huge em { font-style: normal; color: var(--ink-muted); }
-.reboot .huge { padding-bottom: .06em; }
 
 /* =====================================================================
    КАРТОЧКА-ПЕРСОНА
@@ -437,10 +507,12 @@ p { margin: 0; }
    печатном развороте: кадр отдельно, подпись под ним чёрным по белому.
    Ни второй палитры, ни затемнения, ни проблем с контрастом.
    ===================================================================== */
-.pcard { position: relative; display: flex; flex-direction: column; background: none; }
-.pcard__img { order: 1; position: relative; aspect-ratio: 5/7; overflow: hidden; background: var(--ink); }
+.pcard {
+  position: relative; display: flex; flex-direction: column;
+  background: var(--paper); border-radius: var(--radius); overflow: hidden;
+}
+.pcard__img { order: 1; position: relative; aspect-ratio: 5/7; overflow: hidden; background: var(--dark); }
 .pcard__img img { width: 100%; height: 100%; object-fit: cover; }
-.pcard:hover .pcard__img img { transform: scale(1.04); }
 /* =====================================================================
    СЛОТ ПОД СЪЁМКУ
    Пока настоящих портретов нет, карточка показывает не пустоту, а
@@ -464,37 +536,41 @@ p { margin: 0; }
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
 }
-.pcard__body { order: 2; padding: 22px 0 0; color: var(--ink-strong); }
-.pcard__body h4 { font-family: var(--display); font-weight: 400; font-size: 1.24rem; letter-spacing: .01em; }
-.pcard__role { font-family: var(--mono); color: var(--ink-muted); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 400; margin-top: 8px; }
-.pcard__body p { margin-top: 16px; color: var(--ink-muted); font-size: .88rem; line-height: 1.6; }
-/* Теги — без рамок: три обводки на карточку опять дробили белое поле */
-.pcard__tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.pcard__body { order: 2; padding: 22px var(--pad) 0; color: var(--ink-strong); }
+.pcard__body h4 { font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: -.025em; }
+.pcard__role { font-family: var(--mono); color: var(--accent-ink); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; margin-top: 8px; }
+.pcard__body p { margin-top: 16px; color: var(--ink-muted); font-size: .9rem; line-height: 1.62; }
+/* Теги — без рамок: три обводки на карточку опять дробили лист */
+.pcard__tags { margin-top: 16px; padding-bottom: 4px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
 .pcard__tags span {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .02em;
   color: var(--ink-muted);
 }
-/* Год стоит НАД снимком отдельной строкой — как колонцифра в развороте */
+/* Год выпуска — бирюзовая метка поверх снимка: колонцифра карточки */
 .pcard__badge {
-  order: 0; align-self: flex-start; margin-bottom: 10px;
-  font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--ink-muted);
+  order: 0; position: absolute; z-index: 2; top: 12px; left: 12px;
+  padding: 5px 11px; border-radius: 999px; background: var(--accent-ink);
+  font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .02em; color: #ffffff;
 }
 .pcard__res {
-  order: 3; margin-top: 18px; padding-top: 14px;
-  border-top: 1px solid var(--line); font-size: .84rem; color: var(--ink-strong);
+  order: 3; margin: 18px var(--pad) 0; padding: 14px 0 var(--pad);
+  border-top: 1px solid var(--line); font-size: .88rem; color: var(--ink-strong);
 }
-.pcard__res b { color: var(--ink-muted); font-weight: 400; }
+.pcard__res b { color: var(--accent-ink); font-family: var(--display); font-weight: 700; }
+/* У преподавателей нет строки результата — низ карточки закрывают теги */
+.teachers-grid .pcard__body { padding-bottom: var(--pad); }
 
-.teachers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(20px,2.6vw,40px); }
+.teachers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(16px,2vw,28px); }
 
 /* ---------------- Ученики: горизонтальная лента ---------------- */
 .rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
 .rail-nav { display: flex; gap: 8px; }
 .rail-nav button {
-  width: 46px; height: 46px; border: 1px solid var(--line); background: none;
+  width: 48px; height: 48px; border: 2px solid var(--line); border-radius: var(--radius);
+  background: var(--paper);
   color: var(--ink); display: grid; place-items: center;}
-.rail-nav button:hover { border-color: var(--ink); color: var(--ink); }
-.rail-nav button:disabled { opacity: .28; cursor: default; }
+.rail-nav button:hover { border-color: var(--accent); color: var(--accent-ink); }
+.rail-nav button:disabled { opacity: .34; cursor: default; }
 .rail-nav button:disabled:hover { border-color: var(--line); color: var(--ink-muted); }
 .rail {
   display: grid; grid-auto-flow: column; grid-auto-columns: clamp(230px, 23vw, 300px);
@@ -513,20 +589,19 @@ p { margin: 0; }
    строка-подпись и ряд обложек, на той же вертикали, что и всё остальное. */
 .stories { margin-top: clamp(56px,7vw,96px); }
 .stories__lab {
-  font-family: var(--mono); font-size: 10px; letter-spacing: .28em;
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: .12em;
   text-transform: uppercase; color: var(--ink-muted);
-  padding-bottom: clamp(18px,2.2vw,28px); border-bottom: 1px solid var(--line);
-  margin-bottom: clamp(24px,3vw,40px);
+  padding-bottom: clamp(16px,2vw,24px); border-bottom: 2px solid var(--line);
+  margin-bottom: clamp(20px,2.6vw,32px);
 }
 
 /* ---------------- Видео-истории ---------------- */
-.videos { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(20px,2.6vw,40px); }
+.videos { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(16px,2vw,28px); }
 .vcard {
-  position: relative; aspect-ratio: 16/9; overflow: hidden;
-  background: var(--ink);
+  position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: var(--radius);
+  background: var(--dark);
   color: var(--on-dark); display: flex; flex-direction: column; justify-content: flex-end;
 }
-.vcard:hover { transform: translateY(-6px); }
 .vcard img, .vcard video { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index:0; }
 /* Кадр стал широким 16:9, и подпись оказалась на светлой части кадра —
    шторку пришлось усилить. Замерено: было 3.3:1, стало выше 4.5:1. */
@@ -537,67 +612,76 @@ p { margin: 0; }
 .vcard__play {
   position: absolute; z-index:3; top: 50%; left: 50%; transform: translate(-50%,-50%);
   width: 62px; height: 62px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.45); background: rgba(0,0,0,.42);
-  color: var(--on-dark-mut); display: grid; place-items: center;
+  border: 2px solid #ffffff; background: var(--accent-ink);
+  color: #ffffff; display: grid; place-items: center;
 }
-.vcard:hover .vcard__play { background: var(--on-dark-mut); color: #000000; transform: translate(-50%,-50%) scale(1.06); }
+.vcard:hover .vcard__play { background: var(--accent); }
 .vcard.playing .vcard__play { opacity: 0; pointer-events: none; }
-.vcard__cap { position: relative; z-index: 2; padding: 26px 24px; }
+.vcard__cap { position: relative; z-index: 2; padding: 24px 22px; }
 .vcard.playing .vcard__cap { opacity: 0; }
-.vcard__cap h4 { font-family: var(--display); font-weight: 400; font-size: 1.36rem; letter-spacing: -.03em; }
-.vcard__cap span { font-family: var(--mono); font-size: 10.5px; color: var(--on-dark-mut); letter-spacing: .08em; text-transform: uppercase; }
+.vcard__cap h4 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: -.03em; }
+.vcard__cap span { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--on-dark-mut); letter-spacing: .04em; text-transform: uppercase; }
 
 /* ---------------- Трудоустройство ---------------- */
 /* Содержимое начинается с той же вертикали, что и заголовок секции */
 .employ-grid {
-  display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(34px,5vw,80px);
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(16px,2vw,28px);
+  align-items: start;
 }
 @media (max-width: 860px) {
-  .employ-grid { grid-template-columns: 1fr; row-gap: clamp(46px,8vw,80px); }
+  .employ-grid { grid-template-columns: 1fr; row-gap: clamp(16px,2.4vw,28px); }
 }
-.employ__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.employ__list li { display: flex; gap: 20px; align-items: flex-start; padding: 24px 0; border-bottom: 1px solid var(--line); }
-.employ__list .ci { flex: none; width: 18px; height: 18px; color: var(--ink-strong); margin-top: 3px; }
-.employ__list h5 { margin: 0; font-size: .98rem; color: var(--ink-strong); font-weight: 700; }
-.employ__list p { margin-top: 5px; font-size: .89rem; color: var(--ink-muted); }
-/* Вывод раздела: раньше — чёрная плашка, теперь просто крупная реплика
-   на том же белом. Вес ей даёт кегль, а не заливка. */
-.employ__aside { position: relative; padding-top: clamp(28px,3.4vw,44px); border-top: 1px solid var(--line); }
+.employ__list { list-style: none; margin: 0; }
+.employ__list li { display: flex; gap: 18px; align-items: flex-start; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.employ__list .ci { flex: none; width: 20px; height: 20px; margin-top: 3px; }
+.employ__list h5 { margin: 0; font-family: var(--display); font-size: 1.02rem; color: var(--ink-strong); font-weight: 700; letter-spacing: -.02em; }
+.employ__list p { margin-top: 6px; font-size: .92rem; color: var(--ink-muted); }
+/* Вывод раздела — бирюзовая врезка. Рядом с белым перечнем она читается
+   как итог, а не как ещё один пункт: разный фон делает это без слов. */
+.employ__aside {
+  position: relative; background: var(--accent-dim);
+  border-radius: var(--radius); padding: clamp(28px,3.4vw,44px) var(--pad);
+}
 .employ__aside .big {
-  font-family: var(--display); font-weight: 300; letter-spacing: -.03em;
-  font-size: clamp(1.8rem,3.2vw,2.7rem); line-height: 1.14; color: var(--ink-strong);
+  font-family: var(--display); font-weight: 800; letter-spacing: -.035em;
+  font-size: clamp(1.6rem,2.8vw,2.3rem); line-height: 1.14; color: var(--ink-strong);
 }
-.employ__aside .big em { color: var(--ink-muted); font-style: normal; }
-.employ__aside p { margin-top: 26px; color: var(--ink-muted); font-size: .94rem; max-width: 40ch; }
+.employ__aside .big em { color: var(--accent-ink); font-style: normal; }
+.employ__aside p { margin-top: 24px; color: var(--ink-muted); font-size: .94rem; max-width: 40ch; }
 
 /* ---------------- CTA ---------------- */
-.cta { position: relative; overflow: hidden; color: var(--on-dark); background: var(--ink); }
+.cta { position: relative; overflow: hidden; color: var(--on-dark); background: var(--dark); }
 .cta__media { position: absolute; inset: 0; z-index: 0; }
 .cta__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; }
 .cta__scrim { position:absolute; inset:0; z-index:1; background: linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.72) 42%, rgba(0,0,0,.94)); }
 .cta .wrap { position: relative; z-index: 3; text-align: center; }
-.cta .display { font-size: clamp(2.8rem,7.4vw,6rem); }
-.cta__form { margin: 44px auto 0; max-width: 540px; display: grid; gap: 12px; }
+.cta .eyebrow { justify-content: center; }
+.cta .display { font-size: clamp(2.1rem,5.2vw,3.6rem); }
+.cta__form { margin: 40px auto 0; max-width: 540px; display: grid; gap: 12px; }
 .cta__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .field input {
-  width: 100%; padding: 17px 20px; border-radius: 2px;
-  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.18);
-  color: var(--on-dark); font: inherit; font-size: 14.5px;}
-.field input::placeholder { color: rgba(255,255,255,.42); }
-.field input:focus { outline: none; border-color: var(--on-dark-mut); background: rgba(255,255,255,.09); }
-.cta__form .btn { justify-content: center; width: 100%; margin-top: 6px; }
+  width: 100%; padding: 16px 20px; border-radius: var(--radius);
+  background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.2);
+  color: var(--on-dark); font: inherit; font-size: 15px;}
+.field input::placeholder { color: rgba(255,255,255,.55); }
+.field input:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,.12); }
+/* На тёмном кнопка белая: фирменная бирюза под белым текстом даёт 2.5:1,
+   а белая плашка с бирюзовой надписью — 5.8:1 и вдобавок самый сильный
+   элемент на снимке. */
+.cta__form .btn { justify-content: center; width: 100%; margin-top: 6px; background: #ffffff; border-color: #ffffff; color: var(--accent-ink); }
+.cta__form .btn:hover { background: var(--accent-ink); border-color: #ffffff; color: #ffffff; }
 .cta__ok { margin-top: 14px; color: var(--on-dark-mut); font-size: .92rem; min-height: 1.2em; }
-.cta__fine { margin-top: 12px; font-size: 11px; color: var(--on-dark-mut); letter-spacing: .04em; }
+.cta__fine { margin-top: 12px; font-size: 12px; color: var(--on-dark-mut); letter-spacing: .01em; }
 
 /* ---------------- Footer ---------------- */
-.footer { background: var(--ink); color: var(--on-dark-mut); padding-block: 70px 42px; position: relative; z-index: 2; }
-.footer__top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 44px; padding-bottom: 44px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.footer { background: var(--dark); color: var(--on-dark-mut); padding-block: 70px 42px; position: relative; z-index: 2; }
+.footer__top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 44px; padding-bottom: 44px; border-bottom: 1px solid var(--line-dark); }
 .footer .brand { color: var(--on-dark); }
-.footer p { margin-top: 18px; max-width: 34ch; font-size: .89rem; line-height: 1.62; }
-.footer h5 { font-family: var(--mono); color: var(--on-dark); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
-.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; font-size: .9rem; }
-.footer ul a:hover { color: var(--on-dark-mut); }
-.footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 28px; font-size: 11.5px; letter-spacing: .04em; }
+.footer p { margin-top: 18px; max-width: 34ch; font-size: .9rem; line-height: 1.62; }
+.footer h5 { font-family: var(--mono); color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; font-size: .92rem; }
+.footer ul a:hover { color: #ffffff; }
+.footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 28px; font-size: 12px; letter-spacing: .01em; }
 
 
 /* =====================================================================
@@ -619,57 +703,73 @@ p { margin: 0; }
   font-size: 1.05rem; margin-right: .5em;
 }
 
+/* =====================================================================
+   БЕЛЫЕ ПАНЕЛИ
+   ---------------------------------------------------------------------
+   Правило на весь сайт: рассказ идёт по серому холсту, а факты лежат на
+   белом листе. Перечни, вопросы-ответы, цифры, пункты — всё это одна и
+   та же панель: белый фон, скругление 8 px, строки через линейку.
+   Именно эта разница фона и даёт то, чего не хватало: взгляд сам
+   находит, где начинается «читать», а где «смотреть».
+   ===================================================================== */
+.qa, .creed, .figures, .notes, .employ__list {
+  background: var(--paper); border-radius: var(--radius);
+  border-top: 0; padding: 0 var(--pad); margin-block: 0;
+}
+.qa__row:last-child, .creed__row:last-child, .figures__row:last-child,
+.notes li:last-child, .employ__list li:last-child { border-bottom: 0; }
+
 /* Вопрос — ответ: разговор, а не четыре одинаковых кирпича */
-.qa { border-top: 1px solid var(--line); }
-.notes + .qa { margin-top: clamp(56px,7vw,90px); }
+.notes + .qa { margin-top: clamp(20px,2.4vw,32px); }
 .qa__row {
   display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(20px,4vw,60px);
-  padding: clamp(24px,3vw,38px) 0; border-bottom: 1px solid var(--line);
+  padding: clamp(24px,3vw,34px) 0; border-bottom: 1px solid var(--line);
   align-items: start;
 }
 .qa__q {
-  font-family: var(--display); font-weight: 400; font-size: clamp(1.15rem,1.9vw,1.5rem);
-  line-height: 1.25; letter-spacing: -.02em; color: var(--ink-strong);
+  font-family: var(--display); font-weight: 700; font-size: clamp(1.1rem,1.7vw,1.35rem);
+  line-height: 1.28; letter-spacing: -.025em; color: var(--ink-strong);
 }
 .qa__a { font-size: .97rem; color: var(--ink-muted); line-height: 1.7; max-width: 46ch; }
 
 /* Три утверждения строками — вместо трёх карточек */
-.creed { margin-top: clamp(52px,7vw,88px); border-top: 1px solid var(--line); text-align: left; }
+.creed { margin-top: clamp(36px,4.5vw,56px); text-align: left; }
 .creed__row {
-  display: grid; grid-template-columns: auto 1fr; gap: clamp(18px,3vw,44px);
-  padding: clamp(24px,2.8vw,36px) 0; border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: auto 1fr; gap: clamp(18px,3vw,40px);
+  padding: clamp(24px,2.8vw,34px) 0; border-bottom: 1px solid var(--line);
   align-items: baseline;
 }
-.creed__n { font-family: var(--display); color: var(--ink-muted); font-size: .9rem; letter-spacing: .1em; }
-.creed__t { font-family: var(--display); font-weight: 300; font-size: clamp(1.05rem,1.7vw,1.35rem); color: var(--ink-strong); letter-spacing: .01em; line-height: 1.5; }
-.creed__t b { font-weight: 400; }
+.creed__n { font-family: var(--display); font-weight: 800; color: var(--accent-ink); font-size: 1.1rem; letter-spacing: -.02em; }
+.creed__t { font-family: var(--sans); font-weight: 400; font-size: clamp(1rem,1.5vw,1.16rem); color: var(--ink-muted); letter-spacing: 0; line-height: 1.62; }
+.creed__t b { font-family: var(--display); font-weight: 700; color: var(--ink-strong); letter-spacing: -.02em; }
 .creed__t span { color: var(--ink-muted); }
 
-/* Цифры академии как редакционный перечень, а не «плитки».
-   Начинаются с той же вертикали, что и заголовок секции. */
-.figures { border-top: 1px solid var(--line); }
+/* Цифры академии. Крупная цифра бирюзой — самая быстрая точка входа
+   на всём развороте: её видно раньше, чем прочитан заголовок. */
 .figures__row {
   display: grid; grid-template-columns: minmax(90px,.2fr) 1fr; gap: clamp(18px,4vw,56px);
-  padding: clamp(20px,2.4vw,30px) 0; border-bottom: 1px solid var(--line); align-items: baseline;
+  padding: clamp(22px,2.6vw,32px) 0; border-bottom: 1px solid var(--line); align-items: baseline;
 }
 .figures__n {
-  font-family: var(--display); font-weight: 400; letter-spacing: -.03em;
-  font-size: clamp(1.9rem,3.4vw,2.9rem); color: var(--ink-strong); line-height: 1;
+  font-family: var(--display); font-weight: 800; letter-spacing: -.04em;
+  font-size: clamp(2.1rem,3.6vw,3.1rem); color: var(--accent-ink); line-height: 1;
 }
 .figures__t { font-size: .97rem; color: var(--ink-muted); max-width: 44ch; }
 
 /* Короткие заметки о том, как устроено обучение */
-.notes { margin-top: 34px; list-style: none; padding: 0; border-top: 1px solid var(--line); }
+.notes { margin-top: clamp(28px,3.4vw,44px); list-style: none; }
 .notes li {
-  display: flex; gap: 16px; align-items: flex-start;
-  padding: 18px 0; border-bottom: 1px solid var(--line);
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 20px 0; border-bottom: 1px solid var(--line);
   font-size: .96rem; color: var(--ink-body);
 }
 /* Вместо тире — фирменная иконка: бритва, кресло, человек, фен.
    Ровно те инструменты, о которых говорит строка. */
 /* Барберские иконки детальные — на 20 px они превращаются в кашу.
    26 px и цвет основного текста: читается как знак, а не как пятно. */
-.notes li .ic { width: 28px; height: 28px; margin-top: -3px; color: var(--ink-strong); }
+/* Цвет иконки задан внутри спрайта (экспорт из вектора дизайнера), поэтому
+   здесь только размер: перекрасить <use> через color не выйдет. */
+.notes li .ic { width: 28px; height: 28px; margin-top: -3px; }
 
 @media (max-width: 800px){
   .qa__row, .creed__row, .figures__row { grid-template-columns: 1fr; gap: 10px; }
@@ -692,14 +792,14 @@ p { margin: 0; }
    самый крупный тональный разрыв, который оставался. Теперь маршрут
    идёт по тому же листу: тёмный фон остался только на входе (первый
    экран и портал) и на выходе (запись и подвал). */
-.program { position: relative; background: var(--paper); color: var(--ink-strong); }
+.program { position: relative; background: var(--ground); color: var(--ink-strong); }
 .program__stage { position: relative; overflow: hidden; }
 /* Маршрут стоит на той же сетке, что и остальные секции: метка слева,
    шаги — с той же вертикали, что заголовки всех разворотов. */
 .program__stage .wrap {
   position: relative; z-index: 2;
   display: grid; grid-template-columns: var(--col-label) var(--col-body);
-  column-gap: var(--col-gap); align-content: center;
+  column-gap: var(--col-gap); align-content: start;
 }
 .program__stage .eyebrow { grid-column: 1; padding-top: .5em; }
 .program__steps, .program__ticks, .program__foot { grid-column: 2; }
@@ -710,23 +810,34 @@ p { margin: 0; }
 }
 /* Крупная цифра держит кадр и показывает, где мы в маршруте */
 .program__big { display: none; }
-.program__stage { padding-block: clamp(80px,9vw,140px); }
-.program__steps { margin-top: 0; display: grid; gap: clamp(40px,5vw,64px); }
-.program__step { display: grid; gap: 10px; max-width: 46ch; }
+.program__stage { padding-block: clamp(64px,8vw,110px); }
+/* Шесть шагов — шесть белых карточек в два столбца. Сплошным списком
+   они читались как один длинный абзац; разложенные по листам, они
+   показывают маршрут целиком, ещё до того как прочитан первый пункт. */
+.program__steps {
+  margin-top: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: clamp(16px,2vw,24px);
+}
+.program__step {
+  display: grid; gap: 8px; align-content: start;
+  background: var(--paper); border-radius: var(--radius);
+  padding: clamp(22px,2.6vw,32px) var(--pad);
+}
 .program__n {
-  font-family: var(--display); font-size: .95rem; color: var(--ink-muted);
-  font-variant-numeric: tabular-nums; letter-spacing: .04em;
+  font-family: var(--display); font-size: 1.15rem; font-weight: 800; color: var(--accent-ink);
+  font-variant-numeric: tabular-nums; letter-spacing: -.02em;
 }
 .program__step h3 {
-  font-family: var(--display); font-weight: 400; letter-spacing: -.025em;
-  font-size: clamp(1.5rem,3.4vw,2.6rem); line-height: 1.1; color: var(--ink-strong);
+  font-family: var(--display); font-weight: 700; letter-spacing: -.03em;
+  font-size: clamp(1.2rem,1.9vw,1.5rem); line-height: 1.16; color: var(--ink-strong);
 }
-.program__step p { color: var(--ink-muted); font-size: clamp(.95rem,1.3vw,1.08rem); line-height: 1.6; }
+.program__step p { color: var(--ink-muted); font-size: .95rem; line-height: 1.62; }
 .program__ticks { display: none; list-style: none; margin: 0; padding: 0; }
 .program__foot {
-  margin-top: clamp(26px,3vw,40px); font-size: 11px; letter-spacing: .2em;
+  margin-top: clamp(22px,2.6vw,32px); font-size: 13px; font-weight: 600; letter-spacing: .1em;
   text-transform: uppercase; color: var(--ink-muted);
 }
+@media (max-width: 640px) { .program__steps { grid-template-columns: 1fr; } }
 
 /* =====================================================================
    ПОЯВЛЕНИЕ БЛОКОВ
@@ -764,10 +875,10 @@ p { margin: 0; }
 
 /* Мобильное меню */
 .mobile-menu {
-  position: fixed; inset: 0; z-index: 65; background: var(--ink);
+  position: fixed; inset: 0; z-index: 65; background: var(--dark);
   display: none; flex-direction: column; justify-content: center; gap: 4px; padding: var(--gutter);
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu a { font-family: var(--display); font-size: clamp(1.7rem,7vw,2.3rem); color: var(--on-dark); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.mobile-menu a { font-family: var(--display); font-weight: 700; letter-spacing: -.02em; font-size: clamp(1.6rem,6.4vw,2.1rem); color: var(--on-dark); padding: 12px 0; border-bottom: 1px solid var(--line-dark); }
 .mobile-menu .btn { margin-top: 28px; justify-content: center; }
 .mobile-menu__close { position: absolute; top: 22px; right: var(--gutter); background: none; border: 0; color: var(--on-dark); font-size: 32px; line-height: 1; }
