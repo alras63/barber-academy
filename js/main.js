@@ -152,6 +152,54 @@
     });
   }
 
+  /* ===================== БЕГУЩАЯ СТРОКА =====================
+     Само движение целиком в CSS: анимируется один transform, кадры
+     собирает композитор. Здесь только выключатель — строка за пределами
+     экрана останавливается. Это не слушатель прокрутки: наблюдатель
+     будит браузер сам и ничего не измеряет, поэтому во время прокрутки
+     работы не прибавляется ни на кадр.
+  ================================================================= */
+  (function tickers() {
+    var rows = document.querySelectorAll(".ticker");
+    if (!rows.length) return;
+
+    /* Скорость — с основного сайта: там сдвиг 720 px за 8 с на мониторе
+       и 266 px за 8 с на телефоне. Считаем длительность из ширины самой
+       строки, иначе длинное слово ехало бы вдвое быстрее короткого.
+
+       Замер делается ОДИН раз при загрузке. Слушателя изменения размера
+       здесь намеренно нет: на iOS при скрытии адресной строки окно
+       «меняет размер» прямо во время прокрутки — и обработчик, который
+       читает геометрию, вернул бы ровно ту работу на кадр, из-за которой
+       страница когда-то дёргалась. Поворот телефона слегка изменит
+       скорость, и это незаметно. */
+    var speed = isPhone ? 33 : 100;   /* px в секунду */
+    function pace() {
+      for (var i = 0; i < rows.length; i++) {
+        var track = rows[i].querySelector(".ticker__track");
+        var half  = rows[i].querySelector(".ticker__row");
+        if (!track || !half) continue;
+        var w = half.getBoundingClientRect().width;
+        if (w > 0) track.style.animationDuration = Math.round(w / speed) + "s";
+      }
+    }
+    /* Мерить до загрузки шрифта нельзя: ширина строки, набранной запасным
+       гротеском, отличается, и скорость вышла бы мимо. */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(pace);
+    else pace();
+
+    if (!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        e.target.classList.toggle("is-off", !e.isIntersecting);
+      });
+    }, { rootMargin: "120px 0px" });
+    for (var j = 0; j < rows.length; j++) {
+      rows[j].classList.add("is-off");
+      io.observe(rows[j]);
+    }
+  })();
+
   /* ===================== Шапка =====================
      Всё, что относилось к появлению блоков — наблюдатель, страховка от
      «навсегда невидимого» блока, слушатель прокрутки — убрано вместе с
