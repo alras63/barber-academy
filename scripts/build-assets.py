@@ -48,8 +48,17 @@ def main(src_dir):
         total_in += os.path.getsize(path)
         im = Image.open(path).convert("RGB")
         stem = os.path.splitext(name)[0]
+        # Ступени, которые исходник реально тянет. Растягивать снимок вверх
+        # смысла нет: браузер сделает это лучше и без лишних килобайт.
+        widths = [(w, q) for w, q in SIZES if w <= im.width]
+        # Если исходник мельче самой крупной ступени (так пришла фотография
+        # стены — 1080 px), кладём ещё и родную ширину: иначе на мониторе
+        # останется только 800 px и кадр поплывёт.
+        if not widths or widths[0][0] < im.width:
+            widths.insert(0, (im.width, SIZES[0][1]))
+
         made = []
-        for width, quality in SIZES:
+        for width, quality in widths:
             if im.width < width:
                 continue
             h = round(im.height * width / im.width)

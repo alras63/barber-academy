@@ -96,7 +96,9 @@ def inline_plate(m):
     return 'src="%s"' % data_uri(path, "image/webp")
 
 html = re.sub(r'\s+srcset="[^"]*"\s+sizes="100vw"', ' ', html)
-html = re.sub(r'src="assets/img/bg/([\w-]+)-1400\.webp"', inline_plate, html)
+# Ширина в имени файла у разных кадров своя (у фотографии стены исходник
+# всего 1080 px), поэтому суффикс не зашит: берём любой и подменяем на 800.
+html = re.sub(r'src="assets/img/bg/([\w-]+)-\d+\.webp"', inline_plate, html)
 title = re.search(r"<title>(.*?)</title>", html, re.S).group(1).strip()
 body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
 # внешние подключения больше не нужны — всё внутри
