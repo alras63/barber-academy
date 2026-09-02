@@ -1012,9 +1012,9 @@ p { margin: 0; }
 .legal__sec > * + * { margin-top: 14px; }
 .legal__sec p, .legal__sec li { font-size: .95rem; line-height: 1.72; color: var(--ink-muted); max-width: 68ch; }
 .legal__sec b, .legal__sec strong { color: var(--ink-strong); font-weight: 700; }
-/* minmax(0,1fr) вместо неявной колонки: колонка auto растёт по самому
-   широкому пункту, и один помеченный реквизит с рамкой раздувал список
-   до 418 px в контейнере на 298 — страница уезжала вбок. */
+/* minmax(0,1fr) вместо неявной колонки: неявная колонка auto растёт
+   по самому широкому пункту и легко раздувает список шире контейнера —
+   на телефоне страница от этого уезжает вбок. */
 .legal__sec ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 /* Маркер стоит в поле абзаца, а не отдельной колонкой флексбокса:
    в вёрстке через flex каждый элемент внутри пункта становится
@@ -1041,17 +1041,9 @@ p { margin: 0; }
 .legal__req > div > span:last-child { font-size: .95rem; color: var(--ink-strong); }
 @media (max-width: 700px) { .legal__req div { grid-template-columns: 1fr; gap: 2px; } }
 
-/* НЕЗАПОЛНЕННОЕ ПОЛЕ. Юридические реквизиты выдумывать нельзя: политика
-   с несуществующим ИНН хуже, чем её отсутствие. Поэтому места, куда
-   заказчик подставляет свои данные, помечены и видны — их нельзя
-   случайно опубликовать, не заметив. Список — в КОНТЕНТ.md. */
-.legal__fill {
-  color: var(--accent-ink); font-weight: 700;
-  border-bottom: 1px dashed var(--accent); padding-bottom: 1px;
-  /* В заготовках стоят адрес сайта и почта — на телефоне такое слово
-     не переносится и вылезает за край. */
-  overflow-wrap: anywhere;
-}
+/* Почта и адрес сайта — слова, которые не переносятся: на телефоне
+   такое слово вылезает за край полосы. */
+.legal__req { overflow-wrap: anywhere; }
 
 /* =====================================================================
    УВЕДОМЛЕНИЕ О COOKIE
