@@ -248,11 +248,53 @@
         if (ok) { ok.style.color = "#ff9a9a"; ok.textContent = "Оставьте имя и телефон — иначе мы не сможем перезвонить."; }
         return;
       }
+      /* Имя и телефон — персональные данные. Без отметки о согласии заявка
+         не уходит: атрибут required браузер проверяет сам, но форма
+         отправляется через JS с novalidate, поэтому проверяем здесь. */
+      var consent = form.querySelector('input[name="consent"]');
+      if (consent && !consent.checked) {
+        if (ok) { ok.style.color = "#ff9a9a"; ok.textContent = "Отметьте согласие на обработку данных — без него мы не имеем права звонить."; }
+        return;
+      }
       // Демо: в проде здесь отправка на бэкенд/CRM.
       if (ok) { ok.style.color = ""; ok.textContent = "Спасибо, " + name + ". Заявку получили — перезвоним в ближайшее рабочее время."; }
       form.reset();
     });
   }
+
+  /* ===================== Уведомление о cookie =====================
+     Полоса у нижнего края показывается один раз: отметка о согласии
+     лежит в localStorage. Разметка приходит скрытой, а не прячется
+     скриптом, — иначе вернувшийся читатель на долю секунды видел бы
+     полосу, которую он уже закрыл.
+
+     Хранилище бывает недоступно (приватный режим Safari, запрет данных
+     сайтов в настройках). Тогда обращение к нему выбрасывает исключение,
+     и без try/catch на этом месте останавливался бы весь скрипт —
+     вместе с меню и формой. Не сохранили отметку — не беда: полоса
+     просто появится в следующий раз.
+  ================================================================= */
+  (function cookieBar() {
+    var bar = document.getElementById("cookieBar");
+    if (!bar) return;
+    var KEY = "mc-cookie-ok";
+
+    function remembered() {
+      try { return localStorage.getItem(KEY) === "1"; } catch (err) { return false; }
+    }
+    function remember() {
+      try { localStorage.setItem(KEY, "1"); } catch (err) { /* хранилище закрыто */ }
+    }
+
+    if (remembered()) return;
+    bar.hidden = false;
+
+    var btn = document.getElementById("cookieOk");
+    if (btn) btn.addEventListener("click", function () {
+      bar.hidden = true;
+      remember();
+    });
+  })();
 
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());

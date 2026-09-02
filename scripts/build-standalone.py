@@ -104,6 +104,21 @@ body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
 # внешние подключения больше не нужны — всё внутри
 body = re.sub(r'\s*<script src="[^"]+"></script>', "", body)
 
+# --- политика конфиденциальности внутрь --------------------------------------
+# На сайте это отдельная страница. В одном файле соседней страницы нет, а
+# ссылка на неё обязана работать: политика — единственный текст на сайте,
+# который человек имеет право прочитать до того, как оставит телефон.
+# Поэтому документ подшивается в конец той же страницы, а ссылки ведут
+# к нему якорем.
+legal = re.search(r'<main class="legal"[^>]*>(.*?)</main>', read("privacy.html"), re.S).group(1)
+# Заголовок страницы становится заголовком раздела: h1 на странице один.
+legal = legal.replace('<h1 class="display"', '<h2 class="display"').replace("</h1>", "</h2>")
+# Поле под закреплённую шапку нужно только на отдельной странице
+legal = legal.replace(" head legal__head", " head")
+legal = '<section class="legal" id="privacy">%s</section>' % legal
+body = body.replace('<footer class="footer">', legal + '\n<footer class="footer">', 1)
+body = body.replace('href="privacy.html"', 'href="#privacy"')
+
 page = """<title>%s</title>
 <style>
 %s

@@ -489,10 +489,10 @@ p { margin: 0; }
    Сетки с фотографиями намеренно остаются во всю полосу — контраст
    отступа и полного разворота и держит ритм страницы. */
 .figures, .notes, .creed, .qa, .path, .employ-grid, .forecast,
-.course-grid .zero { margin-left: calc((3 / 12) * (100% + var(--col-gap))); }
+.course-grid .zero, .legal__toc, .legal__doc { margin-left: calc((3 / 12) * (100% + var(--col-gap))); }
 @media (max-width: 860px) {
   .figures, .notes, .creed, .qa, .path, .employ-grid, .forecast,
-  .course-grid .zero { margin-left: 0; }
+  .course-grid .zero, .legal__toc, .legal__doc { margin-left: 0; }
 }
 
 /* ---------------- Манифест ---------------- */
@@ -952,3 +952,138 @@ p { margin: 0; }
 .mobile-menu a { font-family: var(--display); font-weight: 700; letter-spacing: -.02em; font-size: clamp(1.6rem,6.4vw,2.1rem); color: var(--on-dark); padding: 12px 0; border-bottom: 1px solid var(--line-dark); }
 .mobile-menu .btn { margin-top: 28px; justify-content: center; }
 .mobile-menu__close { position: absolute; top: 22px; right: var(--gutter); background: none; border: 0; color: var(--on-dark); font-size: 32px; line-height: 1; }
+
+
+/* =====================================================================
+   ПРАВОВОЙ РАЗДЕЛ
+   ---------------------------------------------------------------------
+   Политика конфиденциальности — единственная страница сайта, где текста
+   больше, чем воздуха. Поэтому она не изобретает своей вёрстки: тот же
+   серый холст, тот же белый лист-носитель фактов, та же вертикаль, с
+   которой начинаются все заголовки разворотов. Меняется одно — плотность
+   набора: строка короче (68 знаков), межстрочник крупнее. Юридический
+   текст читают по диагонали, и ему нужны опоры, а не картинки.
+   ===================================================================== */
+.legal { background: var(--ground); }
+/* Шапка на сайте закреплена — под неё нужно то же поле, что и на титуле */
+.legal__head { padding-top: clamp(104px, 9vw, 150px); }
+.legal__meta {
+  grid-column: 2; margin-top: var(--sp-2);
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted);
+}
+@media (max-width: 860px) { .legal__meta { grid-column: 1; } }
+
+/* Оглавление. На длинном документе это не украшение: человек приходит
+   сюда за одним вопросом — «что вы делаете с моим телефоном» — и должен
+   попасть в нужный раздел одним движением. */
+.legal__toc { margin-bottom: var(--sp-2); }
+.legal__toc ol {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px clamp(24px, 4vw, 56px);
+  counter-reset: toc;
+}
+.legal__toc li { counter-increment: toc; display: flex; gap: 14px; font-size: .93rem; }
+.legal__toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  font-family: var(--mono); font-weight: 700; font-size: 12px;
+  color: var(--accent-ink); letter-spacing: .04em; padding-top: .25em;
+}
+.legal__toc a { color: var(--ink-muted); border-bottom: 1px solid transparent; }
+.legal__toc a:hover { color: var(--ink-strong); border-bottom-color: var(--accent); }
+@media (max-width: 700px) { .legal__toc ol { grid-template-columns: 1fr; } }
+
+/* Сам документ — один белый лист, разделы через волосяную линейку.
+   Ровно та же механика, что у блоков «вопрос — ответ» и «цифры». */
+.legal__doc { background: var(--paper); border-radius: var(--radius); padding: 0 var(--pad); }
+.legal__sec { padding-block: var(--sp-3); border-bottom: 1px solid var(--line); }
+.legal__sec:last-child { border-bottom: 0; }
+.legal__sec h2 {
+  font-family: var(--display); font-weight: 700; letter-spacing: -.025em;
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.2; color: var(--ink-strong);
+  display: flex; gap: .7em; align-items: baseline;
+}
+.legal__sec h2 b {
+  font-family: var(--mono); font-weight: 800; font-size: 12px;
+  letter-spacing: .04em; color: var(--accent-ink); flex: none;
+  padding-top: .1em; font-variant-numeric: tabular-nums;
+}
+.legal__sec > * + * { margin-top: 14px; }
+.legal__sec p, .legal__sec li { font-size: .95rem; line-height: 1.72; color: var(--ink-muted); max-width: 68ch; }
+.legal__sec b, .legal__sec strong { color: var(--ink-strong); font-weight: 700; }
+/* minmax(0,1fr) вместо неявной колонки: колонка auto растёт по самому
+   широкому пункту, и один помеченный реквизит с рамкой раздувал список
+   до 418 px в контейнере на 298 — страница уезжала вбок. */
+.legal__sec ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+/* Маркер стоит в поле абзаца, а не отдельной колонкой флексбокса:
+   в вёрстке через flex каждый элемент внутри пункта становится
+   самостоятельным элементом флекса, и жирный термин в начале строки
+   («Персональные данные — ...») отрывался от своего пояснения
+   в отдельный столбец. */
+.legal__sec ul li { position: relative; padding-left: 20px; }
+.legal__sec ul li::before {
+  content: ""; position: absolute; left: 0; top: .62em;
+  width: 6px; height: 6px;
+  background: var(--accent); border-radius: 2px;
+}
+.legal__sec a { color: var(--accent-ink); border-bottom: 1px solid var(--accent); }
+.legal__sec a:hover { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
+/* Реквизиты оператора: пары «поле — значение» строками */
+.legal__req { display: grid; gap: 10px; }
+.legal__req div { display: grid; grid-template-columns: minmax(140px, .28fr) 1fr; gap: 8px clamp(16px, 3vw, 40px); }
+.legal__req dt, .legal__req span:first-child {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); padding-top: .25em;
+}
+.legal__req span:last-child { font-size: .95rem; color: var(--ink-strong); }
+@media (max-width: 700px) { .legal__req div { grid-template-columns: 1fr; gap: 2px; } }
+
+/* НЕЗАПОЛНЕННОЕ ПОЛЕ. Юридические реквизиты выдумывать нельзя: политика
+   с несуществующим ИНН хуже, чем её отсутствие. Поэтому места, куда
+   заказчик подставляет свои данные, помечены и видны — их нельзя
+   случайно опубликовать, не заметив. Список — в КОНТЕНТ.md. */
+.legal__fill {
+  color: var(--accent-ink); font-weight: 700;
+  border-bottom: 1px dashed var(--accent); padding-bottom: 1px;
+  /* В заготовках стоят адрес сайта и почта — на телефоне такое слово
+     не переносится и вылезает за край. */
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================================
+   УВЕДОМЛЕНИЕ О COOKIE
+   ---------------------------------------------------------------------
+   Полоса у нижнего края, а не карточка с тенью: теней в системе нет
+   вовсе, и отделять слой нечем, кроме волосяной линейки и белого фона.
+   Показывается один раз — отметка о согласии живёт в браузере.
+   ===================================================================== */
+.cookie {
+  position: fixed; inset: auto 0 0 0; z-index: 55;
+  background: var(--paper); border-top: 1px solid var(--line);
+  padding-block: 18px;
+}
+.cookie .wrap { display: flex; align-items: center; justify-content: space-between; gap: clamp(18px, 3vw, 48px); }
+.cookie p { font-size: .9rem; line-height: 1.6; color: var(--ink-muted); max-width: 76ch; }
+.cookie a { color: var(--accent-ink); border-bottom: 1px solid var(--accent); }
+.cookie a:hover { color: var(--ink-strong); border-bottom-color: var(--ink-strong); }
+.cookie .btn { flex: none; padding: 12px 28px; }
+@media (max-width: 700px) {
+  .cookie .wrap { flex-direction: column; align-items: stretch; gap: 14px; }
+  .cookie .btn { justify-content: center; }
+}
+
+/* Согласие в форме записи. Без отметки форма не отправляется: имя и
+   телефон — персональные данные, и брать их без согласия нельзя. */
+.consent { display: flex; gap: 12px; align-items: flex-start; text-align: left; margin-top: 4px; }
+.consent input {
+  flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent);
+}
+.consent span { font-size: 12.5px; line-height: 1.55; color: var(--on-dark-mut); }
+.consent a { color: var(--on-dark); border-bottom: 1px solid rgba(255,255,255,.45); }
+.consent a:hover { border-bottom-color: #ffffff; }
+
+/* Правовая строка подвала — рядом со знаком копирайта */
+.footer__legal { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.footer__legal a { border-bottom: 1px solid var(--line-dark); }
+.footer__legal a:hover { color: #ffffff; border-bottom-color: rgba(255,255,255,.5); }

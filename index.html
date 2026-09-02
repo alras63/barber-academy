@@ -526,6 +526,7 @@
         <span class="creed__n">03</span>
         <p class="creed__t"><b>Сменить окружение.</b> <span>Другие люди, другой ритм, другая обстановка. Часто именно за этим и приходят.</span></p>
       </div>
+    </div>
   </div>
 </section>
 
@@ -841,6 +842,14 @@
         <label class="field"><input type="tel" name="phone" placeholder="Телефон для связи" required autocomplete="tel" /></label>
       </div>
       <label class="field"><input type="text" name="about" placeholder="Есть опыт в стрижках? Можно ответить «нет»" /></label>
+      <!-- Имя и телефон — персональные данные: брать их без отметки о согласии
+           нельзя. Отметка снята по умолчанию намеренно — предзаполненная
+           галочка согласием не считается. -->
+      <label class="consent">
+        <input type="checkbox" name="consent" id="consent" required />
+        <span>Согласен на обработку персональных данных и с
+        <a href="privacy.html" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
+      </label>
       <button class="btn" type="submit">Оставить заявку</button>
       <p class="cta__ok" id="formOk" role="status" aria-live="polite"></p>
       <p class="cta__fine">Перезваниваем в рабочее время. Телефон нужен только для разговора об обучении — рассылок не будет.</p>
@@ -886,10 +895,22 @@
     </div>
     <div class="footer__bottom">
       <span>© <span id="year"></span> MensCut Academy · Академия мужских стрижек</span>
+      <span class="footer__legal"><a href="privacy.html">Политика конфиденциальности</a></span>
       <span>Ваша новая глава начинается у нашей стены</span>
     </div>
   </div>
 </footer>
+
+<!-- Уведомление о cookie. Скрыто разметкой: JS снимает атрибут только
+     тем, кто ещё не нажимал «Ясно», — вернувшийся читатель полосы не видит. -->
+<div class="cookie" id="cookieBar" hidden>
+  <div class="wrap">
+    <p>Продолжая пользоваться сайтом, вы соглашаетесь с использованием файлов
+    cookie и обработкой обезличенных данных согласно
+    <a href="privacy.html">политике конфиденциальности</a>.</p>
+    <button class="btn" type="button" id="cookieOk">Ясно</button>
+  </div>
+</div>
 
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
