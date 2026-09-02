@@ -1032,11 +1032,13 @@ p { margin: 0; }
 /* Реквизиты оператора: пары «поле — значение» строками */
 .legal__req { display: grid; gap: 10px; }
 .legal__req div { display: grid; grid-template-columns: minmax(140px, .28fr) 1fr; gap: 8px clamp(16px, 3vw, 40px); }
-.legal__req dt, .legal__req span:first-child {
+/* Только прямые потомки строки: значение может само содержать помеченную
+   заготовку, и правило для значения перекрашивало бы её обратно в чёрный. */
+.legal__req > div > span:first-child {
   font-family: var(--mono); font-size: 12px; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); padding-top: .25em;
 }
-.legal__req span:last-child { font-size: .95rem; color: var(--ink-strong); }
+.legal__req > div > span:last-child { font-size: .95rem; color: var(--ink-strong); }
 @media (max-width: 700px) { .legal__req div { grid-template-columns: 1fr; gap: 2px; } }
 
 /* НЕЗАПОЛНЕННОЕ ПОЛЕ. Юридические реквизиты выдумывать нельзя: политика
