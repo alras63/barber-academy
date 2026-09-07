@@ -292,16 +292,34 @@ p { margin: 0; }
   border-bottom-color: var(--line); padding-block: 14px;
 }
 
-.brand { display: flex; align-items: center; gap: 13px; color: var(--ink-strong); }
-.brand__mark { width: 28px; height: 24px; color: currentColor; }
-.brand__name { font-family: var(--display); font-weight: 800; font-size: 1.15rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
-.brand__name small {
-  display: block; font-family: var(--display); font-size: 9px; letter-spacing: .34em;
-  text-transform: uppercase; color: var(--accent-ink); margin-top: 5px; font-weight: 700;
+/* ЛОГОТИП. Настоящий знак Men's Cut Studio с основного сайта: алмаз
+   с ножницами и наборная надпись. В оригинале замок вертикальный —
+   надпись над знаком, — и в строке шапки высотой 34 px внутренние
+   буквы стали бы четырёхпиксельными. Поэтому те же элементы, ничего
+   не перерисовывая, разложены в строку: знак слева, надпись справа.
+   Мастер-файл в исходном виде лежит в assets/img/logo.svg.
+
+   Заливка снята с путей и задана на самом <svg> как currentColor:
+   она наследуется вниз, и один и тот же знак работает чёрным
+   на белой шапке и белым на тёмном подвале. */
+.brand { display: flex; align-items: center; gap: 14px; color: var(--ink-strong); }
+.brand__logo { height: 34px; width: auto; }
+/* «Академия» в самом знаке отсутствует — это отдельная приписка,
+   и отделена она так же, как отделяют подбренд: волосяной линейкой. */
+.brand__sub {
+  font-family: var(--display); font-size: 9px; letter-spacing: .34em;
+  text-transform: uppercase; color: var(--accent-ink); font-weight: 700;
+  line-height: 1; padding: 6px 0 6px 14px;
+  /* Не var(--line): линейка стоит и на белой шапке, и на сером холсте,
+     и #ebebeb на #f4f4f4 не видно вовсе. Полупрозрачный тон работает
+     на обоих. Поля сверху и снизу задают линейке высоту — без них
+     она была бы ростом со строчку в 9 px, то есть штрихом. */
+  border-left: 1px solid rgba(53,53,53,.22);
 }
-/* В подвале тот же логотип стоит на тёмном — подпись берёт светлый серый */
-.footer .brand, .footer .brand__mark { color: var(--on-dark); }
-.footer .brand__name small { color: var(--accent); }
+/* В подвале тот же знак стоит на тёмном: currentColor делает его белым,
+   приписка берёт фирменную бирюзу — на светлом она была бы нечитаема. */
+.footer .brand { color: var(--on-dark); }
+.footer .brand__sub { color: var(--accent); border-left-color: rgba(255,255,255,.28); }
 .nav { display: flex; align-items: center; gap: clamp(24px,3vw,44px); }
 .nav a {
   font-family: var(--display); color: var(--ink-muted); font-size: 14px; font-weight: 600; letter-spacing: .01em;
@@ -926,6 +944,7 @@ p { margin: 0; }
   .teachers-grid, .videos { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 700px){
+  .brand__logo { height: 30px; }
   .nav { display: none; }
   .burger { display: inline-flex; }
   .topbar .btn { display: none; }
